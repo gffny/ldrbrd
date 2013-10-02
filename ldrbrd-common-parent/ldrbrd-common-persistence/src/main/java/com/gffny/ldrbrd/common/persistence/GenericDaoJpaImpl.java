@@ -17,13 +17,13 @@ import com.gffny.ldrbrd.common.exception.DataAccessException;
 
 /**
  * @author jdgaffney
- *
+ * 
  */
-@SuppressWarnings({"unused", "hiding"})
 public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> {
 
 	/** The Constant log. */
-	private static final Logger LOG = LoggerFactory.getLogger(GenericDaoJpaImpl.class);
+	private static final Logger LOG = LoggerFactory
+			.getLogger(GenericDaoJpaImpl.class);
 
 	/** The em. */
 	@PersistenceContext
@@ -31,19 +31,28 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 
 	/** The type. */
 
-	private Class<T> type;
-	
-	/**
-	 * 
-	 */
-	public GenericDaoJpaImpl() {
-		// TODO Auto-generated constructor stub
-	}
-	
-	public GenericDaoJpaImpl(Class<T> clazz) {
-		type = clazz;
-	}
+	// private Class<T> type;
+	//
+	// /**
+	// *
+	// */
+	// public GenericDaoJpaImpl() {
+	// // TODO Auto-generated constructor stub
+	// }
+	//
+	// public GenericDaoJpaImpl(Class<T> clazz) {
+	// type = clazz;
+	// }
 
+	// /**
+	// * Sets the type.
+	// *
+	// * @param type
+	// * the new type
+	// */
+	// protected void setType(final Class<T> type) {
+	// this.type = type;
+	// }
 
 	/**
 	 * Sets the entity manager.
@@ -63,22 +72,12 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	protected EntityManager getEntityManager() {
 		return em;
 	}
-	
-	/**
-	 * Sets the type.
-	 * 
-	 * @param type
-	 *            the new type
-	 */
-	protected void setType(final Class<T> type) {
-		this.type = type;
-	}
 
 	/**
 	 * 
 	 */
 	@Transactional
-	public <T> T save(T entity) throws DataAccessException {
+	public <T> T persist(T entity) throws DataAccessException {
 		em.persist(entity);
 		LOG.debug("success");
 		return entity;

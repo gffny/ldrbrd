@@ -9,15 +9,4 @@
 	</parent>
 	<artifactId>ldrbrd-common-model</artifactId>
 	<name>common model</name>
-	
-	<dependencies>
-<!-- 
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-annotations</artifactId>
-			<version>3.5.6-Final</version>
-		</dependency>
- -->
-	</dependencies>
-
 </project>
