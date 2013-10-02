@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.gffny.ldrbrd.common.exception.DataAccessException;
 import com.gffny.ldrbrd.common.model.enums.Dominance;
 import com.gffny.ldrbrd.common.model.impl.GolferProfile;
-import com.gffny.ldrbrd.common.persistence.GolferDao;
+import com.gffny.ldrbrd.common.persistence.GenericDao;
 
 /**
  * @author jdgaffney
@@ -27,12 +27,12 @@ import com.gffny.ldrbrd.common.persistence.GolferDao;
 		"classpath*:spring/applicationContext-model.xml" })
 public class GolferDaoTest {
 
-	private GolferDao golferDao;
+	private GenericDao<GolferProfile> golferDao;
 
 	/**
 	 * @return the golferDao
 	 */
-	public GolferDao getGolferDao() {
+	public GenericDao<GolferProfile> getGolferDao() {
 		return golferDao;
 	}
 
@@ -41,7 +41,7 @@ public class GolferDaoTest {
 	 *            the golferDao to set
 	 */
 	@Autowired
-	public void setGolferDao(GolferDao golferDao) {
+	public void setGolferDao(GenericDao<GolferProfile> golferDao) {
 		this.golferDao = golferDao;
 	}
 

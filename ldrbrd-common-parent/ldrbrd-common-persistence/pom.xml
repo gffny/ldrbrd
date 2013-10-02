@@ -36,20 +36,6 @@
 		<property name="hibernate.dbcp.minIdle">0</property>
 	</properties>
 
-	<build>
-		<resources>
-			<!-- step 1: copy all properties, and replace all ${something} with their 
-				corresponding values defined in the build properties. -->
-			<resource>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>**/*.properties</include>
-				</includes>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
-	</build>
-	
 	<dependencies>
 		<dependency>
 			<groupId>com.gffny.ldrbrd</groupId>

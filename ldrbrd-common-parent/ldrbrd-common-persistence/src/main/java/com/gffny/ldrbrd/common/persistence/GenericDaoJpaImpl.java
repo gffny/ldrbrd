@@ -76,6 +76,7 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	/**
 	 * 
 	 */
+	@SuppressWarnings("hiding")
 	@Transactional
 	public <T> T persist(T entity) throws DataAccessException {
 		em.persist(entity);
@@ -86,6 +87,7 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	/**
 	 * 
 	 */
+	@SuppressWarnings("hiding")
 	public <T> T merge(T entity) throws DataAccessException {
 		return this.em.merge(entity);
 	}
@@ -93,6 +95,7 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	/**
 	 * 
 	 */
+	@SuppressWarnings("hiding")
 	public <T> T find(Long id) throws DataAccessException {
 		// TODO Auto-generated method stub
 		return null;
