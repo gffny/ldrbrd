@@ -5,11 +5,9 @@ package com.gffny.ldrbrd.common.model;
 
 import java.io.Serializable;
 
-import javax.persistence.FetchType;
+import javax.persistence.Column;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -19,9 +17,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
-
-import com.gffny.ldrbrd.common.model.impl.UserProfile;
 
 /**
  * Base entity for persisted classes
@@ -42,22 +39,24 @@ public abstract class CommonEntity implements Serializable {
 	private int version;
 
 	@JsonIgnore
-	private UserProfile createdBy;
+	private String createdBy;
+	// private UserProfile createdBy;
 
 	@JsonIgnore
-	private UserProfile updatedBy;
+	private String updatedBy;
+	// private UserProfile updatedBy;
 
 	@JsonIgnore
-	private DateTime created;
+	private DateTime createdDate;
 
 	@JsonIgnore
-	private DateTime updated;
+	private DateTime updatedDate;
 
 	@JsonIgnore
 	private boolean skipCreatedDate = false;
 
 	@JsonIgnore
-	private long syncVersionId;
+	private int syncVersionId;
 
 	/**
 	 * User action, used as user's archive. In active, not in archive DB
@@ -80,6 +79,7 @@ public abstract class CommonEntity implements Serializable {
 
 	@Version
 	@JsonIgnore
+	@Column(name = "vrsn")
 	public int getVersion() {
 		return version;
 	}
@@ -88,42 +88,67 @@ public abstract class CommonEntity implements Serializable {
 		this.version = version;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "created_by", updatable = false)
-	public UserProfile getCreatedBy() {
+	// // @ManyToOne(fetch = FetchType.LAZY)
+	// // @JoinColumn(name = "crtdby", updatable = false)
+	// @Column(name = "crtdby")
+	// public UserProfile getCreatedBy() {
+	// return createdBy;
+	// }
+	//
+	// public void setCreatedBy(final UserProfile createdBy) {
+	// this.createdBy = createdBy;
+	// }
+	//
+	// // @ManyToOne(fetch = FetchType.LAZY)
+	// // @JoinColumn(name = "updtdby", updatable = false)
+	// @Column(name = "updtdby")
+	// public UserProfile getUpdatedBy() {
+	// return updatedBy;
+	// }
+	//
+	// public void setUpdatedBy(final UserProfile updatedBy) {
+	// this.updatedBy = updatedBy;
+	// }
+
+	@Column(name = "crtdby")
+	public String getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(final UserProfile createdBy) {
+	public void setCreatedBy(final String createdBy) {
 		this.createdBy = createdBy;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "updated_by")
-	public UserProfile getUpdatedBy() {
+	@Column(name = "updtdby")
+	public String getUpdatedBy() {
 		return updatedBy;
 	}
 
-	public void setUpdatedBy(final UserProfile updatedBy) {
+	public void setUpdatedBy(final String updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 
-	public DateTime getCreated() {
-		return created;
+	@Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
+	@Column(name = "crtddt")
+	public DateTime getCreatedDate() {
+		return this.createdDate;
 	}
 
-	public void setCreated(final DateTime created) {
-		this.created = created;
+	public void setCreatedDate(final DateTime createdDate) {
+		this.createdDate = createdDate;
 	}
 
-	public DateTime getUpdated() {
-		return updated;
+	@Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
+	@Column(name = "updtddt")
+	public DateTime getUpdatedDate() {
+		return this.updatedDate;
 	}
 
-	public void setUpdated(final DateTime updated) {
-		this.updated = updated;
+	public void setUpdatedDate(final DateTime updatedDate) {
+		this.updatedDate = updatedDate;
 	}
 
+	@Column(name = "obslt", columnDefinition = "BIT", length = 1)
 	public Boolean getIsObsolete() {
 		return isObsolete;
 	}
@@ -132,6 +157,7 @@ public abstract class CommonEntity implements Serializable {
 		this.isObsolete = isObsolete;
 	}
 
+	@Column(name = "archv", columnDefinition = "BIT", length = 1)
 	public Boolean getIsArchive() {
 		return isArchive;
 	}
@@ -140,6 +166,7 @@ public abstract class CommonEntity implements Serializable {
 		this.isArchive = isArchive;
 	}
 
+	@Column(name = "dlt", columnDefinition = "BIT", length = 1)
 	public Boolean getIsDelete() {
 		return isDelete;
 	}
@@ -152,8 +179,8 @@ public abstract class CommonEntity implements Serializable {
 	public void prePersist() {
 
 		final DateTime date = new DateTime();
-		if (!skipCreatedDate || created == null) {
-			setCreated(date);
+		if (!skipCreatedDate || createdDate == null) {
+			setCreatedDate(date);
 		}
 	}
 
@@ -165,20 +192,30 @@ public abstract class CommonEntity implements Serializable {
 		}
 	}
 
-	public long getSyncVersionId() {
+	@Column(name = "syncvrsnid")
+	public int getSyncVersionId() {
 		return syncVersionId;
 	}
 
-	public void setSyncVersionId(final long syncVersionId) {
+	public void setSyncVersionId(final int syncVersionId) {
 		this.syncVersionId = syncVersionId;
 	}
 
 	@Transient
+	@Column(name = "skpcrtddt", columnDefinition = "BIT", length = 1)
 	public boolean isSkipCreatedDate() {
 		return skipCreatedDate;
 	}
 
 	public void setSkipCreatedDate(final boolean skipCreatedDate) {
 		this.skipCreatedDate = skipCreatedDate;
+	}
+
+	/**
+	 * @param manufacturer
+	 * @return
+	 */
+	protected <T> T getDefaultNotNullValue(T value, T defaultValue) {
+		return null != value ? value : defaultValue;
 	}
 }

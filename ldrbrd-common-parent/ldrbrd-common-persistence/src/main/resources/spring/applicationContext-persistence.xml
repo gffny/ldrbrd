@@ -11,46 +11,39 @@
            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
 
-
 	<context:component-scan base-package="com.gffny.ldrbrd.common.persistence" />
 
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		<property name="persistenceXmlLocation" value="classpath:META-INF/persistence.xml" />
+		<property name="persistenceXmlLocation" value="classpath*:META-INF/persistence.xml" />
 		<property name="persistenceUnitName" value="ldrbrd_pu" />
-		<property name="dataSource" ref="dataSource" />
-		<property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
-		<property name="jpaDialect" ref="jpaDialect" />
-		<property name="packagesToScan">
-			<list>
-				<value>com/gffny/ldrbrd/*/</value>
-			</list>
-		</property>
-
+		<property name="jpaVendorAdapter" ref="ldrbrd_jpaVendorAdapter" />
+		<property name="jpaDialect" ref="ldrbrd_jpaDialect" />
+		<property name="dataSource" ref="ldrbrd_dataSource" />
 	</bean>
 
-	<bean id="jpaVendorAdapter"
+	<bean id="ldrbrd_jpaVendorAdapter"
 		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
 		<property name="database" value="MYSQL" />
 		<property name="databasePlatform" value="org.hibernate.dialect.MySQL5Dialect" />
 	</bean>
 
-	<bean id="jpaDialect" class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
+	<bean id="ldrbrd_jpaDialect" class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
 
-	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-		<property name="entityManagerFactory" ref="entityManagerFactory" />
-		<property name="dataSource" ref="dataSource" />
-		<property name="jpaDialect" ref="jpaDialect" />
-	</bean>
-
-	<tx:annotation-driven transaction-manager="transactionManager" />
-
-	<bean id="dataSource"
+	<bean id="ldrbrd_dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://ldrbrd-dev-1.c5jcv5mjkggo.us-east-1.rds.amazonaws.com:3306/ldrbrd" />
+		<property name="url" value="jdbc:mysql://localhost:3306/ldrbrd" />
 		<property name="username" value="root" />
 		<property name="password" value="password" />
 	</bean>
+
+	<bean id="ldrbrd_transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+		<property name="dataSource" ref="ldrbrd_dataSource" />
+		<property name="jpaDialect" ref="ldrbrd_jpaDialect" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="ldrbrd_transactionManager" />
 
 </beans>

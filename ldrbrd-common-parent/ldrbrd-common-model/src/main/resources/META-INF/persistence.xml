@@ -15,7 +15,9 @@
 		
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
-			<property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+			<property name="hibernate.connection.autocommit" value="true"/>
+			<property name="hibernate.show_sql" value="true"/>
+			<property name="hibernate.hbm2ddl.auto" value="validate"/>
 			<property name="hibernate.default_schema" value="ldrbrd"/>
 			<property name="hibernate.cache.region.factory_class" value="net.sf.ehcache.hibernate.EhCacheRegionFactory"/>
 			<property name="hibernate.cache.use_second_level_cache" value="false"/>

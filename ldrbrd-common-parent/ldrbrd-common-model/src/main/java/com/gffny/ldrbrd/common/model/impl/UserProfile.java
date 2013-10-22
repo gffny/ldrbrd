@@ -4,10 +4,10 @@
 package com.gffny.ldrbrd.common.model.impl;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
@@ -16,55 +16,106 @@ import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
  * @author jdgaffney
  * 
  */
-@Entity
-@Table(name = "t_user")
-public class UserProfile extends CommonUUIDEntity {
+@MappedSuperclass
+public abstract class UserProfile extends CommonUUIDEntity {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5309751265778916250L;
 
-	@Id
-	@Column(name = "usr_id")
-	private Integer id;
+	private String profileHandle;
 
-	@Column(name = "is_nbld")
-	private boolean isEnabled = true;
+	protected String firstName;
 
-	@Column(name = "lst_lgn_in")
-	private DateTime lastLogin;
+	protected String lastName;
 
-	@Column(name = "eml_addrss")
-	protected String emailAddress;
+	private String emailAddress;
 
-	@Column(name = "psswrd")
 	private String password;
 
-	@Column(name = "fld_lgn_attmpts")
+	private boolean isEnabled = true;
+
+	private DateTime lastLogin;
+
 	private int failedLoginAttemptsCount = 0;
 
 	/* CONSTRUCTORS */
 
 	/* ACCESSOR/MUTATOR METHODS */
+
 	/**
-	 * @return the isEnabled
+	 * 
+	 * @see com.gffny.leaderboard.model.IGolfer#getFirstName()
 	 */
-	public boolean isEnabled() {
-		return isEnabled;
+	@Column(name = "frst_nm")
+	public String getFirstName() {
+		return firstName;
 	}
 
 	/**
-	 * @param isEnabled
-	 *            the isEnabled to set
+	 * 
+	 * @see com.gffny.leaderboard.model.IGolfer#setFirstName(java.lang.String)
 	 */
-	public void setEnabled(boolean isEnabled) {
-		this.isEnabled = isEnabled;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	/**
+	 * 
+	 * @see com.gffny.leaderboard.model.IGolfer#getLastName()
+	 */
+	@Column(name = "lst_nm")
+	public String getLastName() {
+		return lastName;
+	}
+
+	/**
+	 * 
+	 * @see com.gffny.leaderboard.model.IGolfer#setLastName(java.lang.String)
+	 */
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	@Column(name = "eml_addrss")
+	public String getEmailAddress() {
+		return this.emailAddress;
+	}
+
+	/**
+	 * 
+	 * @see com.gffny.leaderboard.model.IGolfer#getProfileHandle()
+	 */
+	@Column(name = "dsply_nm")
+	public String getProfileHandle() {
+		return this.profileHandle;
+	}
+
+	/**
+	 * 
+	 * @see com.gffny.leaderboard.model.IGolfer#setProfileHandle(java.lang.String)
+	 */
+	public void setProfileHandle(String profileHandle) {
+		this.profileHandle = profileHandle;
+	}
+
+	/**
+	 * 
+	 * @param emailAddress
+	 */
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
 	}
 
 	/**
 	 * @see com.gffny.leaderboard.model.IGolfer#getPassword()
 	 */
+	@Column(name = "psswrd")
 	public String getPassword() {
 		return this.password;
 	}
@@ -79,36 +130,53 @@ public class UserProfile extends CommonUUIDEntity {
 	/**
 	 * @see com.gffny.leaderboard.model.IGolfer#getLastLogin()
 	 */
-	public String getLastLogin() {
-		return this.lastLogin.toString();
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	@Column(name = "lst_lgn_dt")
+	public DateTime getLastLogin() {
+		return this.lastLogin;
 	}
 
 	/**
-	 * @see com.gffny.leaderboard.model.IGolfer#setLastLogin(java.lang.String)
-	 */
-	public void setLastLogin(String lastLogin) {
-		// TODO create a DateUtils class (and project for utils)
-		// this.lastLogin = DateUtils.parseDateOrNull(lastLogin,
-		// DateUtils.MYSQL_DATE_FORMAT.getPattern());
-	}
-
-	/**
-	 * @see com.gffny.leaderboard.model.IGolfer#setLastLogin(java.lang.String)
+	 * @see com.gffny.leaderboard.model.IGolfer#setLastLogin(org.joda.time.DateTime)
 	 */
 	public void setLastLogin(DateTime lastLogin) {
 		this.lastLogin = lastLogin;
 	}
 
 	/**
+	 * 
+	 * @return
+	 */
+	@Column(name = "is_nbld", columnDefinition = "BIT", length = 1)
+	public boolean isEnabled() {
+		return this.isEnabled;
+	}
+
+	/**
+	 * 
+	 * @param isEnabled
+	 */
+	public void setEnabled(Boolean isEnabled) {
+		this.isEnabled = getDefaultNotNullValue(isEnabled, false);
+	}
+
+	/**
 	 * @see com.gffny.leaderboard.model.IGolfer#getFailedLoginAttemptsCount()
 	 */
+	@Column(name = "fld_lgn_attmpts")
 	public int getFailedLoginAttemptsCount() {
 		return this.failedLoginAttemptsCount;
+	}
+
+	public void setFailedLoginAttemptsCount(Integer failedLoginAttemptsCount) {
+		this.failedLoginAttemptsCount = getDefaultNotNullValue(
+				failedLoginAttemptsCount, 5);
 	}
 
 	/**
 	 * @see com.gffny.leaderboard.model.IGolfer#incrementFailedLoginAttemptsCount()
 	 */
+	@Transient
 	public void incrementFailedLoginAttemptsCount() {
 		this.failedLoginAttemptsCount++;
 	}
@@ -116,6 +184,7 @@ public class UserProfile extends CommonUUIDEntity {
 	/**
 	 * @see com.gffny.leaderboard.model.IGolfer#resetFailedLoginAttemptsCount()
 	 */
+	@Transient
 	public void resetFailedLoginAttemptsCount() {
 		this.failedLoginAttemptsCount = 0;
 	}

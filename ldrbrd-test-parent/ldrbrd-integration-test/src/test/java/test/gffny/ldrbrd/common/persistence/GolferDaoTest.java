@@ -6,6 +6,7 @@ package test.gffny.ldrbrd.common.persistence;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,6 +60,9 @@ public class GolferDaoTest {
 		testProfile.setEmailAddress("gaffney.ie@gmail.com");
 		testProfile.setHandicap(26);
 		testProfile.setProfileHandle("gffny");
+		testProfile.setLastLogin(new DateTime());
+		testProfile.setEnabled(true);
+		testProfile.setFailedLoginAttemptsCount(0);
 	}
 
 	@Test

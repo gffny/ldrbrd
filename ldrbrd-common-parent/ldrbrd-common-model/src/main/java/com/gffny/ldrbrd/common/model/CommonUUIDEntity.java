@@ -29,6 +29,7 @@ public abstract class CommonUUIDEntity extends CommonEntity {
 	/**
 	 * 
 	 */
+	@Id
 	@XmlElement
 	private String id;
 

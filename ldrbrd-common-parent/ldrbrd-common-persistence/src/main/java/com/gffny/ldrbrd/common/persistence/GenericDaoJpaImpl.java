@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gffny.ldrbrd.common.exception.DataAccessException;
@@ -19,6 +20,8 @@ import com.gffny.ldrbrd.common.exception.DataAccessException;
  * @author jdgaffney
  * 
  */
+@Repository
+@Transactional
 public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> {
 
 	/** The Constant log. */
@@ -26,33 +29,8 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 			.getLogger(GenericDaoJpaImpl.class);
 
 	/** The em. */
-	@PersistenceContext
+	@PersistenceContext(unitName = "ldrbrd_pu")
 	private EntityManager em;
-
-	/** The type. */
-
-	// private Class<T> type;
-	//
-	// /**
-	// *
-	// */
-	// public GenericDaoJpaImpl() {
-	// // TODO Auto-generated constructor stub
-	// }
-	//
-	// public GenericDaoJpaImpl(Class<T> clazz) {
-	// type = clazz;
-	// }
-
-	// /**
-	// * Sets the type.
-	// *
-	// * @param type
-	// * the new type
-	// */
-	// protected void setType(final Class<T> type) {
-	// this.type = type;
-	// }
 
 	/**
 	 * Sets the entity manager.
@@ -77,7 +55,6 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	 * 
 	 */
 	@SuppressWarnings("hiding")
-	@Transactional
 	public <T> T persist(T entity) throws DataAccessException {
 		em.persist(entity);
 		LOG.debug("success");

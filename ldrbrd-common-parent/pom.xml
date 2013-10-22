@@ -23,26 +23,6 @@
         <logback.version>1.0.13</logback.version>
         <spring.version>3.2.4.RELEASE</spring.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-		<jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
-		<jdbc.url>jdbc:mysql://ldrbrd-dev-1.c5jcv5mjkggo.us-east-1.rds.amazonaws.com:3306/ldrbrd</jdbc.url>
-		<jdbc.user>root</jdbc.user>
-		<jdbc.password>password</jdbc.password>
-		
-		
-
-		<!-- host port where the application will be deployed -->
-		<log4j.level>DEBUG</log4j.level>		
-		<property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
-		<property name="hibernate.connection.url">jdbc:mysql://ldrbrd-dev-1.c5jcv5mjkggo.us-east-1.rds.amazonaws.com:3306/ldrbrd</property>
-		<property name="hibernate.connection.username">mkyong</property>
-		<property name="hibernate.connection.password">password</property>
-		<property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
-		<property name="hibernate.default_schema">ldrbrd</property>
-		<property name="hibernate.dbcp.initialSize">8</property>
-		<property name="hibernate.dbcp.maxActive">20</property>
-		<property name="hibernate.dbcp.maxIdle">20</property>
-		<property name="hibernate.dbcp.minIdle">0</property>
 	</properties>
 	
 	<dependencies>
@@ -52,13 +32,7 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
-		<!--
-		<dependency>
-		    <groupId>org.hibernate.javax.persistence</groupId>
-		    <artifactId>hibernate-jpa-2.0-api</artifactId>
-		    <version>1.0.1.Final</version>
-		</dependency>
-		 JPA REQUIRED LIBRARY -->
+		<!-- JPA REQUIRED LIBRARY -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
@@ -173,6 +147,16 @@
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 			<version>2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time-hibernate</artifactId>
+			<version>1.3</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.jadira.usertype</groupId>
+		    <artifactId>usertype.core</artifactId>
+		    <version>3.0.0.GA</version>
 		</dependency>
 	</dependencies>
 </project>

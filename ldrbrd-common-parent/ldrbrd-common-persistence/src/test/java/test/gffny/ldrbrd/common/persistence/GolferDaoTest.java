@@ -10,40 +10,25 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gffny.ldrbrd.common.exception.DataAccessException;
 import com.gffny.ldrbrd.common.model.enums.Dominance;
 import com.gffny.ldrbrd.common.model.impl.GolferProfile;
-import com.gffny.ldrbrd.common.persistence.GolferDao;
+import com.gffny.ldrbrd.common.persistence.GenericDao;
 
 /**
  * @author jdgaffney
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-// @ContextConfiguration({
-// "classpath*:spring/applicationContext-persistence.xml",
-// "classpath*:spring/applicationContext-model.xml" })
+@ContextConfiguration({ "classpath*:spring/applicationContext-persistence.xml",
+		"classpath*:spring/applicationContext-model.xml" })
 public class GolferDaoTest {
 
-	private GolferDao golferDao;
-
-	/**
-	 * @return the golferDao
-	 */
-	public GolferDao getGolferDao() {
-		return golferDao;
-	}
-
-	/**
-	 * @param golferDao
-	 *            the golferDao to set
-	 */
 	@Autowired
-	public void setGolferDao(GolferDao golferDao) {
-		this.golferDao = golferDao;
-	}
+	private GenericDao<GolferProfile> golferDao;
 
 	GolferProfile testProfile;
 
