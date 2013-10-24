@@ -4,6 +4,7 @@
 package com.gffny.ldrbrd.common.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Inheritance;
@@ -17,7 +18,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 /**
@@ -77,6 +77,10 @@ public abstract class CommonEntity implements Serializable {
 	@JsonIgnore
 	private Boolean isDelete = false;
 
+	/**
+	 * 
+	 * @return
+	 */
 	@Version
 	@JsonIgnore
 	@Column(name = "vrsn")
@@ -84,6 +88,10 @@ public abstract class CommonEntity implements Serializable {
 		return version;
 	}
 
+	/**
+	 * 
+	 * @param version
+	 */
 	public void setVersion(final int version) {
 		this.version = version;
 	}
@@ -110,80 +118,182 @@ public abstract class CommonEntity implements Serializable {
 	// this.updatedBy = updatedBy;
 	// }
 
+	/**
+	 * 
+	 * @return
+	 */
 	@Column(name = "crtdby")
 	public String getCreatedBy() {
 		return createdBy;
 	}
 
+	/**
+	 * 
+	 * @param createdBy
+	 */
 	public void setCreatedBy(final String createdBy) {
 		this.createdBy = createdBy;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	@Column(name = "updtdby")
 	public String getUpdatedBy() {
 		return updatedBy;
 	}
 
+	/**
+	 * 
+	 * @param updatedBy
+	 */
 	public void setUpdatedBy(final String updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 
-	@Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
+	/**
+	 * 
+	 * @return
+	 */
 	@Column(name = "crtddt")
-	public DateTime getCreatedDate() {
+	public Date getCreatedDate() {
+		if (getCreatedDateDT() != null) {
+			return this.getCreatedDateDT().toDate();
+		}
+		return null;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	@Transient
+	public DateTime getCreatedDateDT() {
 		return this.createdDate;
 	}
 
-	public void setCreatedDate(final DateTime createdDate) {
+	/**
+	 * 
+	 * @param createdDate
+	 */
+	public void setCreatedDate(final Date createdDate) {
+		this.setCreatedDateDT(new DateTime(createdDate));
+	}
+
+	/**
+	 * 
+	 * @param createdDate
+	 */
+	@Transient
+	public void setCreatedDateDT(final DateTime createdDate) {
 		this.createdDate = createdDate;
 	}
 
-	@Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
+	/**
+	 * 
+	 * @return
+	 */
 	@Column(name = "updtddt")
-	public DateTime getUpdatedDate() {
+	public Date getUpdatedDate() {
+		if (getUpdatedDateDT() != null) {
+			return getUpdatedDateDT().toDate();
+		}
+		return null;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	@Transient
+	public DateTime getUpdatedDateDT() {
 		return this.updatedDate;
 	}
 
-	public void setUpdatedDate(final DateTime updatedDate) {
-		this.updatedDate = updatedDate;
+	/**
+	 * 
+	 * @param updatedDate
+	 */
+	public void setUpdatedDate(final Date updatedDate) {
+		this.setUpdatedDateDT(new DateTime(updatedDate));
 	}
 
+	/**
+	 * 
+	 * @param updateDatedDate
+	 */
+	@Transient
+	public void setUpdatedDateDT(final DateTime updateDatedDate) {
+		this.updatedDate = updateDatedDate;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
 	@Column(name = "obslt", columnDefinition = "BIT", length = 1)
 	public Boolean getIsObsolete() {
 		return isObsolete;
 	}
 
+	/**
+	 * 
+	 * @param isObsolete
+	 */
 	public void setIsObsolete(final Boolean isObsolete) {
 		this.isObsolete = isObsolete;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	@Column(name = "archv", columnDefinition = "BIT", length = 1)
 	public Boolean getIsArchive() {
 		return isArchive;
 	}
 
+	/**
+	 * 
+	 * @param isArchive
+	 */
 	public void setIsArchive(final Boolean isArchive) {
 		this.isArchive = isArchive;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	@Column(name = "dlt", columnDefinition = "BIT", length = 1)
 	public Boolean getIsDelete() {
 		return isDelete;
 	}
 
+	/**
+	 * 
+	 * @param isDelete
+	 */
 	public void setIsDelete(final Boolean isDelete) {
 		this.isDelete = isDelete;
 	}
 
+	/**
+	 * 
+	 */
 	@PrePersist
 	public void prePersist() {
 
 		final DateTime date = new DateTime();
 		if (!skipCreatedDate || createdDate == null) {
-			setCreatedDate(date);
+			setCreatedDateDT(date);
 		}
 	}
 
+	/**
+	 * 
+	 */
 	@PreUpdate
 	public void preUpdate() {
 
@@ -192,21 +302,36 @@ public abstract class CommonEntity implements Serializable {
 		}
 	}
 
+	/**
+	 * 
+	 */
 	@Column(name = "syncvrsnid")
 	public int getSyncVersionId() {
 		return syncVersionId;
 	}
 
+	/**
+	 * 
+	 * @param syncVersionId
+	 */
 	public void setSyncVersionId(final int syncVersionId) {
 		this.syncVersionId = syncVersionId;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	@Transient
 	@Column(name = "skpcrtddt", columnDefinition = "BIT", length = 1)
 	public boolean isSkipCreatedDate() {
 		return skipCreatedDate;
 	}
 
+	/**
+	 * 
+	 * @param skipCreatedDate
+	 */
 	public void setSkipCreatedDate(final boolean skipCreatedDate) {
 		this.skipCreatedDate = skipCreatedDate;
 	}

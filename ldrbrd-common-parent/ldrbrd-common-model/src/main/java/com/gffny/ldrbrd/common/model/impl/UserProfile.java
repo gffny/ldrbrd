@@ -3,11 +3,12 @@
  */
 package com.gffny.ldrbrd.common.model.impl;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
@@ -130,16 +131,36 @@ public abstract class UserProfile extends CommonUUIDEntity {
 	/**
 	 * @see com.gffny.leaderboard.model.IGolfer#getLastLogin()
 	 */
-	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	@Column(name = "lst_lgn_dt")
-	public DateTime getLastLogin() {
+	public Date getLastLogin() {
+		if (getLastLoginDT() != null) {
+			return getLastLoginDT().toDate();
+		}
+		return null;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	@Transient
+	public DateTime getLastLoginDT() {
 		return this.lastLogin;
 	}
 
 	/**
 	 * @see com.gffny.leaderboard.model.IGolfer#setLastLogin(org.joda.time.DateTime)
 	 */
-	public void setLastLogin(DateTime lastLogin) {
+	public void setLastLogin(Date lastLogin) {
+		setLastLoginDT(new DateTime(lastLogin));
+	}
+
+	/**
+	 * 
+	 * @param lastLogin
+	 */
+	@Transient
+	public void setLastLoginDT(DateTime lastLogin) {
 		this.lastLogin = lastLogin;
 	}
 
@@ -168,6 +189,10 @@ public abstract class UserProfile extends CommonUUIDEntity {
 		return this.failedLoginAttemptsCount;
 	}
 
+	/**
+	 * 
+	 * @param failedLoginAttemptsCount
+	 */
 	public void setFailedLoginAttemptsCount(Integer failedLoginAttemptsCount) {
 		this.failedLoginAttemptsCount = getDefaultNotNullValue(
 				failedLoginAttemptsCount, 5);

@@ -60,7 +60,7 @@ public class GolferDaoTest {
 		testProfile.setEmailAddress("gaffney.ie@gmail.com");
 		testProfile.setHandicap(26);
 		testProfile.setProfileHandle("gffny");
-		testProfile.setLastLogin(new DateTime());
+		testProfile.setLastLoginDT(new DateTime());
 		testProfile.setEnabled(true);
 		testProfile.setFailedLoginAttemptsCount(0);
 	}

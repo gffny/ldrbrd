@@ -23,7 +23,6 @@ public class GolferProfile extends UserProfile {
 	 */
 	private static final long serialVersionUID = 7564055826202157120L;
 
-	private UserProfile userProfile;
 	private Dominance handedness;
 	private int handicap = 0;
 
