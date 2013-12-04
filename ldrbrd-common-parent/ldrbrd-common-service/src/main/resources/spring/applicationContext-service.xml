@@ -15,7 +15,8 @@
 
 	<import resource="classpath*:spring/applicationContext-persistence.xml"/>
 	<import resource="classpath*:spring/applicationContext-model.xml"/>
-	<!-- <context:component-scan base-package="com.gffny.ldrbrd.common" /> -->
+
+	<context:component-scan base-package="com.gffny.ldrbrd.common.service.impl" />
 	<context:annotation-config />
 
 </beans>

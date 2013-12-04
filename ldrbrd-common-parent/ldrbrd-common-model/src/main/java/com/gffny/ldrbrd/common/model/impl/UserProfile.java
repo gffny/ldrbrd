@@ -27,9 +27,9 @@ public abstract class UserProfile extends CommonUUIDEntity {
 
 	private String profileHandle;
 
-	protected String firstName;
+	private String firstName;
 
-	protected String lastName;
+	private String lastName;
 
 	private String emailAddress;
 

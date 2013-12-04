@@ -25,6 +25,7 @@ import org.joda.time.DateTime;
  * 
  * @author jdgaffney
  */
+@SuppressWarnings("restriction")
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @XmlAccessorType(XmlAccessType.NONE)
@@ -57,6 +58,9 @@ public abstract class CommonEntity implements Serializable {
 
 	@JsonIgnore
 	private int syncVersionId;
+
+	@JsonIgnore
+	private boolean isNew = false;
 
 	/**
 	 * User action, used as user's archive. In active, not in archive DB
@@ -233,7 +237,7 @@ public abstract class CommonEntity implements Serializable {
 	 * @return
 	 */
 	@Column(name = "obslt", columnDefinition = "BIT", length = 1)
-	public Boolean getIsObsolete() {
+	public Boolean isObsolete() {
 		return isObsolete;
 	}
 
@@ -241,7 +245,7 @@ public abstract class CommonEntity implements Serializable {
 	 * 
 	 * @param isObsolete
 	 */
-	public void setIsObsolete(final Boolean isObsolete) {
+	public void setObsolete(final Boolean isObsolete) {
 		this.isObsolete = isObsolete;
 	}
 
@@ -250,7 +254,7 @@ public abstract class CommonEntity implements Serializable {
 	 * @return
 	 */
 	@Column(name = "archv", columnDefinition = "BIT", length = 1)
-	public Boolean getIsArchive() {
+	public Boolean isArchive() {
 		return isArchive;
 	}
 
@@ -258,7 +262,7 @@ public abstract class CommonEntity implements Serializable {
 	 * 
 	 * @param isArchive
 	 */
-	public void setIsArchive(final Boolean isArchive) {
+	public void setArchive(final Boolean isArchive) {
 		this.isArchive = isArchive;
 	}
 
@@ -267,7 +271,7 @@ public abstract class CommonEntity implements Serializable {
 	 * @return
 	 */
 	@Column(name = "dlt", columnDefinition = "BIT", length = 1)
-	public Boolean getIsDelete() {
+	public Boolean isDelete() {
 		return isDelete;
 	}
 
@@ -275,7 +279,7 @@ public abstract class CommonEntity implements Serializable {
 	 * 
 	 * @param isDelete
 	 */
-	public void setIsDelete(final Boolean isDelete) {
+	public void setDelete(final Boolean isDelete) {
 		this.isDelete = isDelete;
 	}
 

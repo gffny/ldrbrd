@@ -70,6 +70,7 @@ public class GolferProfile extends UserProfile {
 	@Transient
 	public String getHandednessValue() {
 		// TODO check if I want to call this value or something else
+		// change to dominance
 		return handedness.toString();
 	}
 
@@ -79,5 +80,13 @@ public class GolferProfile extends UserProfile {
 	 */
 	public void setHandedness(Dominance handedness) {
 		this.handedness = handedness;
+	}
+
+	/**
+	 * 
+	 */
+	public String toString() {
+		return this.getFirstName() + " " + this.getLastName() + " "
+				+ this.getId();
 	}
 }

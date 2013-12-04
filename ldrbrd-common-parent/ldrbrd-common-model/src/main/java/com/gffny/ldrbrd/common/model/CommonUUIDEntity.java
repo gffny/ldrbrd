@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlElement;
  * @author jdgaffney
  * 
  */
+@SuppressWarnings("restriction")
 @MappedSuperclass
 public abstract class CommonUUIDEntity extends CommonEntity {
 
