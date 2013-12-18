@@ -74,6 +74,13 @@ public class CompetitionRound extends CommonUUIDEntity {
 
 	/**
 	 * 
+	 */
+	public CompetitionRound() {
+		//hibernate required non-private zero-argument constructor
+	}
+
+	/**
+	 * 
 	 * @param competition
 	 * @param roundDate
 	 * @param roundNumber

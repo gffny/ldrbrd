@@ -14,8 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.gffny.ldrbrd.common.model.enums.TeeColour;
 import com.gffny.ldrbrd.common.model.impl.Competition;
 import com.gffny.ldrbrd.common.model.impl.Course;
-import com.gffny.ldrbrd.common.service.impl.CompetitionService;
-import com.gffny.ldrbrd.common.service.impl.CourseClubService;
+import com.gffny.ldrbrd.common.service.ICompetitionService;
+import com.gffny.ldrbrd.common.service.ICourseClubService;
 
 /**
  * @author jdgaffney
@@ -28,10 +28,10 @@ import com.gffny.ldrbrd.common.service.impl.CourseClubService;
 public class CompetitionDataLoad {
 
 	@Autowired
-	private CompetitionService competitionService;
+	private ICompetitionService competitionService;
 
 	@Autowired
-	private CourseClubService courseClubService;
+	private ICourseClubService courseClubService;
 
 	private Competition competition;
 

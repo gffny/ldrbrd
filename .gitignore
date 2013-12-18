@@ -29,3 +29,5 @@ activemq-data/
 #Deployment artifacts #
 deploy/artifact
 
+#Class Files#
+*.class

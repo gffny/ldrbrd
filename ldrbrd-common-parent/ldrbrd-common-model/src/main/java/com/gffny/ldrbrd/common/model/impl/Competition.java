@@ -41,6 +41,13 @@ public class Competition extends CommonUUIDEntity {
 
 	/**
 	 * 
+	 */
+	public Competition() {
+		//hibernate required non-private zero-argument constructor
+	}
+	
+	/**
+	 * 
 	 * @param competitionName
 	 */
 	private Competition(String competitionName) {

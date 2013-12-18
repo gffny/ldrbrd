@@ -73,6 +73,13 @@ public class Scorecard extends CommonUUIDEntity {
 	}
 
 	/**
+	 *
+	 */
+	public Scorecard() {
+		//hibernate required non-private zero-argument constructor
+	}
+
+	/**
 	 * 
 	 * @param golferId
 	 * @param courseId

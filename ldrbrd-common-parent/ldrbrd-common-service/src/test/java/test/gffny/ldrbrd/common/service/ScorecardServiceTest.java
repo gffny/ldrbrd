@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.gffny.ldrbrd.common.model.impl.GolfClub;
 import com.gffny.ldrbrd.common.model.impl.GolferProfile;
 import com.gffny.ldrbrd.common.model.impl.Scorecard;
-import com.gffny.ldrbrd.common.service.impl.ScorecardService;
+import com.gffny.ldrbrd.common.service.IScorecardService;
 
 /**
  * @author jdgaffney
@@ -30,7 +30,7 @@ import com.gffny.ldrbrd.common.service.impl.ScorecardService;
 public class ScorecardServiceTest {
 
 	@Autowired
-	private ScorecardService scorecardService;
+	private IScorecardService scorecardService;
 
 	private GolferProfile golferProfile;
 	private List<GolfClub> golfbag;
@@ -61,6 +61,6 @@ public class ScorecardServiceTest {
 		scorecard = scorecardService.startCompetitionScorecard(scorerId,
 				scoredId, competitionId, roundNumber,
 				new LinkedList<GolfClub>());
-
+		System.out.println(scorecard.toString());
 	}
 }

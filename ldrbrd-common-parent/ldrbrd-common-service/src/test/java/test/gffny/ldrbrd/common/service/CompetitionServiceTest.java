@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gffny.ldrbrd.common.model.impl.Competition;
 import com.gffny.ldrbrd.common.model.impl.CompetitionRound;
-import com.gffny.ldrbrd.common.service.impl.CompetitionService;
+import com.gffny.ldrbrd.common.service.ICompetitionService;
 
 /**
  * @author jdgaffney
@@ -18,7 +18,7 @@ import com.gffny.ldrbrd.common.service.impl.CompetitionService;
 public class CompetitionServiceTest {
 
 	@Autowired
-	private CompetitionService competitionService;
+	private ICompetitionService competitionService;
 
 	private Competition competition;
 

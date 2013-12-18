@@ -17,13 +17,14 @@ import com.gffny.ldrbrd.common.model.enums.TeeColour;
 import com.gffny.ldrbrd.common.model.impl.Club;
 import com.gffny.ldrbrd.common.model.impl.Course;
 import com.gffny.ldrbrd.common.persistence.GenericDao;
+import com.gffny.ldrbrd.common.service.ICourseClubService;
 
 /**
  * @author jdgaffney
  * 
  */
 @Service
-public class CourseClubService {
+public class CourseClubService implements ICourseClubService {
 
 	/** The Constant log. */
 	private static final Logger LOG = LoggerFactory
@@ -41,9 +42,8 @@ public class CourseClubService {
 	@Autowired
 	private GenericDao<Club> clubDao;
 
-	/**
-	 * 
-	 * @return
+	/* (non-Javadoc)
+	 * @see com.gffny.ldrbrd.common.service.impl.ICourseClubService#createCourse(java.lang.String, com.gffny.ldrbrd.common.model.impl.Club, com.gffny.ldrbrd.common.model.enums.TeeColour, java.lang.Double, java.lang.Integer, java.lang.String)
 	 */
 	public Course createCourse(String courseName, Club club,
 			TeeColour teeColour, Double slopeIndex, Integer par,
@@ -58,10 +58,8 @@ public class CourseClubService {
 		return newCourse;
 	}
 
-	/**
-	 * 
-	 * @param clubName
-	 * @return
+	/* (non-Javadoc)
+	 * @see com.gffny.ldrbrd.common.service.impl.ICourseClubService#createClub(java.lang.String)
 	 */
 	public Club createClub(String clubName) {
 		Club newClub = Club.createClub(clubName);
@@ -73,19 +71,15 @@ public class CourseClubService {
 		return newClub;
 	}
 
-	/**
-	 * 
-	 * @return
+	/* (non-Javadoc)
+	 * @see com.gffny.ldrbrd.common.service.impl.ICourseClubService#getClubList()
 	 */
 	public List<Club> getClubList() {
 		return clubDao.findAll(Club.class);
 	}
 
-	/**
-	 * 
-	 * @param courseName
-	 * @param teeColour
-	 * @return
+	/* (non-Javadoc)
+	 * @see com.gffny.ldrbrd.common.service.impl.ICourseClubService#getCourseByNameAndTeeColour(java.lang.String, com.gffny.ldrbrd.common.model.enums.TeeColour)
 	 */
 	public Course getCourseByNameAndTeeColour(String courseName,
 			TeeColour teeColour) {

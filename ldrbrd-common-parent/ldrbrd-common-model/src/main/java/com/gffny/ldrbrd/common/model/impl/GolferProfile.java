@@ -5,6 +5,8 @@ package com.gffny.ldrbrd.common.model.impl;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -14,6 +16,9 @@ import com.gffny.ldrbrd.common.model.enums.Dominance;
  * @author
  * 
  */
+@NamedQueries({
+	@NamedQuery(name = GolferProfile.FIND_BY_HANDLE, query="select golfer from GolferProfile golfer where golfer.profileHandle = :profileHandle") //golfer.isObsolete = false and
+})
 @Entity
 @Table(name = "t_golfer")
 public class GolferProfile extends UserProfile {
@@ -22,6 +27,8 @@ public class GolferProfile extends UserProfile {
 	 * 
 	 */
 	private static final long serialVersionUID = 7564055826202157120L;
+	
+	public static final String FIND_BY_HANDLE = "findByProfileHandle";
 
 	private Dominance handedness;
 	private int handicap = 0;

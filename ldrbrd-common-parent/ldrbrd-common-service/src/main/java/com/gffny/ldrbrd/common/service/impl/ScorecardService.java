@@ -19,13 +19,15 @@ import com.gffny.ldrbrd.common.model.impl.GolfClub;
 import com.gffny.ldrbrd.common.model.impl.GolferProfile;
 import com.gffny.ldrbrd.common.model.impl.Scorecard;
 import com.gffny.ldrbrd.common.persistence.GenericDao;
+import com.gffny.ldrbrd.common.service.ICompetitionService;
+import com.gffny.ldrbrd.common.service.IScorecardService;
 
 /**
  * @author jdgaffney
  * 
  */
 @Service
-public class ScorecardService {
+public class ScorecardService implements IScorecardService {
 
 	/** The Constant log. */
 	private static final Logger LOG = LoggerFactory
@@ -59,16 +61,10 @@ public class ScorecardService {
 	 * 
 	 */
 	@Autowired
-	private CompetitionService competitionService;
+	private ICompetitionService competitionService;
 
-	/**
-	 * 
-	 * @param golfer
-	 * @param course
-	 * @param handicap
-	 * @param hashMap
-	 * @param linkedList
-	 * @return
+	/* (non-Javadoc)
+	 * @see com.gffny.ldrbrd.common.service.impl.IScorecardService#startGeneralScorecard(java.lang.String, java.lang.String, int, java.util.HashMap, java.util.LinkedList)
 	 */
 	public Scorecard startGeneralScorecard(String golferId, String courseId,
 			int handicap, HashMap<String, String> hashMap,
@@ -89,13 +85,8 @@ public class ScorecardService {
 		return null;
 	}
 
-	/**
-	 * 
-	 * @param golferId
-	 * @param courseId
-	 * @param hashMap
-	 * @param linkedList
-	 * @return
+	/* (non-Javadoc)
+	 * @see com.gffny.ldrbrd.common.service.impl.IScorecardService#startGeneralScorecard(java.lang.String, java.lang.String, java.util.HashMap, java.util.LinkedList)
 	 */
 	public Scorecard startGeneralScorecard(String golferId, String courseId,
 			HashMap<String, String> hashMap, LinkedList<GolfClub> linkedList) {
@@ -116,14 +107,8 @@ public class ScorecardService {
 		return null;
 	}
 
-	/**
-	 * 
-	 * @param scorerId
-	 * @param scoredId
-	 * @param competitionId
-	 * @param roundNumber
-	 * @param linkedList
-	 * @return
+	/* (non-Javadoc)
+	 * @see com.gffny.ldrbrd.common.service.impl.IScorecardService#startCompetitionScorecard(java.lang.String, java.lang.String, java.lang.String, java.lang.Integer, java.util.LinkedList)
 	 */
 	public Scorecard startCompetitionScorecard(String scorerId,
 			String scoredId, String competitionId, Integer roundNumber,

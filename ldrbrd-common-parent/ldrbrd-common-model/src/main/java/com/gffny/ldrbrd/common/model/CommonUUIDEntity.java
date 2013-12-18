@@ -14,7 +14,6 @@ import javax.xml.bind.annotation.XmlElement;
  * @author jdgaffney
  * 
  */
-@SuppressWarnings("restriction")
 @MappedSuperclass
 public abstract class CommonUUIDEntity extends CommonEntity {
 
@@ -30,7 +29,7 @@ public abstract class CommonUUIDEntity extends CommonEntity {
 	/**
 	 * 
 	 */
-	@Id
+	//@Id
 	@XmlElement
 	private String id;
 
@@ -73,7 +72,7 @@ public abstract class CommonUUIDEntity extends CommonEntity {
 	/**
 	 * 
 	 */
-	protected CommonUUIDEntity() {
+	public CommonUUIDEntity() {
 		if (getId() == null) {
 			id = UUID.randomUUID().toString();
 		}

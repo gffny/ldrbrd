@@ -16,7 +16,7 @@ import com.gffny.ldrbrd.common.model.impl.GolferProfile;
 import com.gffny.ldrbrd.common.security.enums.AuthenticationResult;
 import com.gffny.ldrbrd.common.security.token.AuthenticationToken;
 import com.gffny.ldrbrd.common.security.token.impl.EmailPasswordToken;
-import com.gffny.ldrbrd.common.service.impl.PersonService;
+import com.gffny.ldrbrd.common.service.IPersonService;
 
 /**
  * @author jdgaffney
@@ -29,7 +29,7 @@ import com.gffny.ldrbrd.common.service.impl.PersonService;
 public class AuthenticationTest {
 
 	@Autowired
-	PersonService personService;
+	IPersonService personService;
 
 	GolferProfile testGolfer = new GolferProfile();
 	String password = "password";

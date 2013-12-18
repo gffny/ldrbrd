@@ -7,8 +7,6 @@
 		<artifactId>ldrbrd-test-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>com.gffny.ldrbrd</groupId>
 	<artifactId>ldrbrd-test-dataload</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>data load</name>
 </project>

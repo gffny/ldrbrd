@@ -25,7 +25,6 @@ import org.joda.time.DateTime;
  * 
  * @author jdgaffney
  */
-@SuppressWarnings("restriction")
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @XmlAccessorType(XmlAccessType.NONE)

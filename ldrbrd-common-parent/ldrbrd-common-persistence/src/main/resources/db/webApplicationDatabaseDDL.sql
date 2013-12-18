@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS `ldrbrd`.`t_club` ;
 CREATE  TABLE IF NOT EXISTS `ldrbrd`.`t_club` (
   `id` VARCHAR(45) NOT NULL ,
   `clb_nm` VARCHAR(100) NOT NULL ,
-  `address` VARCHAR(300) NULL DEFAULT NULL ,
+  `addrss` VARCHAR(300) NULL DEFAULT NULL ,
   `mngr_nm` VARCHAR(100) NULL DEFAULT NULL ,
   `drs_cd_plcy` VARCHAR(200) NULL DEFAULT NULL ,
   `grn_kpr_nm` VARCHAR(100) NULL DEFAULT NULL ,
@@ -45,10 +45,10 @@ CREATE  TABLE IF NOT EXISTS `ldrbrd`.`t_course` (
   `id` VARCHAR(45) NOT NULL ,
   `crs_nm` VARCHAR(100) NOT NULL ,
   `clb_id` VARCHAR(45) NOT NULL ,
-  `t_clr` INT(11) NULL DEFAULT NULL COMMENT 'Ordinal value for enum in code' ,
+  `tee_clr` INT(11) NULL DEFAULT NULL COMMENT 'Ordinal value for enum in code' ,
   `slp_indx` DOUBLE NULL DEFAULT NULL ,
   `par` INT(11) NULL DEFAULT NULL ,
-  `crs_img_id` VARCHAR(45) NULL DEFAULT NULL ,
+  `crs_img_ref` VARCHAR(45) NULL DEFAULT NULL ,
   `vrsn` INT(11) NULL DEFAULT NULL ,
   `crtdby` VARCHAR(45) NULL DEFAULT NULL ,
   `updtdby` VARCHAR(45) NULL DEFAULT NULL ,
@@ -356,7 +356,66 @@ CREATE  TABLE IF NOT EXISTS `ldrbrd`.`t_user` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
+-- -----------------------------------------------------
+-- Table `ldrbrd`.`t_competition`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ldrbrd`.`t_competition` ;
 
+CREATE  TABLE IF NOT EXISTS `ldrbrd`.`t_competition` (
+  `id` VARCHAR(45) NOT NULL ,
+  `cmpttn_nm` VARCHAR(100) NOT NULL ,
+  `vrsn` INT(11) NULL DEFAULT NULL ,
+  `crtdby` VARCHAR(45) NULL DEFAULT NULL ,
+  `updtdby` VARCHAR(45) NULL DEFAULT NULL ,
+  `crtddt` DATETIME NULL DEFAULT NULL ,
+  `updtddt` DATETIME NULL DEFAULT NULL ,
+  `skpcrtddt` TINYINT(1) NULL DEFAULT NULL ,
+  `syncvrsnid` INT(11) NULL DEFAULT NULL ,
+  `obslt` TINYINT(1) NULL DEFAULT NULL ,
+  `archv` TINYINT(1) NULL DEFAULT NULL ,
+  `dlt` TINYINT(1) NULL DEFAULT NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `cmpttn_nm_UNIQUE` (`cmpttn_nm` ASC) )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+-- -----------------------------------------------------
+-- Table `ldrbrd`.`t_competition_round`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ldrbrd`.`t_competition_round` ;
+
+CREATE  TABLE IF NOT EXISTS `ldrbrd`.`t_competition_round` (
+  `id` VARCHAR(45) NOT NULL ,
+  `rnd_nmbr` INT(11) NOT NULL ,
+  `cmpttn_id` VARCHAR(45) NOT NULL ,
+  `crs_id` VARCHAR(45) NOT NULL ,
+  `rnd_dt` DATETIME NOT NULL,
+  `vrsn` INT(11) NULL DEFAULT NULL ,
+  `crtdby` VARCHAR(45) NULL DEFAULT NULL ,
+  `updtdby` VARCHAR(45) NULL DEFAULT NULL ,
+  `crtddt` DATETIME NULL DEFAULT NULL ,
+  `updtddt` DATETIME NULL DEFAULT NULL ,
+  `skpcrtddt` TINYINT(1) NULL DEFAULT NULL ,
+  `syncvrsnid` INT(11) NULL DEFAULT NULL ,
+  `obslt` TINYINT(1) NULL DEFAULT NULL ,
+  `archv` TINYINT(1) NULL DEFAULT NULL ,
+  `dlt` TINYINT(1) NULL DEFAULT NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `cmpttn_id_UNIQUE` (`id` ASC) ,
+  UNIQUE INDEX `cmpttn_id_rnd_nbmr_UNIQUE` ( `rnd_nmbr` ASC, `cmpttn_id` ASC ),
+  CONSTRAINT `cmpttn_rnd_cmpttn_fk`
+    FOREIGN KEY (`cmpttn_id` )
+    REFERENCES `ldrbrd`.`t_competition` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `cmpttn_rnd_crs_fk`
+    FOREIGN KEY (`crs_id` )
+    REFERENCES `ldrbrd`.`t_course` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+ )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

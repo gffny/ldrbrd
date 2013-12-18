@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.gffny.ldrbrd.common.model.enums.TeeColour;
 import com.gffny.ldrbrd.common.model.impl.Club;
 import com.gffny.ldrbrd.common.model.impl.Course;
-import com.gffny.ldrbrd.common.service.impl.CourseClubService;
+import com.gffny.ldrbrd.common.service.ICourseClubService;
 
 /**
  * @author jdgaffney
@@ -26,7 +26,7 @@ import com.gffny.ldrbrd.common.service.impl.CourseClubService;
 public class CourseDataLoad {
 
 	@Autowired
-	private CourseClubService courseClubService;
+	private ICourseClubService courseClubService;
 
 	/**
 	 * @throws java.lang.Exception

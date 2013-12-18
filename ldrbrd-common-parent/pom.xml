@@ -15,6 +15,7 @@
 		<module>ldrbrd-common-persistence</module>
 		<module>ldrbrd-common-security</module>
 		<module>ldrbrd-common-service</module>
+		<module>ldrbrd-common-utils</module>
 	</modules>
 
 	<properties>

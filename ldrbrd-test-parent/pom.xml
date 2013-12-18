@@ -23,25 +23,24 @@
         <spring.version>3.2.4.RELEASE</spring.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<!-- JDBC CONFIG -->
+		<!-- JDBC CONFIG 
+		THESE ARE IGNORED
 		<jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
-<!--  	<jdbc.url>jdbc:mysql://ldrbrd-dev-1.c5jcv5mjkggo.us-east-1.rds.amazonaws.com:3306/ldrbrd</jdbc.url>-->
 		<jdbc.url>jdbc:mysql://localhost:3306/ldrbrd</jdbc.url>
-		<jdbc.user>root</jdbc.user>
-		<jdbc.password>password</jdbc.password>
+		<jdbc.user>ldrbrd</jdbc.user>
+		<jdbc.password>password</jdbc.password> -->
 
 		<!-- host port where the application will be deployed -->
 		<log4j.level>DEBUG</log4j.level>		
+<!-- 		
 		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
 		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/ldrbrd</property>
-		<property name="hibernate.connection.username">root</property>
-		<property name="hibernate.connection.password">password</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
 		<property name="hibernate.default_schema">ldrbrd</property>
 		<property name="hibernate.dbcp.initialSize">8</property>
 		<property name="hibernate.dbcp.maxActive">20</property>
 		<property name="hibernate.dbcp.maxIdle">20</property>
-		<property name="hibernate.dbcp.minIdle">0</property>
+		<property name="hibernate.dbcp.minIdle">0</property> -->
 	</properties>
 	
 	<dependencies>

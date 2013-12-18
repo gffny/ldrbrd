@@ -17,6 +17,7 @@ import com.gffny.ldrbrd.common.persistence.GenericDao;
 import com.gffny.ldrbrd.common.security.enums.AuthenticationResult;
 import com.gffny.ldrbrd.common.security.token.AuthenticationToken;
 import com.gffny.ldrbrd.common.security.token.impl.EmailPasswordToken;
+import com.gffny.ldrbrd.common.service.IPersonService;
 
 /**
  * 
@@ -24,7 +25,7 @@ import com.gffny.ldrbrd.common.security.token.impl.EmailPasswordToken;
  * 
  */
 @Service
-public class PersonService {
+public class PersonService implements IPersonService {
 
 	/** The Constant log. */
 	private static final Logger LOG = LoggerFactory
@@ -36,10 +37,8 @@ public class PersonService {
 	@Autowired
 	private GenericDao<GolferProfile> personDao;
 
-	/**
-	 * 
-	 * @param golfer
-	 * @throws DataAccessException
+	/* (non-Javadoc)
+	 * @see com.gffny.ldrbrd.common.service.impl.IPersonService#addPerson(com.gffny.ldrbrd.common.model.impl.GolferProfile)
 	 */
 	public void addPerson(GolferProfile golfer) throws DataAccessException {
 		if (golfer != null) {
@@ -51,19 +50,15 @@ public class PersonService {
 		}
 	}
 
-	/**
-	 * 
-	 * @return
-	 * @throws DataAccessException
+	/* (non-Javadoc)
+	 * @see com.gffny.ldrbrd.common.service.impl.IPersonService#fetchAllPersons()
 	 */
 	public List<GolferProfile> fetchAllPersons() throws DataAccessException {
 		return new ArrayList<GolferProfile>();
 	}
 
-	/**
-	 * 
-	 * @param authToken
-	 * @return
+	/* (non-Javadoc)
+	 * @see com.gffny.ldrbrd.common.service.impl.IPersonService#authenticateUser(com.gffny.ldrbrd.common.security.token.AuthenticationToken)
 	 */
 	public AuthenticationResult authenticateUser(AuthenticationToken authToken) {
 		// check if authToken is not null

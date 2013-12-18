@@ -19,13 +19,14 @@ import com.gffny.ldrbrd.common.model.impl.Competition;
 import com.gffny.ldrbrd.common.model.impl.CompetitionRound;
 import com.gffny.ldrbrd.common.model.impl.Course;
 import com.gffny.ldrbrd.common.persistence.GenericDao;
+import com.gffny.ldrbrd.common.service.ICompetitionService;
 
 /**
  * @author jdgaffney
  * 
  */
 @Service
-public class CompetitionService {
+public class CompetitionService implements ICompetitionService {
 
 	/** The Constant log. */
 	private static final Logger LOG = LoggerFactory
@@ -43,11 +44,8 @@ public class CompetitionService {
 	@Autowired
 	private GenericDao<CompetitionRound> competitionRoundDao;
 
-	/**
-	 * 
-	 * @param competitionId
-	 * @param roundNumber
-	 * @return
+	/* (non-Javadoc)
+	 * @see com.gffny.ldrbrd.common.service.impl.ICompetitionService#getCompetitionRound(java.lang.String, java.lang.Integer)
 	 */
 	@Transactional(readOnly = true)
 	public CompetitionRound getCompetitionRound(String competitionId,
@@ -61,10 +59,8 @@ public class CompetitionService {
 		return competitionRoundList.get(0);
 	}
 
-	/**
-	 * 
-	 * @param competitionName
-	 * @return
+	/* (non-Javadoc)
+	 * @see com.gffny.ldrbrd.common.service.impl.ICompetitionService#createCompetition(java.lang.String)
 	 */
 	public Competition createCompetition(String competitionName) {
 		Competition newCompetition = Competition
@@ -77,12 +73,8 @@ public class CompetitionService {
 		return newCompetition;
 	}
 
-	/**
-	 * 
-	 * @param competition
-	 * @param roundDate
-	 * @param roundNumber
-	 * @return
+	/* (non-Javadoc)
+	 * @see com.gffny.ldrbrd.common.service.impl.ICompetitionService#createCompetitionRound(com.gffny.ldrbrd.common.model.impl.Competition, org.joda.time.DateTime, java.lang.Integer, com.gffny.ldrbrd.common.model.impl.Course)
 	 */
 	public CompetitionRound createCompetitionRound(Competition competition,
 			DateTime roundDate, Integer roundNumber, Course course) {
