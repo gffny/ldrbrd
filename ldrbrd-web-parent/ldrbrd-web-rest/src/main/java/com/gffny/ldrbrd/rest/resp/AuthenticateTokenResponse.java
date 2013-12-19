@@ -3,6 +3,8 @@
  */
 package com.gffny.ldrbrd.rest.resp;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 /**
  * @author jdgaffney
  *
@@ -11,7 +13,7 @@ package com.gffny.ldrbrd.rest.resp;
 public class AuthenticateTokenResponse {
 
 	private StatusResponse status;
-//	private UserInfo userInfo;
+	private UserDetails userDetails;
 
 	/**
 	 * 
@@ -33,15 +35,15 @@ public class AuthenticateTokenResponse {
 	 * 
 	 * @return
 	 */
-//	public UserInfo getUserInfo() {
-//		return userInfo;
-//	}
+	public UserDetails getUserDetails() {
+		return userDetails;
+	}
 
 	/**
 	 * 
 	 * @param userInfo
 	 */
-//	public void setUserInfo(final UserInfo userInfo) {
-//		this.userInfo = userInfo;
-//	}
+	public void setUserInfo(final UserDetails userDetails) {
+		this.userDetails = userDetails;
+	}
 }

@@ -125,6 +125,7 @@ public abstract class CommonEntity implements Serializable {
 	 * 
 	 * @return
 	 */
+	@JsonIgnore
 	@Column(name = "crtdby")
 	public String getCreatedBy() {
 		return createdBy;
@@ -142,6 +143,7 @@ public abstract class CommonEntity implements Serializable {
 	 * 
 	 * @return
 	 */
+	@JsonIgnore
 	@Column(name = "updtdby")
 	public String getUpdatedBy() {
 		return updatedBy;
@@ -159,6 +161,7 @@ public abstract class CommonEntity implements Serializable {
 	 * 
 	 * @return
 	 */
+	@JsonIgnore
 	@Column(name = "crtddt")
 	public Date getCreatedDate() {
 		if (getCreatedDateDT() != null) {
@@ -171,6 +174,7 @@ public abstract class CommonEntity implements Serializable {
 	 * 
 	 * @return
 	 */
+	@JsonIgnore
 	@Transient
 	public DateTime getCreatedDateDT() {
 		return this.createdDate;
@@ -188,6 +192,7 @@ public abstract class CommonEntity implements Serializable {
 	 * 
 	 * @param createdDate
 	 */
+	@JsonIgnore
 	@Transient
 	public void setCreatedDateDT(final DateTime createdDate) {
 		this.createdDate = createdDate;
@@ -197,6 +202,7 @@ public abstract class CommonEntity implements Serializable {
 	 * 
 	 * @return
 	 */
+	@JsonIgnore
 	@Column(name = "updtddt")
 	public Date getUpdatedDate() {
 		if (getUpdatedDateDT() != null) {
@@ -209,6 +215,7 @@ public abstract class CommonEntity implements Serializable {
 	 * 
 	 * @return
 	 */
+	@JsonIgnore
 	@Transient
 	public DateTime getUpdatedDateDT() {
 		return this.updatedDate;
@@ -226,6 +233,7 @@ public abstract class CommonEntity implements Serializable {
 	 * 
 	 * @param updateDatedDate
 	 */
+	@JsonIgnore
 	@Transient
 	public void setUpdatedDateDT(final DateTime updateDatedDate) {
 		this.updatedDate = updateDatedDate;
@@ -235,6 +243,7 @@ public abstract class CommonEntity implements Serializable {
 	 * 
 	 * @return
 	 */
+	@JsonIgnore
 	@Column(name = "obslt", columnDefinition = "BIT", length = 1)
 	public Boolean isObsolete() {
 		return isObsolete;
@@ -252,6 +261,7 @@ public abstract class CommonEntity implements Serializable {
 	 * 
 	 * @return
 	 */
+	@JsonIgnore
 	@Column(name = "archv", columnDefinition = "BIT", length = 1)
 	public Boolean isArchive() {
 		return isArchive;
@@ -269,6 +279,7 @@ public abstract class CommonEntity implements Serializable {
 	 * 
 	 * @return
 	 */
+	@JsonIgnore
 	@Column(name = "dlt", columnDefinition = "BIT", length = 1)
 	public Boolean isDelete() {
 		return isDelete;
@@ -308,6 +319,7 @@ public abstract class CommonEntity implements Serializable {
 	/**
 	 * 
 	 */
+	@JsonIgnore
 	@Column(name = "syncvrsnid")
 	public int getSyncVersionId() {
 		return syncVersionId;
@@ -325,6 +337,7 @@ public abstract class CommonEntity implements Serializable {
 	 * 
 	 * @return
 	 */
+	@JsonIgnore
 	@Transient
 	@Column(name = "skpcrtddt", columnDefinition = "BIT", length = 1)
 	public boolean isSkipCreatedDate() {

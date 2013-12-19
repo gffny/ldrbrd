@@ -89,7 +89,7 @@ CREATE  TABLE IF NOT EXISTS `ldrbrd`.`t_golfer` (
   `lst_lgn_dt` TIMESTAMP NULL ,
   `fld_lgn_attmpts` INT(11) NULL ,
   `hndcp` INT(11) NULL DEFAULT NULL ,
-  `glfr_img_ref` VARCHAR(45) NULL DEFAULT NULL ,
+  `img_ref` VARCHAR(200) NULL ,
   `hnddnss` INT(11) NULL DEFAULT NULL ,
   `vrsn` INT(11) NULL DEFAULT NULL ,
   `crtdby` VARCHAR(45) NULL DEFAULT NULL ,

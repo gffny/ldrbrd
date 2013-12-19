@@ -75,7 +75,12 @@ public class CourseClubService implements ICourseClubService {
 	 * @see com.gffny.ldrbrd.common.service.impl.ICourseClubService#getClubList()
 	 */
 	public List<Club> getClubList() {
+		try {
 		return clubDao.findAll(Club.class);
+		} catch (DataAccessException daex) {
+			//TODO fix this 
+			return null;
+		}
 	}
 
 	/* (non-Javadoc)
@@ -86,12 +91,21 @@ public class CourseClubService implements ICourseClubService {
 		Map<String, Object> params = new HashMap<String, Object>();// Collections.emptyMap();
 		params.put("courseName", courseName);
 		params.put("teeColour", teeColour);
-		List<Course> courseList = courseDao.findByNamedQuery(
-				Course.FIND_BY_NAME_AND_TEE_COLOUR, params);
-		if (courseList != null) {
-			return courseList.get(0);
-		} else {
+		try {
+			List<Course> courseList = courseDao.findByNamedQuery(
+					Course.FIND_BY_NAME_AND_TEE_COLOUR, params);
+			if (courseList != null) {
+				return courseList.get(0);
+			} else {
+
+				//TODO fix this 
+				return null;
+			}
+		} catch (DataAccessException daex) {
+			
+			//TODO fix this 
 			return null;
 		}
+
 	}
 }

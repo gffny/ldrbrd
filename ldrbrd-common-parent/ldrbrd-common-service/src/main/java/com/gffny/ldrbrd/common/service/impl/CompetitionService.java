@@ -53,10 +53,16 @@ public class CompetitionService implements ICompetitionService {
 		Map<String, Object> params = Collections.emptyMap();
 		params.put("competitionId", competitionId);
 		params.put("roundNumber", roundNumber);
+		try {
 		List<CompetitionRound> competitionRoundList = competitionRoundDao
 				.findByNamedQuery(
 						CompetitionRound.FIND_BY_COMP_ID_AND_RND_NMBR, params);
 		return competitionRoundList.get(0);
+		} catch (DataAccessException daex) {
+			
+			//TODO implement this 
+			return null;
+		}
 	}
 
 	/* (non-Javadoc)

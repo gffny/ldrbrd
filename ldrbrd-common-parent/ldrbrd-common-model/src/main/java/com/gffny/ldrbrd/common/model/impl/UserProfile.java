@@ -35,6 +35,8 @@ public abstract class UserProfile extends CommonUUIDEntity {
 
 	private String password;
 
+	private String profileImageRef;
+
 	private boolean isEnabled = true;
 
 	private DateTime lastLogin;
@@ -126,6 +128,23 @@ public abstract class UserProfile extends CommonUUIDEntity {
 	 */
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	/**
+	 * 
+	 * @see com.gffny.leaderboard.model.IGolfer#getLocation()
+	 */
+	@Column(name = "img_ref")
+	public String getProfileImageRef() {
+		return profileImageRef;
+	}
+
+	/**
+	 * 
+	 * @see com.gffny.leaderboard.model.IGolfer#setLocation(java.lang.String)
+	 */
+	public void setProfileImageRef(String profileImageRef) {
+		this.profileImageRef = profileImageRef;
 	}
 
 	/**

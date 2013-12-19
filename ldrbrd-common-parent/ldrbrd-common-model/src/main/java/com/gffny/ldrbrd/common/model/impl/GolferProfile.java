@@ -35,17 +35,6 @@ public class GolferProfile extends UserProfile {
 
 	/**
 	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	// public String toString() {
-	// return "Golfer [userId=" + this.getId() + ", profileHandle="
-	// + this.getProfileHandle() + ", emailAddress="
-	// + getEmailAddress() + ", firstName=" + firstName
-	// + ", lastName=" + lastName + ", handicap=" + handicap + "]";
-	// }
-
-	/**
-	 * 
 	 * @see com.gffny.leaderboard.model.IGolfer#getHandicap()
 	 */
 	@Column(name = "hndcp")
@@ -90,7 +79,7 @@ public class GolferProfile extends UserProfile {
 	}
 
 	/**
-	 * 
+	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
 		return this.getFirstName() + " " + this.getLastName() + " "
