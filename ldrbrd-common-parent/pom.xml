@@ -11,20 +11,35 @@
 	<name>common parent</name>
 	<packaging>pom</packaging>
 	<modules>
+		<module>ldrbrd-common-utils</module>
 		<module>ldrbrd-common-model</module>
 		<module>ldrbrd-common-persistence</module>
 		<module>ldrbrd-common-security</module>
 		<module>ldrbrd-common-service</module>
-		<module>ldrbrd-common-utils</module>
 	</modules>
 
 	<properties>
-        <hibernate.version>4.2.6.Final</hibernate.version>
-        <mysql.connector.version>5.1.18</mysql.connector.version>
-        <slf4j.version>1.7.5</slf4j.version>
-        <logback.version>1.0.13</logback.version>
-        <spring.version>3.2.4.RELEASE</spring.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<commons.codec.version>1.8</commons.codec.version>
+		<commons.beanutils.version>1.8.3</commons.beanutils.version>
+		<commons.config.version>1.7</commons.config.version>
+		<commons.io.version>2.4</commons.io.version>
+		<hibernate.annotations.version>3.5.6-Final</hibernate.annotations.version>
+		<hibernate.validator.version>5.0.2.Final</hibernate.validator.version>
+		<hibernate.version>4.2.6.Final</hibernate.version>
+		<jackson.core.asl>1.9.13</jackson.core.asl>
+		<jackson.mapper.lapl.version>1.9.13</jackson.mapper.lapl.version>
+		<jadira.usertype>3.1.0.CR8</jadira.usertype>
+		<joda.time.hibernate>1.3</joda.time.hibernate>
+		<joda.time>2.3</joda.time>
+		<junit.version>4.11</junit.version>
+		<log4j.version>1.2.17</log4j.version>
+		<logback.version>1.0.13</logback.version>
+		<mysql.connector.version>5.1.18</mysql.connector.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.version>0.0.1-SNAPSHOT</project.version>
+		<slf4j.version>1.7.5</slf4j.version>
+		<spring.security.core.version>3.1.4.RELEASE</spring.security.core.version>
+		<spring.version>3.2.6.RELEASE</spring.version>
 	</properties>
 	
 	<dependencies>
@@ -34,6 +49,7 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
+
 		<!-- JPA REQUIRED LIBRARY -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -45,12 +61,14 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>4.3.1.Final</version>
 		</dependency>
+
 		<!-- HIBERNATE C3PO REQUIRED LIBRARY for connection pooling -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-c3p0</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
+
 		<!-- HIBERNATE EHCACHE LIBRARY -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -129,7 +147,12 @@
 			<artifactId>spring-tx</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		 
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${spring.security.core.version}</version>
+		</dependency>
+
 		<!-- JUNIT TESTING REQUIRED LIBRARIES -->
 		<dependency>
 			<groupId>junit</groupId>

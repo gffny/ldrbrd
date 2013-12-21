@@ -1,24 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.gffny.ldrbrd</groupId>
 		<artifactId>ldrbrd-common-project</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-	</parent>
+	</parent> 
 	<artifactId>ldrbrd-common-model</artifactId>
 	<name>common model</name>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.gffny.ldrbrd</groupId>
 			<artifactId>ldrbrd-common-utils</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
+		
+		<!-- HIBERNATE REQUIRED LIBRARIES --> 
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+	            
+		<!-- SPRING REQUIRED LIBRARIES  -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
-			<version>3.1.1.RELEASE</version>
+			<version>${spring.security.core.version}</version>
 		</dependency>
+
 	</dependencies>
 </project>
