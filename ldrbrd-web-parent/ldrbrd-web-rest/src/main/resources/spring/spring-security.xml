@@ -4,7 +4,10 @@
 	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
  
 	<security:http auto-config="true">
-		<security:intercept-url pattern="/auth*" access="ROLE_USER" />
+		<security:intercept-url pattern="/auth/*" access="ROLE_USER" />
+		<security:intercept-url pattern="/check/*" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <security:intercept-url pattern="/css/main.css" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <security:intercept-url pattern="/resources/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 	</security:http>
  
 	<security:authentication-manager>
