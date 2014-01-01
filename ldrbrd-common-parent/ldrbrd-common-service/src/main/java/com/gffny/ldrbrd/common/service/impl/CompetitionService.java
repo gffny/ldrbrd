@@ -3,7 +3,7 @@
  */
 package com.gffny.ldrbrd.common.service.impl;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,8 +29,7 @@ import com.gffny.ldrbrd.common.service.ICompetitionService;
 public class CompetitionService implements ICompetitionService {
 
 	/** The Constant log. */
-	private static final Logger LOG = LoggerFactory
-			.getLogger(CompetitionService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CompetitionService.class);
 
 	/**
 	 * 
@@ -47,20 +46,18 @@ public class CompetitionService implements ICompetitionService {
 	/* (non-Javadoc)
 	 * @see com.gffny.ldrbrd.common.service.impl.ICompetitionService#getCompetitionRound(java.lang.String, java.lang.Integer)
 	 */
+	//TODO consider changing return type to List<CompetitionRound>
 	@Transactional(readOnly = true)
-	public CompetitionRound getCompetitionRound(String competitionId,
-			Integer roundNumber) {
-		Map<String, Object> params = Collections.emptyMap();
+	public CompetitionRound getCompetitionRound(String competitionId, Integer roundNumber) {
+		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("competitionId", competitionId);
 		params.put("roundNumber", roundNumber);
 		try {
-		List<CompetitionRound> competitionRoundList = competitionRoundDao
-				.findByNamedQuery(
-						CompetitionRound.FIND_BY_COMP_ID_AND_RND_NMBR, params);
-		return competitionRoundList.get(0);
+			//TODO use the super.namedQueryResultOrNullMethod
+			List<CompetitionRound> competitionRoundList = competitionRoundDao.findByNamedQuery(CompetitionRound.FIND_BY_COMP_ID_AND_RND_NMBR, params);
+			return competitionRoundList.get(0);
 		} catch (DataAccessException daex) {
-			
-			//TODO implement this 
+			LOG.error(daex.getMessage());
 			return null;
 		}
 	}
@@ -69,8 +66,7 @@ public class CompetitionService implements ICompetitionService {
 	 * @see com.gffny.ldrbrd.common.service.impl.ICompetitionService#createCompetition(java.lang.String)
 	 */
 	public Competition createCompetition(String competitionName) {
-		Competition newCompetition = Competition
-				.createNewCompetition(competitionName);
+		Competition newCompetition = Competition.createNewCompetition(competitionName);
 		try {
 			return competitionDao.persist(newCompetition);
 		} catch (DataAccessException daEx) {
@@ -84,9 +80,7 @@ public class CompetitionService implements ICompetitionService {
 	 */
 	public CompetitionRound createCompetitionRound(Competition competition,
 			DateTime roundDate, Integer roundNumber, Course course) {
-		CompetitionRound newCompetitionRound = CompetitionRound
-				.createNewCompetitionRound(competition, roundDate, roundNumber,
-						course);
+		CompetitionRound newCompetitionRound = CompetitionRound.createNewCompetitionRound(competition, roundDate, roundNumber, course);
 		try {
 			return competitionRoundDao.persist(newCompetitionRound);
 		} catch (DataAccessException daEx) {

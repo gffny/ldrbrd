@@ -7,12 +7,18 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
+
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
 
 /**
  * @author jdgaffney
  * 
  */
+@NamedQueries({
+	@NamedQuery(name = Club.FIND_CLUB_BY_CLUB_NAME, query = "SELECT c FROM Club c WHERE c.clubName = :clubName")
+})
 @Entity
 @Table(name = "t_club")
 public class Club extends CommonUUIDEntity {
@@ -21,6 +27,8 @@ public class Club extends CommonUUIDEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = -4364295284099333222L;
+
+	public static final String FIND_CLUB_BY_CLUB_NAME = "findClubByClubName";
 
 	/**
 	 * 

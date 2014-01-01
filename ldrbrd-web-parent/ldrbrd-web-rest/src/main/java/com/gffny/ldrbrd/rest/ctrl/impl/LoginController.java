@@ -44,6 +44,7 @@ public class LoginController extends AbstractController{
 		}
 		UserDto userDto = new UserDto();
 		try {
+
 			userDto.setUser((LeaderboardUserDetails)authorisationService.loadUserByUsername(username));
 			return returnSuccess(userDto, HttpStatus.OK);
 		} catch (UsernameNotFoundException unfex) {

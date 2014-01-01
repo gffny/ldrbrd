@@ -88,7 +88,7 @@ CREATE  TABLE IF NOT EXISTS `ldrbrd`.`t_golfer` (
   `is_nbld` TINYINT(1) NULL ,
   `lst_lgn_dt` TIMESTAMP NULL ,
   `fld_lgn_attmpts` INT(11) NULL ,
-  `hndcp` INT(11) NULL DEFAULT NULL ,
+  `hndcp` INT(11) NULL DEFAULT 0 ,
   `img_ref` VARCHAR(200) NULL ,
   `hnddnss` INT(11) NULL DEFAULT NULL ,
   `vrsn` INT(11) NULL DEFAULT NULL ,
@@ -219,9 +219,12 @@ DROP TABLE IF EXISTS `ldrbrd`.`t_scorecard` ;
 CREATE  TABLE IF NOT EXISTS `ldrbrd`.`t_scorecard` (
   `id` VARCHAR(45) NOT NULL ,
   `scrcrd_d` DATE NOT NULL ,
-  `glfr_id` VARCHAR(45) NOT NULL ,
+  `glfr_id` VARCHAR(45) NOT NULL ,	
+  `scrng_glfr_id` VARCHAR(45) NULL ,
   `crs_id` VARCHAR(45) NOT NULL ,
   `rnd_typ` INT(11) NULL DEFAULT NULL ,
+  `cmpttn_rnd_id` VARCHAR(45) NULL DEFAULT NULL,
+  `hndcp` INT(11) NULL DEFAULT 0,
   `vrsn` INT(11) NULL DEFAULT NULL ,
   `crtdby` VARCHAR(45) NULL DEFAULT NULL ,
   `updtdby` VARCHAR(45) NULL DEFAULT NULL ,
@@ -238,6 +241,11 @@ CREATE  TABLE IF NOT EXISTS `ldrbrd`.`t_scorecard` (
   INDEX `scrd_crs_fk` (`crs_id` ASC) ,
   CONSTRAINT `scrd_glfr_fk`
     FOREIGN KEY (`glfr_id` )
+    REFERENCES `ldrbrd`.`t_golfer` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `scrd_scrng_glfr_fk`
+    FOREIGN KEY (`scrng_glfr_id` )
     REFERENCES `ldrbrd`.`t_golfer` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
@@ -259,6 +267,7 @@ CREATE  TABLE IF NOT EXISTS `ldrbrd`.`t_hole_score` (
   `id` VARCHAR(45) NOT NULL ,
   `scrcrd_id` VARCHAR(45) NOT NULL ,
   `hl_id` VARCHAR(45) NOT NULL ,
+  `hl_scr` INT(11) NOT NULL DEFAULT 1,
   `vrsn` INT(11) NULL DEFAULT NULL ,
   `crtdby` VARCHAR(45) NULL DEFAULT NULL ,
   `updtdby` VARCHAR(45) NULL DEFAULT NULL ,

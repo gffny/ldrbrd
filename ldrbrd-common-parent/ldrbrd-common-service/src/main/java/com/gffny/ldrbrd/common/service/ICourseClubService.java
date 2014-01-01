@@ -5,6 +5,7 @@ import java.util.List;
 import com.gffny.ldrbrd.common.model.enums.TeeColour;
 import com.gffny.ldrbrd.common.model.impl.Club;
 import com.gffny.ldrbrd.common.model.impl.Course;
+import com.gffny.ldrbrd.common.model.impl.CourseHole;
 
 public interface ICourseClubService {
 
@@ -37,5 +38,26 @@ public interface ICourseClubService {
 	 */
 	public abstract Course getCourseByNameAndTeeColour(String courseName,
 			TeeColour teeColour);
+
+	/**
+	 * 
+	 * @param id
+	 */
+	public abstract Course getCourseById(String id);
+
+	/**
+	 * 
+	 * @param golferId
+	 * @param favouriteLimit
+	 * @return
+	 */
+	public abstract List<Course> getFavouriteCourseList(String golferId,
+			int favouriteLimit);
+
+	/**
+	 * 
+	 * @param courseHole
+	 */
+	public abstract void saveOrUpdateHole(CourseHole courseHole);
 
 }

@@ -1,7 +1,6 @@
 package com.gffny.ldrbrd.common.service;
 
 import org.joda.time.DateTime;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.gffny.ldrbrd.common.model.impl.Competition;
 import com.gffny.ldrbrd.common.model.impl.CompetitionRound;

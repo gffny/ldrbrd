@@ -3,36 +3,23 @@
  */
 package com.gffny.ldrbrd.rest.ctrl;
 
-import javax.servlet.http.HttpSession;
-
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.hibernate.service.spi.ServiceException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.LockedException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.WebContentGenerator;
 
 import com.gffny.ldrbrd.common.model.impl.GolferProfile;
 import com.gffny.ldrbrd.web.model.JSONable;
-import com.gffny.ldrbrd.web.model.RequestContext;
-
-//import com.gffny.leaderboard.intralayer.ServiceException;
-//import com.gffny.leaderboard.model.IGolfer;
-import com.gffny.ldrbrd.web.model.JSONable;
-import com.gffny.ldrbrd.web.model.dto.InitResponseDto;
 import com.gffny.ldrbrd.web.model.JsonResponse;
 import com.gffny.ldrbrd.web.model.JsonResponse.JsonFailResponse;
 import com.gffny.ldrbrd.web.model.JsonResponse.JsonSuccessResponse;
 import com.gffny.ldrbrd.web.model.RequestContext;
 import com.gffny.ldrbrd.web.model.ServletData;
 //import com.sun.servicetag.UnauthorizedAccessException;
+//import com.gffny.leaderboard.intralayer.ServiceException;
+//import com.gffny.leaderboard.model.IGolfer;
 
 public abstract class AbstractController extends WebContentGenerator {
 

@@ -1,15 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-   xmlns:context="http://www.springframework.org/schema/context"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xmlns:mvc="http://www.springframework.org/schema/mvc"
-   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
 
- 	<context:component-scan base-package="com.gffny.ldrbrd.rest.ctrl.impl" />
+	<context:component-scan base-package="com.gffny.ldrbrd.rest.ctrl.impl" />
 
- 	<context:annotation-config />
- 	<mvc:annotation-driven />
+	<context:annotation-config />
+	<mvc:annotation-driven />
 
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="order" value="1" />
+		<property name="mediaTypes">
+			<map>
+				<entry key="xml" value="application/xml" />
+				<entry key="json" value="application/json" />
+			</map>
+		</property>
+		<property name="defaultViews">
+			<list>
+				<!-- JSON View -->
+				<bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
+
+				<!-- JAXB XML View
+ 				<bean class="org.springframework.web.servlet.view.xml.MarshallingView">
+					<constructor-arg>
+						<ref bean="jaxb2Marshaller" />
+					</constructor-arg>
+				</bean>
+				-->
+			</list>
+		</property>
+		<property name="ignoreAcceptHeader" value="true" />
+	</bean>
+
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="order" value="1" />
+		<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+					<property name="supportedMediaTypes" value="application/json" />
+				</bean>
+
+<!-- 				<bean id="marshallingHttpMessageConverter"
+					class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+					<property name="marshaller" ref="jaxb2Marshaller" />
+					<property name="unmarshaller" ref="jaxb2Marshaller" />
+					<property name="supportedMediaTypes" value="application/xml" />
+				</bean> -->
+
+<!-- 				<bean class="org.springframework.http.converter.FormHttpMessageConverter">
+					<property name="supportedMediaTypes" value="application/x-www-form-urlencoded" />
+				</bean> -->
+
+<!-- 				<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+					<property name="supportedMediaTypes" value="text/plain;charset=UTF-8" />
+				</bean> -->
+			</list>
+		</property>
+	</bean>
 </beans>

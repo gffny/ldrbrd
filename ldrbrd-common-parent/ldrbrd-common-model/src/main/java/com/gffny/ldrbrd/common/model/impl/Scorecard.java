@@ -14,14 +14,21 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.NamedQuery;
+import org.hibernate.annotations.NamedQueries;
 import org.joda.time.DateTime;
 
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
+import com.gffny.ldrbrd.utils.DateUtils;
 
 /**
  * @author John Gaffney (john@gffny.com) Jul 30, 2012
  * 
  */
+
+@NamedQueries({	
+	@NamedQuery(name = Scorecard.FIND_SCORECARD_BY_COMPETITION_ROUND_AND_GOLFER, query = "SELECT s FROM Scorecard s WHERE s.competitionRound.id = :competitionRoundId AND s.golfer.id  = :golferId")
+})
 @Entity
 @Table(name = "t_scorecard")
 public class Scorecard extends CommonUUIDEntity {
@@ -31,11 +38,14 @@ public class Scorecard extends CommonUUIDEntity {
 	 */
 	private static final long serialVersionUID = 641411664200798837L;
 
+	public static final String FIND_SCORECARD_BY_COMPETITION_ROUND_AND_GOLFER = "findScorecardByCompetitionRoundAndGolfer";
+
 	private GolferProfile golfer;
+	private GolferProfile scoringGolfer;
 	private Course course;
 	private CompetitionRound competitionRound;
 	private String teesPlayedOff = new String();
-	private int[] scoreArray = null;
+	private int[] scoreArray = new int[18];
 	private String scorecardNotes = new String();
 	private DateTime scorecardDate;
 	private int handicap;
@@ -48,27 +58,27 @@ public class Scorecard extends CommonUUIDEntity {
 	 * @param handicap
 	 * @return
 	 */
-	public static Scorecard createNewScorecard(GolferProfile golfer,
+	public static Scorecard createNewScorecard(GolferProfile golfer, GolferProfile scoreKeeper,
 			Course course, int handicap) {
-		Scorecard scorecard = new Scorecard(golfer, course, handicap);
-		scorecard.setCreatedDateDT(new DateTime(System.currentTimeMillis()));
+		Scorecard scorecard = new Scorecard(golfer, scoreKeeper, course, handicap);
+		scorecard.initDates(new DateTime(System.currentTimeMillis()));
 		return scorecard;
 	}
 
 	/**
-	 * Factory method to create a instance of Scorecard
 	 * 
-	 * @param golferId
-	 * @param courseId
+	 * @param golfer
+	 * @param scoreKeeper
+	 * @param competitionRound
 	 * @param handicap
 	 * @return
 	 */
-	public static Scorecard createNewCompetitionScorecard(GolferProfile golfer,
+	public static Scorecard createNewCompetitionScorecard(GolferProfile golfer, GolferProfile scoreKeeper,
 			CompetitionRound competitionRound, int handicap) {
-		Scorecard scorecard = new Scorecard(golfer,
+		Scorecard scorecard = new Scorecard(golfer, scoreKeeper,
 				competitionRound.getCourse(), handicap);
 		scorecard.setCompetitionRound(competitionRound);
-		scorecard.setCreatedDateDT(new DateTime(System.currentTimeMillis()));
+		scorecard.initDates(new DateTime(System.currentTimeMillis()));
 		return scorecard;
 	}
 
@@ -81,14 +91,47 @@ public class Scorecard extends CommonUUIDEntity {
 
 	/**
 	 * 
-	 * @param golferId
-	 * @param courseId
+	 * @param golfer
+	 * @param scoreKeeper
+	 * @param course
 	 * @param handicap
 	 */
-	private Scorecard(GolferProfile golfer, Course course, int handicap) {
+	private Scorecard(GolferProfile golfer, GolferProfile scoreKeeper, Course course, int handicap) {
 		this.golfer = golfer;
+		this.scoringGolfer = scoreKeeper;
 		this.course = course;
 		this.handicap = handicap;
+	}
+
+	/**
+	 * 
+	 */
+	public void signScorecard() {
+		//TODO research what I could do to "sign" a scorecard (look at adding a "isSubmitted" bool to the entity)
+		if(this.scorecardNotes == null) {
+			this.scorecardNotes = encodeComment("scorecard signed: ");
+		} else {
+			this.scorecardNotes += encodeComment("scorecard signed: ");
+		}
+	}
+
+	/**
+	 * 
+	 */
+	public void submitScorecard() {
+		//TODO research what I should do to submit a scorecard (look at adding a "isSubmitted" bool to the entity)
+		if(this.scorecardNotes == null) {
+			this.scorecardNotes = encodeComment("scorecard submited: ");
+		} else {
+			this.scorecardNotes += encodeComment("scorecard submited: ");
+		}
+	}
+
+	/**
+	 * @return
+	 */
+	private String encodeComment(String comment) {
+		return comment + DateUtils.format(new Date(System.currentTimeMillis()), DateUtils.LOG_DATE_FORMAT.getPattern()) + " | ";
 	}
 
 	/**
@@ -109,6 +152,26 @@ public class Scorecard extends CommonUUIDEntity {
 	public void setGolfer(GolferProfile golfer) {
 		this.golfer = golfer;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	@ManyToOne
+	@JoinColumn(name = "scrng_glfr_id", nullable = false)
+	@ForeignKey(name = "id")
+	public GolferProfile getScoringGolfer() {
+		return this.scoringGolfer;
+	}
+
+	/**
+	 * 
+	 * @param golferId
+	 */
+	public void setScoringGolfer(GolferProfile golfer) {
+		this.scoringGolfer = golfer;
+	}
+
 
 	/**
 	 * 
@@ -188,9 +251,17 @@ public class Scorecard extends CommonUUIDEntity {
 	/**
 	 * 
 	 */
-	@Transient
+	@Column(name = "scrcrd_nts")
 	public String getScorecardNotes() {
 		return this.scorecardNotes;
+	}
+
+	/**
+	 * 
+	 * @param scorecardNotes
+	 */
+	public void setScorecardNotes(String scorecardNotes) {
+		this.scorecardNotes = scorecardNotes;
 	}
 
 	/**
@@ -250,6 +321,15 @@ public class Scorecard extends CommonUUIDEntity {
 	@Transient
 	public void setScorecardDateDT(DateTime scorecardDateTime) {
 		this.scorecardDate = scorecardDateTime;
+	}
+
+	/**
+	 * 
+	 * @param dateTime
+	 */
+	private void initDates(DateTime dateTime) {
+		this.setScorecardDateDT(dateTime);
+		this.setCreatedDateDT(dateTime);
 	}
 
 	/**

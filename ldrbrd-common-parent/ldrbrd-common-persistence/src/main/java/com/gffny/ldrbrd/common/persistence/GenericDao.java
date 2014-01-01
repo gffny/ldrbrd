@@ -8,6 +8,9 @@ import java.util.Map;
 
 import com.gffny.ldrbrd.common.exception.DataAccessException;
 import com.gffny.ldrbrd.common.model.CommonEntity;
+import com.gffny.ldrbrd.common.model.impl.CompetitionRound;
+import com.gffny.ldrbrd.common.model.impl.GolferProfile;
+import com.gffny.ldrbrd.common.model.impl.Scorecard;
 
 /**
  * @author jdgaffney
@@ -64,8 +67,7 @@ public interface GenericDao<T> {
 	 * @param maxResults
 	 * @return
 	 */
-	List<T> findByNamedQuery(String name, Map<String, ?> parameters,
-			int maxResults) throws DataAccessException;
+	List<T> findByNamedQuery(String name, Map<String, ?> parameters, int maxResults) throws DataAccessException;
 
 	/**
 	 * 1 Find by using a query
@@ -87,8 +89,7 @@ public interface GenericDao<T> {
 	 * @param parameters
 	 * @return single result
 	 */
-	Object findByAggregateNamedQuerySingleResult(String namedQuery,
-			Map<String, ?> parameters) throws DataAccessException;
+	Object findByAggregateNamedQuerySingleResult(String namedQuery,	Map<String, ?> parameters) throws DataAccessException;
 
 	/**
 	 * Finds all of the rows associated with the class

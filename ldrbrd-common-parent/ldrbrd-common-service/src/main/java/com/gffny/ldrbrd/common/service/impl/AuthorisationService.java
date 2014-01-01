@@ -19,7 +19,6 @@ import com.gffny.ldrbrd.common.model.impl.GolferProfile;
 import com.gffny.ldrbrd.common.model.impl.LeaderboardUserDetails;
 import com.gffny.ldrbrd.common.persistence.GenericDao;
 import com.gffny.ldrbrd.common.service.IAuthorisationService;
-import com.gffny.ldrbrd.utils.MapUtils;
 
 /**
  * @author John Gaffney (john@gffny.com) Dec 23, 2012

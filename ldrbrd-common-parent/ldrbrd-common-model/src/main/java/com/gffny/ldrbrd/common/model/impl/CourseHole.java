@@ -5,7 +5,13 @@ package com.gffny.ldrbrd.common.model.impl;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
 
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
 
@@ -13,6 +19,9 @@ import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
  * @author jdgaffney
  * 
  */
+@NamedQueries({
+	@NamedQuery(name = CourseHole.FIND_BY_COURSE_ID_AND_HOLE_NUMBER, query = "SELECT ch FROM CourseHole ch WHERE ch.course.id = :courseId and ch.holeNumber = :holeNumber")
+})
 @Entity
 @Table(name = "t_hole")
 public class CourseHole extends CommonUUIDEntity {
@@ -21,6 +30,8 @@ public class CourseHole extends CommonUUIDEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = -2698132847477453497L;
+
+	public static final String FIND_BY_COURSE_ID_AND_HOLE_NUMBER = "findCourseHoleByCourseIdAndHoleNumber";
 
 	private String name;
 
@@ -31,6 +42,28 @@ public class CourseHole extends CommonUUIDEntity {
 	private int holeNumber;
 
 	private String holeImageId;
+	
+	private Course course;
+	
+	/**
+	 * 
+	 * @param name
+	 * @param distance
+	 * @param description
+	 * @param holeNumber
+	 * @param holeImageId
+	 * @return
+	 */
+	public static CourseHole createCourseHole(Course course, String name, int distance, String description, int holeNumber, String holeImageId) {
+		CourseHole courseHole = new CourseHole();
+		courseHole.setCourse(course);
+		courseHole.setName(name);
+		courseHole.setHoleDistance(distance);
+		courseHole.setHoleDescription(description);
+		courseHole.setHoleNumber(holeNumber);
+		courseHole.setHoleImageId(holeImageId);
+		return courseHole;
+	}
 
 	/**
 	 * @return the name
@@ -117,6 +150,23 @@ public class CourseHole extends CommonUUIDEntity {
 	 */
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	/**
+	 * @return the course
+	 */
+	@ManyToOne
+	@JoinColumn(name = "crs_id", nullable = false)
+	@ForeignKey(name = "id")
+	public Course getCourse() {
+		return course;
+	}
+
+	/**
+	 * @param course the course to set
+	 */
+	public void setCourse(Course course) {
+		this.course = course;
 	}
 
 }

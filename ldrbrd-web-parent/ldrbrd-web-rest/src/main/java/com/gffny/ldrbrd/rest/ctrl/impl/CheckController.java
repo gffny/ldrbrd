@@ -28,7 +28,7 @@ public class CheckController extends AbstractController{
 	 * @return
 	 */
 	@RequestMapping(value = "/c_online", method = RequestMethod.GET)
-	public ResponseEntity<JsonResponse<JSONable>> authenticateUserToken() {
+	public ResponseEntity<JsonResponse<JSONable>> applicationOnlineCheck() {
 		UserDto user = new UserDto();
 		return returnSuccess(user, HttpStatus.OK);
 	}

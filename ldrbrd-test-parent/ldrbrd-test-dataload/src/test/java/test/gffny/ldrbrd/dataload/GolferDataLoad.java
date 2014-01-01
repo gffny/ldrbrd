@@ -12,11 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gffny.ldrbrd.common.exception.DataAccessException;
 import com.gffny.ldrbrd.common.model.enums.Dominance;
-import com.gffny.ldrbrd.common.model.enums.TeeColour;
-import com.gffny.ldrbrd.common.model.impl.Club;
-import com.gffny.ldrbrd.common.model.impl.Course;
 import com.gffny.ldrbrd.common.model.impl.GolferProfile;
-import com.gffny.ldrbrd.common.service.ICourseClubService;
 import com.gffny.ldrbrd.common.service.IPersonService;
 
 /**
