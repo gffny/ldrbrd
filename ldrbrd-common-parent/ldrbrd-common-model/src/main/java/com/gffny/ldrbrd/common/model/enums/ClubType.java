@@ -8,8 +8,53 @@ package com.gffny.ldrbrd.common.model.enums;
  * 
  */
 public enum ClubType {
-	Driver, Two_Wood, Three_Wood, Four_Wood, Five_Wood, Six_Wood, Seven_Wood, One_Hybrid, Two_Hybrid, Three_Hybrid, Four_Hybrid, Five_Hybrid, Six_Hybrid, Seven_Hybrid, One_Iron, Two_Iron, Three_Iron, Four_Iron, Five_Iron, Six_Iron, Seven_Iron, Eight_Iron, Nine_Iron, Pitching_Wedge, Approach_Wedge, Sand_Wedge, Putter;
+	DRIVER, TWO_WOOD, THREE_WOOD, FOUR_WOOD, FIVE_WOOD, SIX_WOOD, SEVEN_WOOD, ONE_HYBRID, TWO_HYBRID, THREE_HYBRID, FOUR_HYBRID, FIVE_HYBRID, SIX_HYBRID, SEVEN_HYBRID, ONE_IRON, TWO_IRON, THREE_IRON, FOUR_IRON, FIVE_IRON, SIX_IRON, SEVEN_IRON, EIGHT_IRON, NINE_IRON, PITCHING_WEDGE, APPROACH_WEDGE, SAND_WEDGE, PUTTER;
 
-	public static ClubType DEFAULT = Driver;
+	/**
+	 * 
+	 */
+	public static ClubType DEFAULT = DRIVER;
 
+	/**
+	 * 
+	 */
+	public static ClubType[] DRIVER_ARRAY = { DRIVER };
+
+	/**
+	 * 
+	 */
+	public static ClubType[] WOOD_ARRAY = { TWO_WOOD, THREE_WOOD, FOUR_WOOD,
+			FIVE_WOOD };
+
+	/**
+	 * 
+	 */
+	public static ClubType[] HYBRID_ARRAY = { ONE_HYBRID, TWO_HYBRID,
+			THREE_HYBRID, FOUR_HYBRID, FIVE_HYBRID, SIX_HYBRID, SEVEN_HYBRID };
+
+	/**
+	 * 
+	 */
+	public static ClubType[] IRON_ARRAY = { ONE_IRON, TWO_IRON, THREE_IRON,
+			FOUR_IRON, FIVE_IRON, SIX_IRON, SEVEN_IRON, EIGHT_IRON, NINE_IRON };
+
+	/**
+	 * 
+	 */
+	public static ClubType[] WEDGE_ARRAY = { PITCHING_WEDGE, APPROACH_WEDGE,
+			SAND_WEDGE };
+
+	/**
+	 * 
+	 */
+	public static ClubType[] PUTTER_ARRAY = { PUTTER };
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static int getDefaultClubQuantity() {
+		return DRIVER_ARRAY.length + WOOD_ARRAY.length + HYBRID_ARRAY.length
+				+ IRON_ARRAY.length + WEDGE_ARRAY.length + PUTTER_ARRAY.length;
+	}
 }

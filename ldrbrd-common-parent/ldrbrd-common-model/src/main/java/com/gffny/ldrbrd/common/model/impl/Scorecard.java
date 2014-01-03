@@ -13,13 +13,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.NamedQueries;
 import org.joda.time.DateTime;
 
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
-import com.gffny.ldrbrd.utils.DateUtils;
 
 /**
  * @author John Gaffney (john@gffny.com) Jul 30, 2012
@@ -106,32 +106,21 @@ public class Scorecard extends CommonUUIDEntity {
 	/**
 	 * 
 	 */
-	public void signScorecard() {
-		//TODO research what I could do to "sign" a scorecard (look at adding a "isSubmitted" bool to the entity)
-		if(this.scorecardNotes == null) {
-			this.scorecardNotes = encodeComment("scorecard signed: ");
-		} else {
-			this.scorecardNotes += encodeComment("scorecard signed: ");
-		}
+	public void signScorecard(String signature) {
+		//TODO research what I could do to "sign" a scorecard 
+		//(look at adding a "isSubmitted" bool to the entity)
+		//(signing time stamp)
+		this.scorecardNotes = signature;
 	}
 
 	/**
 	 * 
 	 */
-	public void submitScorecard() {
-		//TODO research what I should do to submit a scorecard (look at adding a "isSubmitted" bool to the entity)
-		if(this.scorecardNotes == null) {
-			this.scorecardNotes = encodeComment("scorecard submited: ");
-		} else {
-			this.scorecardNotes += encodeComment("scorecard submited: ");
-		}
-	}
-
-	/**
-	 * @return
-	 */
-	private String encodeComment(String comment) {
-		return comment + DateUtils.format(new Date(System.currentTimeMillis()), DateUtils.LOG_DATE_FORMAT.getPattern()) + " | ";
+	public void submitScorecard(String submission) {
+		//TODO research what I should do to submit a scorecard 
+		//(look at adding a "isSubmitted" bool to the entity)
+		//(signing time stamp)
+		this.scorecardNotes = submission;
 	}
 
 	/**
@@ -347,5 +336,35 @@ public class Scorecard extends CommonUUIDEntity {
 						: null) + ", scorecardNotes=" + scorecardNotes
 				+ ", scorecardDate=" + scorecardDate + ", grossScore="
 				+ getGrossScore() + ", handicap=" + getHandicap() + "]";
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	@Transient
+	public int grossScore() {
+		// create return value
+		int totalScore = 0;
+		//iterate the score array and total score
+		for(int holeScore : scoreArray) {
+			totalScore += holeScore;
+		}
+		return totalScore;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	@Transient
+	public String encodingSignature() {
+		String signature = new String();
+		signature+=((golfer != null ? golfer.getId() : ""));
+		signature+=(String.valueOf(grossScore()));
+		signature+=(ArrayUtils.toString(scoreArray));
+		signature+=((scoringGolfer != null ? scoringGolfer.getId() : ""));
+		signature+=((scoringGolfer != null ? scoringGolfer.getProfileHandle() : ""));
+		return signature;
 	}
 }

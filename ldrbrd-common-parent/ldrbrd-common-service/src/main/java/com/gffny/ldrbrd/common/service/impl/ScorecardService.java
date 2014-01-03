@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -330,7 +331,7 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 			try {
 				Scorecard scorecard = scorecardDao.findById(Scorecard.class, scorecardId);
 				if (scorecard != null) {
-					scorecard.submitScorecard();
+					scorecard.submitScorecard(ScorecardService.encodeScorecard(scorecard));
 					LOG.debug("submitting scorecard: "+scorecardId);
 					scorecardDao.merge(scorecard);
 				} else {
@@ -355,7 +356,7 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 			try {
 				Scorecard scorecard = scorecardDao.findById(Scorecard.class, scorecardId);
 				if (scorecard != null) {
-					scorecard.signScorecard();
+					scorecard.signScorecard(ScorecardService.encodeScorecard(scorecard));
 					LOG.debug("signing scorecard: "+scorecardId);
 					scorecardDao.merge(scorecard);
 				} else {
@@ -367,5 +368,20 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 		} else {
 			LOG.error("method parameter(s) not valid");
 		}
+	}
+
+	/**
+	 * 
+	 * @param scorecard
+	 * @return
+	 */
+	public final static String encodeScorecard(Scorecard scorecard) {
+		if(scorecard != null) {
+			LOG.debug("encoding scorecard with signature: "+scorecard.encodingSignature());
+			return DigestUtils.md5Hex(scorecard.encodingSignature());
+		}
+		LOG.error("scorecard parameter is null");
+		//don't return null as there may be operations applied to the return value
+		return new String("");
 	}
 }

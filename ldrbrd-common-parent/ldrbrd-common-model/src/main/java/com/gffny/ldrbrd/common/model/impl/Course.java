@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.ForeignKey;
 
@@ -216,5 +217,14 @@ public class Course extends CommonUUIDEntity {
 	 */
 	public void setCourseImageRef(String courseImageRef) {
 		this.courseImageReference = courseImageRef;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	@Transient
+	public boolean isNineHole() {
+		return par<40;
 	}
 }

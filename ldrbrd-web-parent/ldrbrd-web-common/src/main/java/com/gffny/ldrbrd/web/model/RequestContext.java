@@ -6,7 +6,7 @@ package com.gffny.ldrbrd.web.model;
 import com.gffny.ldrbrd.web.model.cache.Cache;
 import com.gffny.ldrbrd.common.model.impl.GolferProfile;
 import com.gffny.ldrbrd.common.service.IAuthorisationService;
-import com.gffny.ldrbrd.common.service.IPersonService;
+import com.gffny.ldrbrd.common.service.IUserProfileService;
 //import com.gffny.leaderboard.service.IAuthorisationService;
 import com.gffny.ldrbrd.common.service.ICompetitionService;
 import com.gffny.ldrbrd.common.service.ICourseClubService;
@@ -46,7 +46,7 @@ public class RequestContext {
 	/**
 	 * 
 	 */
-	private IPersonService userService;
+	private IUserProfileService userService;
 
 	/**
 	 * 
@@ -185,7 +185,7 @@ public class RequestContext {
 	 * 
 	 * @return
 	 */
-	public IPersonService getUserService() {
+	public IUserProfileService getUserService() {
 		return userService;
 	}
 
@@ -193,7 +193,7 @@ public class RequestContext {
 	 * @param userService
 	 *            the userService to set
 	 */
-	public void setUserService(IPersonService userService) {
+	public void setUserService(IUserProfileService userService) {
 		this.userService = userService;
 	}
 

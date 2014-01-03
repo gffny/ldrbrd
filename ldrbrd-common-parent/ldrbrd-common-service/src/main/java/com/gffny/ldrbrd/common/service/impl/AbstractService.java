@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import com.gffny.ldrbrd.common.exception.DataAccessException;
 import com.gffny.ldrbrd.common.persistence.GenericDao;
-import com.gffny.ldrbrd.common.service.IScorecardService;
 
 public class AbstractService {
 	

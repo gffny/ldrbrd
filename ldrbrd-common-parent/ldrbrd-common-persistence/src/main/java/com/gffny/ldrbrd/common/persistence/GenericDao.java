@@ -8,9 +8,6 @@ import java.util.Map;
 
 import com.gffny.ldrbrd.common.exception.DataAccessException;
 import com.gffny.ldrbrd.common.model.CommonEntity;
-import com.gffny.ldrbrd.common.model.impl.CompetitionRound;
-import com.gffny.ldrbrd.common.model.impl.GolferProfile;
-import com.gffny.ldrbrd.common.model.impl.Scorecard;
 
 /**
  * @author jdgaffney

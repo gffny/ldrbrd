@@ -5,6 +5,8 @@ package com.gffny.ldrbrd.common.model.impl;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
@@ -17,10 +19,8 @@ import com.gffny.ldrbrd.common.model.enums.Manufacturer;
  * 
  * 
  */
+@NamedQueries({ @NamedQuery(name = GolfClub.DEFAULT_CLUB_LIST_QUERY, query = "SELECT clb FROM GolfClub clb WHERE clb.default = true ORDER BY clb.clubType ") })
 @Entity
-// @Table(name = "t_golfclub", schema = "ldrbrd", uniqueConstraints =
-// @UniqueConstraint(name = "nameManufacturerTypeConstraint", columnNames = {
-// "clb_typ", "clb_mnfctrr", "clb_nm" }))
 @Table(name = "t_golfclub", schema = "ldrbrd")
 public class GolfClub extends CommonUUIDEntity {
 
@@ -28,6 +28,8 @@ public class GolfClub extends CommonUUIDEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = -1022225457106091586L;
+
+	public static final String DEFAULT_CLUB_LIST_QUERY = "defaultClubList";
 
 	private Manufacturer manufacturer;
 
@@ -57,7 +59,7 @@ public class GolfClub extends CommonUUIDEntity {
 	 */
 	public void setManufacturer(Manufacturer manufacturer) {
 		this.manufacturer = getDefaultNotNullValue(manufacturer,
-				Manufacturer.DEFAULT);
+				Manufacturer.getDefault());
 	}
 
 	/**
@@ -150,5 +152,25 @@ public class GolfClub extends CommonUUIDEntity {
 	public void setDefault(Boolean isDefault) {
 		this.isDefault = getDefaultNotNullValue(isDefault, false)
 				.booleanValue();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "GolfClub ["
+				+ (manufacturer != null ? "manufacturer=" + manufacturer + ", "
+						: "")
+				+ (clubType != null ? "clubType=" + clubType + ", " : "")
+				+ "clubLoft="
+				+ clubLoft
+				+ ", "
+				+ (clubCategory != null ? "clubCategory=" + clubCategory + ", "
+						: "")
+				+ (clubName != null ? "clubName=" + clubName + ", " : "")
+				+ "isDefault=" + isDefault + "]";
 	}
 }

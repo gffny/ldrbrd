@@ -8,8 +8,15 @@ package com.gffny.ldrbrd.common.model.enums;
  * 
  */
 public enum Manufacturer {
-	CLEVELAND;
+	GENERIC, // only for clubs that are assigned to the user upon profile set up
+	NIKE, MIZUNO, PING, CLEVELAND; // TODO add more club manufacturers
 
-	public static final Manufacturer DEFAULT = CLEVELAND;
+	/**
+	 * 
+	 * @return
+	 */
+	public static Manufacturer getDefault() {
+		return GENERIC;
+	}
 
 }

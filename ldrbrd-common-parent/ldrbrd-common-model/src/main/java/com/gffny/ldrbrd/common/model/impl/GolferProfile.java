@@ -3,8 +3,14 @@
  */
 package com.gffny.ldrbrd.common.model.impl;
 
+import java.util.List;
+
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -17,7 +23,9 @@ import com.gffny.ldrbrd.common.model.enums.Dominance;
  * 
  */
 @NamedQueries({
-	@NamedQuery(name = GolferProfile.FIND_BY_HANDLE, query="select golfer from GolferProfile golfer where golfer.profileHandle = :profileHandle") //golfer.isObsolete = false and
+		@NamedQuery(name = GolferProfile.FIND_BY_HANDLE, query = "select golfer from GolferProfile golfer where golfer.profileHandle = :profileHandle"),
+		@NamedQuery(name = GolferProfile.FIND_BY_EMAIL, query = "select golfer from GolferProfile golfer where golfer.emailAddress = :emailAddress")
+// golfer.isObsolete = false and ...
 })
 @Entity
 @Table(name = "t_golfer")
@@ -27,11 +35,31 @@ public class GolferProfile extends UserProfile {
 	 * 
 	 */
 	private static final long serialVersionUID = 7564055826202157120L;
-	
+
+	/**
+	 * 
+	 */
 	public static final String FIND_BY_HANDLE = "findByProfileHandle";
 
+	/**
+	 * 
+	 */
+	public static final String FIND_BY_EMAIL = "findByEmailAddress";
+
+	/**
+	 * 
+	 */
 	private Dominance handedness;
+
+	/**
+	 * 
+	 */
 	private int handicap = 0;
+
+	/**
+	 * 
+	 */
+	private List<GolferClubDetail> golfBag;
 
 	/**
 	 * 
@@ -76,6 +104,24 @@ public class GolferProfile extends UserProfile {
 	 */
 	public void setHandedness(Dominance handedness) {
 		this.handedness = handedness;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "t_golf_bag", joinColumns = @JoinColumn(name = "glfr_id"))
+	public List<GolferClubDetail> getGolfBag() {
+		return this.golfBag;
+	}
+
+	/**
+	 * 
+	 * @param golfBag
+	 */
+	public void setGolfBag(List<GolferClubDetail> golfBag) {
+		this.golfBag = golfBag;
 	}
 
 	/**

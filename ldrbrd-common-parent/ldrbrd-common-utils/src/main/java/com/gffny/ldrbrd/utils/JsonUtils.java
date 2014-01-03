@@ -21,19 +21,35 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
 import org.codehaus.jackson.type.TypeReference;
 
+/**
+ * 
+ * @author jdgaffney
+ * 
+ */
 public class JsonUtils {
 
 	private static ObjectMapper m = new ObjectMapper();
 	private static JsonFactory jf = new JsonFactory();
+	public static final String EMPTY_ARRAY = "[]";
+	public static final String EMPTY_OBJECT = "{}";
 
+	/**
+	 * 
+	 */
 	static {
 		m.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		m.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
 	}
 
-	public static final String EMPTY_ARRAY = "[]";
-	public static final String EMPTY_OBJECT = "{}";
-
+	/**
+	 * 
+	 * @param jsonAsString
+	 * @param pojoClass
+	 * @return
+	 * @throws JsonMappingException
+	 * @throws JsonParseException
+	 * @throws IOException
+	 */
 	public static <T> T fromJson(String jsonAsString, Class<T> pojoClass)
 			throws JsonMappingException, JsonParseException, IOException {
 		return m.readValue(jsonAsString, pojoClass);
@@ -56,11 +72,27 @@ public class JsonUtils {
 		}
 	}
 
+	/**
+	 * 
+	 * @param fr
+	 * @param pojoClass
+	 * @return
+	 * @throws JsonParseException
+	 * @throws IOException
+	 */
 	public static <T> T fromJson(FileReader fr, Class<T> pojoClass)
 			throws JsonParseException, IOException {
 		return m.readValue(fr, pojoClass);
 	}
 
+	/**
+	 * 
+	 * @param is
+	 * @param pojoClass
+	 * @return
+	 * @throws JsonParseException
+	 * @throws IOException
+	 */
 	public static <T> T fromJson(InputStream is, Class<T> pojoClass)
 			throws JsonParseException, IOException {
 		return m.readValue(is, pojoClass);
@@ -78,6 +110,11 @@ public class JsonUtils {
 		return (T) m.readValue(jsonAsString, javaType);
 	}
 
+	/**
+	 * 
+	 * @param jsonAsString
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object> fromJsonToMap(String jsonAsString) {
 		try {
@@ -128,6 +165,12 @@ public class JsonUtils {
 		return (T) m.readValue(jsonAsString, typeRef);
 	}
 
+	/**
+	 * 
+	 * @param jsonAsString
+	 * @param typeRef
+	 * @return
+	 */
 	public static <T> T fromJsonNullable(String jsonAsString,
 			TypeReference<T> typeRef) {
 		try {
@@ -160,6 +203,13 @@ public class JsonUtils {
 		return toJsonNullable(pojo, Object.class, prettyPrint);
 	}
 
+	/**
+	 * 
+	 * @param pojo
+	 * @param viewClass
+	 * @param prettyPrint
+	 * @return
+	 */
 	public static String toJsonNullable(Object pojo, Class<?> viewClass,
 			boolean prettyPrint) {
 		try {
@@ -169,16 +219,43 @@ public class JsonUtils {
 		}
 	}
 
+	/**
+	 * 
+	 * @param pojo
+	 * @return
+	 * @throws JsonMappingException
+	 * @throws JsonGenerationException
+	 * @throws IOException
+	 */
 	public static String toJson(Object pojo) throws JsonMappingException,
 			JsonGenerationException, IOException {
 		return toJson(pojo, false);
 	}
 
+	/**
+	 * 
+	 * @param pojo
+	 * @param prettyPrint
+	 * @return
+	 * @throws JsonMappingException
+	 * @throws JsonGenerationException
+	 * @throws IOException
+	 */
 	public static String toJson(Object pojo, boolean prettyPrint)
 			throws JsonMappingException, JsonGenerationException, IOException {
 		return toJson(pojo, Object.class, prettyPrint);
 	}
 
+	/**
+	 * 
+	 * @param pojo
+	 * @param viewClass
+	 * @param prettyPrint
+	 * @return
+	 * @throws JsonMappingException
+	 * @throws JsonGenerationException
+	 * @throws IOException
+	 */
 	public static String toJson(Object pojo, Class<?> viewClass,
 			boolean prettyPrint) throws JsonMappingException,
 			JsonGenerationException, IOException {
@@ -191,6 +268,15 @@ public class JsonUtils {
 		return sw.toString();
 	}
 
+	/**
+	 * 
+	 * @param pojo
+	 * @param fw
+	 * @param prettyPrint
+	 * @throws JsonMappingException
+	 * @throws JsonGenerationException
+	 * @throws IOException
+	 */
 	public static void toJson(Object pojo, Writer fw, boolean prettyPrint)
 			throws JsonMappingException, JsonGenerationException, IOException {
 		JsonGenerator jg = jf.createJsonGenerator(fw);
@@ -200,12 +286,25 @@ public class JsonUtils {
 		m.writeValue(jg, pojo);
 	}
 
+	/**
+	 * 
+	 * @param pojo
+	 * @param os
+	 * @throws JsonGenerationException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 */
 	public static void toJson(Object pojo, OutputStream os)
 			throws JsonGenerationException, JsonMappingException, IOException {
 		JsonGenerator jg = createJsonGenerator(os);
 		m.writeValue(jg, pojo);
 	}
 
+	/**
+	 * 
+	 * @param w
+	 * @return
+	 */
 	public static JsonGenerator createJsonGenerator(Writer w) {
 		try {
 			return jf.createJsonGenerator(w);
@@ -214,6 +313,11 @@ public class JsonUtils {
 		}
 	}
 
+	/**
+	 * 
+	 * @param os
+	 * @return
+	 */
 	public static JsonGenerator createJsonGenerator(OutputStream os) {
 		try {
 			return jf.createJsonGenerator(os, JsonEncoding.UTF8);
@@ -222,6 +326,11 @@ public class JsonUtils {
 		}
 	}
 
+	/**
+	 * 
+	 * @param in
+	 * @return
+	 */
 	public static JsonParser createJsonParser(InputStream in) {
 		try {
 			return jf.createJsonParser(in);
@@ -230,6 +339,11 @@ public class JsonUtils {
 		}
 	}
 
+	/**
+	 * 
+	 * @param in
+	 * @return
+	 */
 	public static JsonParser createJsonParser(String in) {
 		try {
 			return jf.createJsonParser(in);
@@ -238,8 +352,11 @@ public class JsonUtils {
 		}
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public static ObjectMapper getObjectMapper() {
 		return m;
 	}
-
 }
