@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.gffny.ldrbrd.common.exception.DataAccessException;
 import com.gffny.ldrbrd.common.model.impl.GolfClub;
+import com.gffny.ldrbrd.common.model.impl.GolferClubDetail;
 import com.gffny.ldrbrd.common.model.impl.GolferProfile;
 import com.gffny.ldrbrd.common.persistence.GenericDao;
 import com.gffny.ldrbrd.common.security.enums.AuthenticationResult;
@@ -128,14 +130,30 @@ public class ProfileService extends AbstractService implements
 			try {
 				GolferProfile updatedGolfer = personDao.findById(
 						GolferProfile.class, golfer.getId());
+				List<GolferClubDetail> defaultGolfBag = new ArrayList<GolferClubDetail>();
 				for (GolfClub gc : golfClubService.getDefaultGolfClubList()) {
-
+					defaultGolfBag.add(new GolferClubDetail(gc, 0, ""));
 				}
+				updatedGolfer.setGolfBag(defaultGolfBag);
+				personDao.merge(updatedGolfer);
 			} catch (DataAccessException daEx) {
 				LOG.error("error creating default golf bag for golfer id: "
 						+ golfer.getId() + ". Excpt: " + daEx.getMessage());
 			}
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.gffny.ldrbrd.common.service.IUserProfileService#getGolferWithBagByHandle
+	 * (java.lang.String)
+	 */
+	public GolferProfile getGolferWithBagByHandle(String golferHandle) {
+		GolferProfile golferProfile = getGolferByHandle(golferHandle);
+		Hibernate.initialize(golferProfile.getGolfBag());
+		return golferProfile;
 	}
 
 	/*

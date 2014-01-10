@@ -35,7 +35,7 @@ public class GolfClub extends CommonUUIDEntity {
 
 	private ClubType clubType;
 
-	private int clubLoft;
+	private double clubLoft;
 
 	private ClubCategory clubCategory;
 
@@ -125,7 +125,7 @@ public class GolfClub extends CommonUUIDEntity {
 	 * @return the clubLoft
 	 */
 	@Column(name = "clb_lft")
-	public int getClubLoft() {
+	public double getClubLoft() {
 		return clubLoft;
 	}
 
@@ -133,8 +133,8 @@ public class GolfClub extends CommonUUIDEntity {
 	 * @param clubLoft
 	 *            the clubLoft to set
 	 */
-	public void setClubLoft(Integer clubLoft) {
-		this.clubLoft = getDefaultNotNullValue(clubLoft, 0).intValue();
+	public void setClubLoft(Double clubLoft) {
+		this.clubLoft = getDefaultNotNullValue(clubLoft, 0).doubleValue();
 	}
 
 	/**

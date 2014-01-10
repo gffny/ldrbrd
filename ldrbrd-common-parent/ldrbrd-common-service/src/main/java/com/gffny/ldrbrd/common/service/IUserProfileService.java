@@ -45,9 +45,15 @@ public interface IUserProfileService {
 
 	/**
 	 * 
+	 * @param golferHandle
+	 * @return
+	 */
+	public abstract GolferProfile getGolferWithBagByHandle(String golferHandle);
+
+	/**
+	 * 
 	 * @param string
 	 * @return
 	 */
 	public GolferProfile getGolferByEmail(String string);
-
 }

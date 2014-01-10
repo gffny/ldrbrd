@@ -1,0 +1,20 @@
+DROP TABLE IF EXISTS `ldrbrd`.`t_golf_bag2` ;
+
+CREATE  TABLE IF NOT EXISTS `ldrbrd`.`t_golf_bag2` (
+  `glfr_id` VARCHAR(45) NOT NULL ,
+  `glfclb_id` VARCHAR(45) NOT NULL ,
+  `glf_bg_d` DATE NULL DEFAULT NULL ,
+  INDEX `glf_bgr_glfr_fk` (`glfr_id` ASC) ,
+  INDEX `glf_bg_glfclb_fk` (`glfclb_id` ASC) ,
+  CONSTRAINT `glf_bgr_glfr_fk2`
+    FOREIGN KEY (`glfr_id` )
+    REFERENCES `ldrbrd`.`t_golfer` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `glf_bg_glfclb_fk2`
+    FOREIGN KEY (`glfclb_id` )
+    REFERENCES `ldrbrd`.`t_golfclub` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;

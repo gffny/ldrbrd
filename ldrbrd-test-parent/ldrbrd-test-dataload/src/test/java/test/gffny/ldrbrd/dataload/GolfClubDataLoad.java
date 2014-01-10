@@ -31,9 +31,6 @@ import com.gffny.ldrbrd.common.service.impl.GolfClubService;
 		"classpath*:spring/applicationContext-service.xml" })
 public class GolfClubDataLoad {
 
-	// @Autowired
-	// private IGolfClubService golfClubService;
-
 	@Autowired
 	private GenericDao<GolfClub> golfClubDao;
 
@@ -51,7 +48,7 @@ public class GolfClubDataLoad {
 
 	@Test
 	public void testLoadDefaultGolfClubList() {
-		GolferProfile gffny = profileService.getGolferByHandle("gffny");
+		GolferProfile gffny = profileService.getGolferByEmail("john@gffny.com");
 		profileService.createDefaultGolfBagForGolfer(gffny);
 	}
 
@@ -127,7 +124,7 @@ public class GolfClubDataLoad {
 	 * @param type
 	 * @return
 	 */
-	private GolfClub testClub(ClubCategory cat, int lft, ClubType type) {
+	private GolfClub testClub(ClubCategory cat, double lft, ClubType type) {
 
 		GolfClub newClub = new GolfClub();
 		newClub.setClubCategory(cat);

@@ -1,6 +1,7 @@
 package com.gffny.ldrbrd.common.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.gffny.ldrbrd.common.model.enums.TeeColour;
 import com.gffny.ldrbrd.common.model.impl.Club;
@@ -59,5 +60,21 @@ public interface ICourseClubService {
 	 * @param courseHole
 	 */
 	public abstract void saveOrUpdateHole(CourseHole courseHole);
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public abstract Map<Integer, CourseHole> getHoleListByCourseId(String id);
+
+	/**
+	 * 
+	 * @param id
+	 * @param nineHole
+	 * @return
+	 */
+	public abstract Map<Integer, CourseHole> getHoleListByCourseId(String id,
+			boolean isNineHole);
 
 }

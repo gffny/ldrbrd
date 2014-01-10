@@ -9,6 +9,7 @@ import org.hibernate.annotations.ForeignKey;
 
 @Embeddable
 public class GolferClubDetail {
+
 	/**
 	 * 
 	 */
@@ -23,6 +24,27 @@ public class GolferClubDetail {
 	 * 
 	 */
 	private String clubNotes;
+
+	/**
+	 * default zero-argument constructor for @Embeddable annotation & hibernate
+	 */
+	public GolferClubDetail() {
+
+		// zero-argument constructor for @Embeddable annotation & hibernate
+	}
+
+	/**
+	 * 
+	 * @param golfClub
+	 * @param averageDistance
+	 * @param golferNotes
+	 */
+	public GolferClubDetail(GolfClub golfClub, int averageDistance,
+			String golferNotes) {
+		this.golfClub = golfClub;
+		this.averageDistance = averageDistance;
+		this.clubNotes = golferNotes;
+	}
 
 	/**
 	 * @return the golfClub
@@ -86,5 +108,4 @@ public class GolferClubDetail {
 						: "") + "averageDistance=" + averageDistance + ", "
 				+ (clubNotes != null ? "clubNotes=" + clubNotes : "") + "]";
 	}
-
 }

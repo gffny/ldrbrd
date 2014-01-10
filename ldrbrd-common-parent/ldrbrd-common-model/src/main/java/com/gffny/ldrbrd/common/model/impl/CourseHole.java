@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
@@ -20,8 +21,8 @@ import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
  * 
  */
 @NamedQueries({
-	@NamedQuery(name = CourseHole.FIND_BY_COURSE_ID_AND_HOLE_NUMBER, query = "SELECT ch FROM CourseHole ch WHERE ch.course.id = :courseId and ch.holeNumber = :holeNumber")
-})
+		@NamedQuery(name = CourseHole.FIND_BY_COURSE_ID_AND_HOLE_NUMBER, query = "SELECT ch FROM CourseHole ch WHERE ch.course.id = :courseId and ch.holeNumber = :holeNumber"),
+		@NamedQuery(name = CourseHole.FIND_BY_COURSE_ID, query = "SELECT ch FROM CourseHole ch WHERE ch.course.id = :courseId ORDER BY holeNumber ASC") })
 @Entity
 @Table(name = "t_hole")
 public class CourseHole extends CommonUUIDEntity {
@@ -33,6 +34,8 @@ public class CourseHole extends CommonUUIDEntity {
 
 	public static final String FIND_BY_COURSE_ID_AND_HOLE_NUMBER = "findCourseHoleByCourseIdAndHoleNumber";
 
+	public static final String FIND_BY_COURSE_ID = "findCourseHoleByCourseId";
+
 	private String name;
 
 	private int holeDistance;
@@ -42,9 +45,9 @@ public class CourseHole extends CommonUUIDEntity {
 	private int holeNumber;
 
 	private String holeImageId;
-	
+
 	private Course course;
-	
+
 	/**
 	 * 
 	 * @param name
@@ -54,7 +57,8 @@ public class CourseHole extends CommonUUIDEntity {
 	 * @param holeImageId
 	 * @return
 	 */
-	public static CourseHole createCourseHole(Course course, String name, int distance, String description, int holeNumber, String holeImageId) {
+	public static CourseHole createCourseHole(Course course, String name,
+			int distance, String description, int holeNumber, String holeImageId) {
 		CourseHole courseHole = new CourseHole();
 		courseHole.setCourse(course);
 		courseHole.setName(name);
@@ -158,12 +162,14 @@ public class CourseHole extends CommonUUIDEntity {
 	@ManyToOne
 	@JoinColumn(name = "crs_id", nullable = false)
 	@ForeignKey(name = "id")
+	@JsonIgnore
 	public Course getCourse() {
 		return course;
 	}
 
 	/**
-	 * @param course the course to set
+	 * @param course
+	 *            the course to set
 	 */
 	public void setCourse(Course course) {
 		this.course = course;
