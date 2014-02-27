@@ -1,4 +1,4 @@
-/**
+/**	
  * 
  */
 package com.gffny.ldrbrd.rest.ctrl.impl;
@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -125,7 +126,9 @@ public class GolfPlayController extends AbstractController {
 	 * @param input
 	 * @return
 	 */
-	@RequestMapping(value = "/noncompetitionscorecard")
+	@RequestMapping(value = "/noncompetitionscorecard", consumes = {
+			MediaType.APPLICATION_JSON_VALUE,
+			MediaType.APPLICATION_FORM_URLENCODED_VALUE })
 	// , method = RequestMethod.GET)
 	public ResponseEntity<JsonResponse<JSONable>> startNonCompetitionScorecard(
 			@RequestBody final ScorecardRequest scorecardRequest) {
@@ -134,7 +137,7 @@ public class GolfPlayController extends AbstractController {
 
 		// check for parameter validity
 		if (null != scorecardRequest
-				&& StringUtils.isNotEmpty(scorecardRequest.getCompetitionId())
+				&& StringUtils.isNotEmpty(scorecardRequest.getCourseId())
 				&& StringUtils.isNotEmpty(scorecardRequest.getScoreKeeperId())) {
 
 			// create golfer/scorecard map

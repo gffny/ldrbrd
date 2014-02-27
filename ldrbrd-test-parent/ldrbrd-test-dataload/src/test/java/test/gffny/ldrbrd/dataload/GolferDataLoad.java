@@ -51,4 +51,10 @@ public class GolferDataLoad {
 		personService.addGolferProfile(golfer);
 	}
 
+	@Test
+	public void testGetGolferByName() {
+		GolferProfile golfer = personService.getGolferByEmail("john@gffny.com");
+		System.out.println(golfer.getId());
+	}
+
 }

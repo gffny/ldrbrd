@@ -40,11 +40,24 @@ public class GolfCourseController extends AbstractController {
 	private ICourseClubService courseClubService;
 
 	/**
+	 * Test method for iPhone Dev
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/test")
+	public ResponseEntity<JsonResponse<JSONable>> test() {
+		CourseInformationResponse resp = new CourseInformationResponse();
+		return returnSuccess(resp, HttpStatus.OK);
+	}
+
+	/**
 	 * 
 	 * @param courseId
 	 * @return
 	 */
-	@RequestMapping(value = "/courseFromId", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/coursefromid", consumes = {
+			MediaType.APPLICATION_JSON_VALUE,
+			MediaType.APPLICATION_FORM_URLENCODED_VALUE })
 	public ResponseEntity<JsonResponse<JSONable>> getCourseFromId(
 			@RequestBody final CourseRequest courseId) {
 		CourseInformationResponse response = new CourseInformationResponse();

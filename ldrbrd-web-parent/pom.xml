@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.gffny.ldrbrd</groupId>
@@ -12,6 +10,7 @@
 	<modules>
 		<module>ldrbrd-web-common</module>
 		<module>ldrbrd-web-rest</module>
+		<module>ldrbrd-web-client</module>
 	</modules>
 
 	<properties>
@@ -19,28 +18,10 @@
         <mysql.connector.version>5.1.18</mysql.connector.version>
         <slf4j.version>1.7.5</slf4j.version>
         <logback.version>1.0.13</logback.version>
-        <spring.version>3.1.4.RELEASE</spring.version>
+        <spring.version>4.0.0.RELEASE</spring.version>
         <spring.security.version>3.1.4.RELEASE</spring.security.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-		<!-- JDBC CONFIG 
-		THESE ARE IGNORED
-		<jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
-		<jdbc.url>jdbc:mysql://localhost:3306/ldrbrd</jdbc.url>
-		<jdbc.user>ldrbrd</jdbc.user>
-		<jdbc.password>password</jdbc.password> -->
-
-		<!-- host port where the application will be deployed -->
-		<log4j.level>DEBUG</log4j.level>		
-<!-- 		
-		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/ldrbrd</property>
-		<property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
-		<property name="hibernate.default_schema">ldrbrd</property>
-		<property name="hibernate.dbcp.initialSize">8</property>
-		<property name="hibernate.dbcp.maxActive">20</property>
-		<property name="hibernate.dbcp.maxIdle">20</property>
-		<property name="hibernate.dbcp.minIdle">0</property> -->
+		<log4j.level>DEBUG</log4j.level>
 	</properties>
 	
 	<dependencies>
