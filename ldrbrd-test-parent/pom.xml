@@ -16,53 +16,54 @@
 	</modules>
 
 	<properties>
-        <hibernate.version>4.2.6.Final</hibernate.version>
-        <mysql.connector.version>5.1.18</mysql.connector.version>
-        <slf4j.version>1.7.5</slf4j.version>
-        <logback.version>1.0.13</logback.version>
-        <spring.version>3.1.4.RELEASE</spring.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- PROJECT DEPEDENDCY VERSION -->
+		<project.version>0.0.1-SNAPSHOT</project.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<!-- JDBC CONFIG 
-		THESE ARE IGNORED
-		<jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
-		<jdbc.url>jdbc:mysql://localhost:3306/ldrbrd</jdbc.url>
-		<jdbc.user>ldrbrd</jdbc.user>
-		<jdbc.password>password</jdbc.password> -->
+		<!-- SPRING DEPEDENDCY VERSION -->
+		<spring.version>4.0.1.RELEASE</spring.version>
+		<spring.security.core.version>3.1.4.RELEASE</spring.security.core.version>
 
-		<!-- host port where the application will be deployed -->
-		<log4j.level>DEBUG</log4j.level>		
-<!-- 		
-		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/ldrbrd</property>
-		<property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
-		<property name="hibernate.default_schema">ldrbrd</property>
-		<property name="hibernate.dbcp.initialSize">8</property>
-		<property name="hibernate.dbcp.maxActive">20</property>
-		<property name="hibernate.dbcp.maxIdle">20</property>
-		<property name="hibernate.dbcp.minIdle">0</property> -->
+		<!-- LOGGING DEPEDENDCY VERSION -->
+		<slf4j.version>1.7.5</slf4j.version>
+		<logback.version>1.0.13</logback.version>
+		<log4j.version>1.2.17</log4j.version>
+		<log4j.level>DEBUG</log4j.level>
+
+		<commons.codec.version>1.8</commons.codec.version>
+		<commons.beanutils.version>1.8.3</commons.beanutils.version>
+		<commons.config.version>1.7</commons.config.version>
+		<commons.io.version>2.4</commons.io.version>
+
+		<!-- HIBERNATE DEPEDENDCY VERSION -->
+		<hibernate.version>4.2.6.Final</hibernate.version>
+		<hibernate.annotations.version>3.5.6-Final</hibernate.annotations.version>
+		<hibernate.validator.version>5.0.2.Final</hibernate.validator.version>
+		<mysql.connector.version>5.1.26</mysql.connector.version>
+
+		<jackson.mapper.version>1.9.13</jackson.mapper.version>
+		<jadira.usertype>3.1.0.CR8</jadira.usertype>
+
+		<joda.time.hibernate>1.3</joda.time.hibernate>
+		<joda.time>2.3</joda.time>
+		<junit.version>4.11</junit.version>
 	</properties>
 	
 	<dependencies>
 		<dependency>
 			<groupId>com.gffny.ldrbrd</groupId>
 			<artifactId>ldrbrd-common-model</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.gffny.ldrbrd</groupId>
-			<artifactId>ldrbrd-common-persistence</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.gffny.ldrbrd</groupId>
 			<artifactId>ldrbrd-common-service</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.gffny.ldrbrd</groupId>
-			<artifactId>ldrbrd-common-security</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<artifactId>ldrbrd-common-model</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 		<!-- HIBERNATE REQUIRED LIBRARIES --> 
@@ -80,7 +81,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>4.3.1.Final</version>
+			<version>${hibernate.validator.version}</version>
 		</dependency>
 		<!-- HIBERNATE C3PO REQUIRED LIBRARY for connection pooling -->
 		<dependency>
@@ -99,7 +100,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.26</version>
+			<version>${mysql.connector.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 
@@ -107,14 +108,14 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.5</version>
+			<version>${slf4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
 			<type>jar</type>
 			<scope>runtime</scope>
-			<version>1.7.5</version>
+			<version>${slf4j.version}</version>
 		</dependency>
 
 		<dependency>
@@ -170,7 +171,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>${junit.version}</version>
 		</dependency>
 	</dependencies>
 </project>

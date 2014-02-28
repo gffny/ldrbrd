@@ -13,14 +13,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.gffny.ldrbrd.common.dao.GenericDao;
 import com.gffny.ldrbrd.common.exception.DataAccessException;
 import com.gffny.ldrbrd.common.model.enums.TeeColour;
 import com.gffny.ldrbrd.common.model.impl.Club;
 import com.gffny.ldrbrd.common.model.impl.Course;
 import com.gffny.ldrbrd.common.model.impl.CourseHole;
-import com.gffny.ldrbrd.common.persistence.GenericDao;
 import com.gffny.ldrbrd.common.service.ICourseClubService;
-import com.gffny.ldrbrd.utils.StringUtils;
+import com.gffny.ldrbrd.common.utils.StringUtils;
 
 /**
  * @author jdgaffney

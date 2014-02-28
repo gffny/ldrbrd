@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.gffny.ldrbrd.common.dao.GenericDao;
 import com.gffny.ldrbrd.common.exception.DataAccessException;
 import com.gffny.ldrbrd.common.model.enums.ClubCategory;
 import com.gffny.ldrbrd.common.model.enums.ClubType;
 import com.gffny.ldrbrd.common.model.enums.Manufacturer;
 import com.gffny.ldrbrd.common.model.impl.GolfClub;
 import com.gffny.ldrbrd.common.model.impl.GolferProfile;
-import com.gffny.ldrbrd.common.persistence.GenericDao;
 import com.gffny.ldrbrd.common.service.IUserProfileService;
 import com.gffny.ldrbrd.common.service.impl.GolfClubService;
 

@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.gffny.ldrbrd.common.dao.GenericDao;
 import com.gffny.ldrbrd.common.exception.DataAccessException;
 import com.gffny.ldrbrd.common.model.impl.Competition;
 import com.gffny.ldrbrd.common.model.impl.CompetitionRound;
@@ -25,10 +26,9 @@ import com.gffny.ldrbrd.common.model.impl.GolferProfile;
 import com.gffny.ldrbrd.common.model.impl.HoleScore;
 import com.gffny.ldrbrd.common.model.impl.HoleShot;
 import com.gffny.ldrbrd.common.model.impl.Scorecard;
-import com.gffny.ldrbrd.common.persistence.GenericDao;
 import com.gffny.ldrbrd.common.service.ICompetitionService;
 import com.gffny.ldrbrd.common.service.IScorecardService;
-import com.gffny.ldrbrd.utils.StringUtils;
+import com.gffny.ldrbrd.common.utils.StringUtils;
 
 /**
  * @author jdgaffney

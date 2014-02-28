@@ -28,13 +28,12 @@ import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-
-import com.gffny.ldrbrd.utils.ApplicationConfiguration;
-import com.gffny.ldrbrd.utils.DateUtils;
-import com.gffny.ldrbrd.utils.JsonUtils;
-import com.gffny.ldrbrd.utils.Locale;
-import com.gffny.ldrbrd.utils.MapUtils;
-import com.gffny.ldrbrd.utils.StringUtils;
+import com.gffny.ldrbrd.common.utils.ApplicationConfiguration;
+import com.gffny.ldrbrd.common.utils.DateUtils;
+import com.gffny.ldrbrd.common.utils.JsonUtils;
+import com.gffny.ldrbrd.common.utils.Locale;
+import com.gffny.ldrbrd.common.utils.MapUtils;
+import com.gffny.ldrbrd.common.utils.StringUtils;
 
 /**
  * @author John Gaffney (john@gffny.com) Dec 24, 2012

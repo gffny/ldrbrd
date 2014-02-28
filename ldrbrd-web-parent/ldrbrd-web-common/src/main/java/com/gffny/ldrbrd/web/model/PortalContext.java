@@ -2,7 +2,7 @@ package com.gffny.ldrbrd.web.model;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-import com.gffny.ldrbrd.utils.StringUtils;
+import com.gffny.ldrbrd.common.utils.StringUtils;
 
 public class PortalContext {
 

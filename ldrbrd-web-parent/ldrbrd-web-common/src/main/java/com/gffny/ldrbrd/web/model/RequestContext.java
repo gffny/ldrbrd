@@ -3,15 +3,15 @@
  */
 package com.gffny.ldrbrd.web.model;
 
-import com.gffny.ldrbrd.web.model.cache.Cache;
 import com.gffny.ldrbrd.common.model.impl.GolferProfile;
 import com.gffny.ldrbrd.common.service.IAuthorisationService;
-import com.gffny.ldrbrd.common.service.IUserProfileService;
 //import com.gffny.leaderboard.service.IAuthorisationService;
 import com.gffny.ldrbrd.common.service.ICompetitionService;
 import com.gffny.ldrbrd.common.service.ICourseClubService;
 import com.gffny.ldrbrd.common.service.IScorecardService;
-import com.gffny.ldrbrd.utils.Locale;
+import com.gffny.ldrbrd.common.service.IUserProfileService;
+import com.gffny.ldrbrd.common.utils.Locale;
+import com.gffny.ldrbrd.web.model.cache.Cache;
 
 /**
  * @author John Gaffney (john@gffny.com) Dec 24, 2012

@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
-	http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
-  	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.gffny.ldrbrd</groupId>
 		<artifactId>ldrbrd-common-project</artifactId>
@@ -12,97 +9,4 @@
 	</parent>
 	<artifactId>ldrbrd-common-utils</artifactId>
 	<name>common utils</name>
-
-	<properties>
-		<commons.codec.version>1.8</commons.codec.version>
-		<commons.beanutils.version>1.8.3</commons.beanutils.version>
-		<commons.config.version>1.7</commons.config.version>
-		<commons.io.version>2.4</commons.io.version>
-		<hibernate.annotations.version>3.5.6-Final</hibernate.annotations.version>
-		<hibernate.validator.version>5.0.2.Final</hibernate.validator.version>
-		<hibernate.version>4.2.6.Final</hibernate.version>
-		<jackson.core.asl>1.9.13</jackson.core.asl>
-		<jackson.mapper.lapl.version>1.9.13</jackson.mapper.lapl.version>
-		<jadira.usertype>3.1.0.CR8</jadira.usertype>
-		<joda.time.hibernate>1.3</joda.time.hibernate>
-		<joda.time>2.3</joda.time>
-		<junit.version>4.11</junit.version>
-		<log4j.version>1.2.17</log4j.version>
-		<logback.version>1.0.13</logback.version>
-		<mysql.connector.version>5.1.18</mysql.connector.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.version>0.0.1-SNAPSHOT</project.version>
-		<slf4j.version>1.7.5</slf4j.version>
-		<spring.security.core.version>3.1.4.RELEASE</spring.security.core.version>
-		<spring.version>3.1.4.RELEASE</spring.version>
-	</properties>
-
-	<dependencies>
-		<!-- SPRING REQUIRED LIBRARIES -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		
-		<!-- COMMONS LIBRARIES -->
-  		<dependency>
-			<groupId>commons-configuration</groupId>
-			<artifactId>commons-configuration</artifactId>
-			<version>${commons.config.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>${commons.io.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-			<version>${commons.codec.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-beanutils</groupId>
-			<artifactId>commons-beanutils</artifactId>
-			<version>${commons.beanutils.version}</version>
-		</dependency>
-		<!-- LOGGING REQUIRED LIBRARIES -->
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
-
-		<!-- JACKSON JSON PARSER REQUIRED LIBRARIES -->
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-lgpl</artifactId>
-			<version>${jackson.mapper.lapl.version}</version>
-		</dependency>
-
-<!-- 		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-asl</artifactId>
-			<version>${jackson.core.asl}</version>
-		</dependency>
-		 -->
-
-		<!-- JODA TIME REQUIRED LIBRARIES -->
-		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>${joda.time}</version>
-		</dependency>
-<!-- 		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time-hibernate</artifactId>
-			<version>${joda.time.hibernate}</version>
-		</dependency> -->
-<!-- 		<dependency>
-		    <groupId>org.jadira.usertype</groupId>
-		    <artifactId>usertype.core</artifactId>
-		    <version>${jadira.usertype}</version>
-		</dependency> -->
-	</dependencies>
-		
 </project>

@@ -14,11 +14,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.gffny.ldrbrd.common.dao.GenericDao;
 import com.gffny.ldrbrd.common.exception.DataAccessException;
 import com.gffny.ldrbrd.common.model.impl.GolfClub;
 import com.gffny.ldrbrd.common.model.impl.GolferClubDetail;
 import com.gffny.ldrbrd.common.model.impl.GolferProfile;
-import com.gffny.ldrbrd.common.persistence.GenericDao;
 import com.gffny.ldrbrd.common.security.enums.AuthenticationResult;
 import com.gffny.ldrbrd.common.security.token.AuthenticationToken;
 import com.gffny.ldrbrd.common.security.token.impl.EmailPasswordToken;

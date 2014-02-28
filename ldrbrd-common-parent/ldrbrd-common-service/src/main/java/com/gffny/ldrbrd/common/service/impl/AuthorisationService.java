@@ -14,10 +14,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.gffny.ldrbrd.common.dao.GenericDao;
 import com.gffny.ldrbrd.common.exception.DataAccessException;
 import com.gffny.ldrbrd.common.model.impl.GolferProfile;
 import com.gffny.ldrbrd.common.model.impl.LeaderboardUserDetails;
-import com.gffny.ldrbrd.common.persistence.GenericDao;
 import com.gffny.ldrbrd.common.service.IAuthorisationService;
 
 /**
@@ -33,8 +33,12 @@ public class AuthorisationService implements IAuthorisationService,
 	@Autowired
 	private GenericDao<GolferProfile> golferDao;
 
-	/* (non-Javadoc)
-	 * @see com.gffny.ldrbrd.common.service.impl.IAuthorisationService#isPermitted(java.lang.String, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.gffny.ldrbrd.common.service.impl.IAuthorisationService#isPermitted
+	 * (java.lang.String, java.lang.String)
 	 */
 	public boolean isPermitted(String userId, String enterScorecard) {
 		// TODO handle authorisation
@@ -49,13 +53,17 @@ public class AuthorisationService implements IAuthorisationService,
 		try {
 			Map<String, String> queryMap = new HashMap<String, String>();
 			queryMap.put("profileHandle", username);
-			List<GolferProfile> golferList = golferDao.findByNamedQuery(GolferProfile.FIND_BY_HANDLE, queryMap, 1);
-			if(golferList !=null && golferList.size() == 1) {
+			List<GolferProfile> golferList = golferDao.findByNamedQuery(
+					GolferProfile.FIND_BY_HANDLE, queryMap, 1);
+			if (golferList != null && golferList.size() == 1) {
 				return new LeaderboardUserDetails(golferList.get(0));
-			} else if (golferList !=null && golferList.size() > 1) {
-				log.error("No unique user has been found for user ("+username+")");
-				throw new UsernameNotFoundException("No unique user has been found for user ("+username+")");
-			} else if (golferList !=null && golferList.size() < 1) {
+			} else if (golferList != null && golferList.size() > 1) {
+				log.error("No unique user has been found for user (" + username
+						+ ")");
+				throw new UsernameNotFoundException(
+						"No unique user has been found for user (" + username
+								+ ")");
+			} else if (golferList != null && golferList.size() < 1) {
 				log.error("User (" + username + ") has not been found");
 				throw new UsernameNotFoundException("User (" + username
 						+ ") has not been found");

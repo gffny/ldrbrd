@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.gffny.ldrbrd</groupId>
 		<artifactId>ldrbrd-common-project</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-	</parent> 
+	</parent>
 	<artifactId>ldrbrd-common-model</artifactId>
 	<name>common model</name>
 
@@ -17,19 +16,46 @@
 			<artifactId>ldrbrd-common-utils</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<!-- HIBERNATE REQUIRED LIBRARIES --> 
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
-	            
-		<!-- SPRING REQUIRED LIBRARIES  -->
+
+		<!-- JPA REQUIRED LIBRARY -->
 		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-			<version>${spring.security.core.version}</version>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernate.validator.version}</version>
+		</dependency>
+
+		<!-- HIBERNATE C3PO REQUIRED LIBRARY for connection pooling -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-c3p0</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+
+		<!-- HIBERNATE EHCACHE LIBRARY -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-ehcache</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		
+		<!-- MYSQL REQUIRED LIBRARIES -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.connector.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 
 	</dependencies>

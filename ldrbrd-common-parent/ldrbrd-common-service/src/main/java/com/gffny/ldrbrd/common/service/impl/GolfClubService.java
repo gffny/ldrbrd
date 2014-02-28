@@ -11,11 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.gffny.ldrbrd.common.dao.GenericDao;
 import com.gffny.ldrbrd.common.exception.DataAccessException;
 import com.gffny.ldrbrd.common.model.enums.ClubType;
 import com.gffny.ldrbrd.common.model.enums.Manufacturer;
 import com.gffny.ldrbrd.common.model.impl.GolfClub;
-import com.gffny.ldrbrd.common.persistence.GenericDao;
 import com.gffny.ldrbrd.common.service.IGolfClubService;
 
 /**

@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.gffny.ldrbrd.common.service.ICourseClubService;
+import com.gffny.ldrbrd.common.utils.CollectionUtils;
 import com.gffny.ldrbrd.rest.ctrl.AbstractController;
 import com.gffny.ldrbrd.rest.req.CourseRequest;
 import com.gffny.ldrbrd.rest.resp.CourseInformationResponse;
-import com.gffny.ldrbrd.utils.CollectionUtils;
 import com.gffny.ldrbrd.web.model.JSONable;
 import com.gffny.ldrbrd.web.model.JsonResponse;
 

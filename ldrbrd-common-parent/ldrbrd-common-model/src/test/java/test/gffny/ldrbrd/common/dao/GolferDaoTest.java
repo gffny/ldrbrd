@@ -1,12 +1,11 @@
 /**
  * 
  */
-package test.gffny.ldrbrd.common.persistence;
+package test.gffny.ldrbrd.common.dao;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,23 +27,8 @@ import com.gffny.ldrbrd.common.model.impl.GolferProfile;
 		"classpath*:spring/applicationContext-model.xml" })
 public class GolferDaoTest {
 
-	private GenericDao<GolferProfile> golferDao;
-
-	/**
-	 * @return the golferDao
-	 */
-	public GenericDao<GolferProfile> getGolferDao() {
-		return golferDao;
-	}
-
-	/**
-	 * @param golferDao
-	 *            the golferDao to set
-	 */
 	@Autowired
-	public void setGolferDao(GenericDao<GolferProfile> golferDao) {
-		this.golferDao = golferDao;
-	}
+	private GenericDao<GolferProfile> golferDao;
 
 	GolferProfile testProfile;
 
@@ -60,9 +44,6 @@ public class GolferDaoTest {
 		testProfile.setEmailAddress("gaffney.ie@gmail.com");
 		testProfile.setHandicap(26);
 		testProfile.setProfileHandle("gffny");
-		testProfile.setLastLoginDT(new DateTime());
-		testProfile.setEnabled(true);
-		testProfile.setFailedLoginAttemptsCount(0);
 	}
 
 	@Test

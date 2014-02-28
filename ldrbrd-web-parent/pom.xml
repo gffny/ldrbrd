@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.gffny.ldrbrd</groupId>
@@ -10,59 +11,67 @@
 	<modules>
 		<module>ldrbrd-web-common</module>
 		<module>ldrbrd-web-rest</module>
-		<module>ldrbrd-web-client</module>
 	</modules>
 
 	<properties>
-        <hibernate.version>4.2.6.Final</hibernate.version>
-        <mysql.connector.version>5.1.18</mysql.connector.version>
-        <slf4j.version>1.7.5</slf4j.version>
-        <logback.version>1.0.13</logback.version>
-        <spring.version>4.0.0.RELEASE</spring.version>
-        <spring.security.version>3.1.4.RELEASE</spring.security.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- PROJECT DEPEDENDCY VERSION -->
+		<project.version>0.0.1-SNAPSHOT</project.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!-- SPRING DEPEDENDCY VERSION -->
+		<spring.version>4.0.1.RELEASE</spring.version>
+		<spring.security.version>3.1.4.RELEASE</spring.security.version>
+
+		<!-- LOGGING DEPEDENDCY VERSION -->
+		<slf4j.version>1.7.5</slf4j.version>
+		<logback.version>1.0.13</logback.version>
+		<log4j.version>1.2.17</log4j.version>
 		<log4j.level>DEBUG</log4j.level>
+
+		<!-- HIBERNATE DEPEDENDCY VERSION -->
+		<hibernate.version>4.2.6.Final</hibernate.version>
+		<hibernate.annotations.version>3.5.6-Final</hibernate.annotations.version>
+		<hibernate.validator.version>5.0.2.Final</hibernate.validator.version>		<mysql.connector.version>5.1.18</mysql.connector.version>
+
+		<jackson.mapper.version>1.9.13</jackson.mapper.version>
+		<jadira.usertype>3.1.0.CR8</jadira.usertype>
+
+		<joda.time.hibernate>1.3</joda.time.hibernate>
+		<joda.time>2.3</joda.time>
+		<junit.version>4.11</junit.version>
+		
+		<servlet.api.version>2.5</servlet.api.version>
 	</properties>
-	
+
 	<dependencies>
-			<dependency>
+		<dependency>
 			<groupId>com.gffny.ldrbrd</groupId>
 			<artifactId>ldrbrd-common-utils</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.gffny.ldrbrd</groupId>
 			<artifactId>ldrbrd-common-model</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.gffny.ldrbrd</groupId>
-			<artifactId>ldrbrd-common-persistence</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.gffny.ldrbrd</groupId>
 			<artifactId>ldrbrd-common-service</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.gffny.ldrbrd</groupId>
-			<artifactId>ldrbrd-common-security</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<!-- LOGGING REQUIRED LIBRARIES -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.5</version>
+			<version>${slf4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
 			<type>jar</type>
 			<scope>runtime</scope>
-			<version>1.7.5</version>
+			<version>${slf4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
@@ -73,11 +82,6 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-core</artifactId>
 			<version>${logback.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.1.3</version>
 		</dependency>
 
 		<!-- SPRING REQUIRED LIBRARIES -->
@@ -121,11 +125,11 @@
 			<artifactId>spring-web</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
- 		<dependency>
+<!-- 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-asm</artifactId>
 			<version>${spring.security.version}</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
@@ -158,8 +162,8 @@
 			<artifactId>spring-security-web</artifactId>
 			<version>${spring.security.version}</version>
 		</dependency>
-            
-		<!-- HIBERNATE REQUIRED LIBRARIES --> 
+
+		<!-- HIBERNATE REQUIRED LIBRARIES -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
@@ -174,7 +178,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>4.3.1.Final</version>
+			<version>${hibernate.validator.version}</version>
 		</dependency>
 		<!-- HIBERNATE C3PO REQUIRED LIBRARY for connection pooling -->
 		<dependency>
@@ -188,12 +192,12 @@
 			<artifactId>hibernate-ehcache</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
-		
+
 		<!-- MYSQL REQUIRED LIBRARIES -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.26</version>
+			<version>${mysql.connector.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 
@@ -201,23 +205,23 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>${junit.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-lgpl</artifactId>
-			<version>1.7.1</version>
+			<version>${jackson.mapper.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
+			<version>${log4j.version}</version>
 		</dependency>
 		<dependency>
-		    <groupId>javax.servlet</groupId>
-		    <artifactId>servlet-api</artifactId>
-		    <version>2.5</version>
-		    <scope>provided</scope>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>${servlet.api.version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

@@ -14,11 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gffny.ldrbrd.common.dao.GenericDao;
 import com.gffny.ldrbrd.common.exception.DataAccessException;
 import com.gffny.ldrbrd.common.model.impl.Competition;
 import com.gffny.ldrbrd.common.model.impl.CompetitionRound;
 import com.gffny.ldrbrd.common.model.impl.Course;
-import com.gffny.ldrbrd.common.persistence.GenericDao;
 import com.gffny.ldrbrd.common.service.ICompetitionService;
 
 /**
@@ -29,7 +29,8 @@ import com.gffny.ldrbrd.common.service.ICompetitionService;
 public class CompetitionService implements ICompetitionService {
 
 	/** The Constant log. */
-	private static final Logger LOG = LoggerFactory.getLogger(CompetitionService.class);
+	private static final Logger LOG = LoggerFactory
+			.getLogger(CompetitionService.class);
 
 	/**
 	 * 
@@ -43,18 +44,26 @@ public class CompetitionService implements ICompetitionService {
 	@Autowired
 	private GenericDao<CompetitionRound> competitionRoundDao;
 
-	/* (non-Javadoc)
-	 * @see com.gffny.ldrbrd.common.service.impl.ICompetitionService#getCompetitionRound(java.lang.String, java.lang.Integer)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.gffny.ldrbrd.common.service.impl.ICompetitionService#getCompetitionRound
+	 * (java.lang.String, java.lang.Integer)
 	 */
-	//TODO consider changing return type to List<CompetitionRound>
+	// TODO consider changing return type to List<CompetitionRound>
 	@Transactional(readOnly = true)
-	public CompetitionRound getCompetitionRound(String competitionId, Integer roundNumber) {
+	public CompetitionRound getCompetitionRound(String competitionId,
+			Integer roundNumber) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("competitionId", competitionId);
 		params.put("roundNumber", roundNumber);
 		try {
-			//TODO use the super.namedQueryResultOrNullMethod
-			List<CompetitionRound> competitionRoundList = competitionRoundDao.findByNamedQuery(CompetitionRound.FIND_BY_COMP_ID_AND_RND_NMBR, params);
+			// TODO use the super.namedQueryResultOrNullMethod
+			List<CompetitionRound> competitionRoundList = competitionRoundDao
+					.findByNamedQuery(
+							CompetitionRound.FIND_BY_COMP_ID_AND_RND_NMBR,
+							params);
 			return competitionRoundList.get(0);
 		} catch (DataAccessException daex) {
 			LOG.error(daex.getMessage());
@@ -62,11 +71,16 @@ public class CompetitionService implements ICompetitionService {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.gffny.ldrbrd.common.service.impl.ICompetitionService#createCompetition(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.gffny.ldrbrd.common.service.impl.ICompetitionService#createCompetition
+	 * (java.lang.String)
 	 */
 	public Competition createCompetition(String competitionName) {
-		Competition newCompetition = Competition.createNewCompetition(competitionName);
+		Competition newCompetition = Competition
+				.createNewCompetition(competitionName);
 		try {
 			return competitionDao.persist(newCompetition);
 		} catch (DataAccessException daEx) {
@@ -75,12 +89,19 @@ public class CompetitionService implements ICompetitionService {
 		return newCompetition;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.gffny.ldrbrd.common.service.impl.ICompetitionService#createCompetitionRound(com.gffny.ldrbrd.common.model.impl.Competition, org.joda.time.DateTime, java.lang.Integer, com.gffny.ldrbrd.common.model.impl.Course)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gffny.ldrbrd.common.service.impl.ICompetitionService#
+	 * createCompetitionRound(com.gffny.ldrbrd.common.model.impl.Competition,
+	 * org.joda.time.DateTime, java.lang.Integer,
+	 * com.gffny.ldrbrd.common.model.impl.Course)
 	 */
 	public CompetitionRound createCompetitionRound(Competition competition,
 			DateTime roundDate, Integer roundNumber, Course course) {
-		CompetitionRound newCompetitionRound = CompetitionRound.createNewCompetitionRound(competition, roundDate, roundNumber, course);
+		CompetitionRound newCompetitionRound = CompetitionRound
+				.createNewCompetitionRound(competition, roundDate, roundNumber,
+						course);
 		try {
 			return competitionRoundDao.persist(newCompetitionRound);
 		} catch (DataAccessException daEx) {
