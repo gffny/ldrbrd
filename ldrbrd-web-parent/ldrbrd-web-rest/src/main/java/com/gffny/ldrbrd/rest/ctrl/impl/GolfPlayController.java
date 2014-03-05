@@ -177,10 +177,10 @@ public class GolfPlayController extends AbstractController {
 				HttpStatus.OK);
 	}
 
-	// 4) series of holes recorded
+	// n-2) series of holes recorded
 	// [ HoleInformation ]
 	/**
-	 * Check to see if the controller is online!
+	 * 
 	 * 
 	 * @param input
 	 * @return

@@ -3,12 +3,19 @@
  */
 package com.gffny.ldrbrd.common.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,7 +33,7 @@ import com.gffny.ldrbrd.common.service.IAuthorisationService;
  */
 @Service
 public class AuthorisationService implements IAuthorisationService,
-		UserDetailsService {
+		UserDetailsService, AuthenticationProvider {
 
 	private static Logger log = Logger.getLogger(AuthorisationService.class);
 
@@ -77,4 +84,37 @@ public class AuthorisationService implements IAuthorisationService,
 					+ ") has not been found");
 		}
 	}
+
+	public Authentication authenticate(Authentication authentication)
+			throws AuthenticationException {
+
+		try {
+			Map<String, String> queryMap = new HashMap<String, String>();
+			queryMap.put("profileHandle", authentication.getName());
+			List<GolferProfile> golferList = golferDao.findByNamedQuery(
+					GolferProfile.FIND_BY_HANDLE, queryMap, 1);
+			if (golferList != null && golferList.size() == 1) {
+				GolferProfile golfer = golferList.get(0);
+				List<GrantedAuthority> grantedAuths = new ArrayList<GrantedAuthority>();
+				grantedAuths.add(new SimpleGrantedAuthority("ROLE_USER"));
+				grantedAuths.add(new SimpleGrantedAuthority("GOLFER"));
+				Authentication auth = new UsernamePasswordAuthenticationToken(
+						golfer.getProfileHandle(), golfer.getPassword(),
+						grantedAuths);
+				return auth;
+			}
+		} catch (DataAccessException dae) {
+			log.error("User (" + authentication.getName()
+					+ ") has not been found");
+			throw new UsernameNotFoundException("User ("
+					+ authentication.getName() + ") has not been found");
+		}
+		return null;
+	}
+
+	public boolean supports(Class<?> authentication) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

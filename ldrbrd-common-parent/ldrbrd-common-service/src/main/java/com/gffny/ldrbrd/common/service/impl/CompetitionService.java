@@ -22,7 +22,7 @@ import com.gffny.ldrbrd.common.model.impl.Course;
 import com.gffny.ldrbrd.common.service.ICompetitionService;
 
 /**
- * @author jdgaffney
+ * @author John Gaffney (john@gffny.com) Dec 23, 2012
  * 
  */
 @Service

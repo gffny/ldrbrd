@@ -352,9 +352,9 @@ public class ScorecardService extends AbstractService implements
 								courseHoleDao,
 								CourseHole.FIND_BY_COURSE_ID_AND_HOLE_NUMBER,
 								courseHoleParams);
-						LOG.debug("scoring hole " + holeNumber
-								+ " for scorecard " + scorecardId
-								+ " with score " + holeScore);
+						LOG.debug(
+								"scoring hole {} for scorecard {} with score {}",
+								holeNumber, scorecardId, holeScore);
 						holeScoreDao.persist(HoleScore.createInstance(
 								scorecard, courseHole, holeScore));
 
