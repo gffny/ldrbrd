@@ -5,6 +5,8 @@ package com.gffny.ldrbrd.rest.ctrl.impl;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,14 +18,15 @@ import com.gffny.ldrbrd.web.model.dto.UserDto;
 
 /**
  * @author jdgaffney
- *
+ * 
  */
 @Controller
 @RequestMapping("/check")
-public class CheckController extends AbstractController{
+public class CheckController extends AbstractController {
 
 	/**
 	 * Check to see if the controller is online!
+	 * 
 	 * @param input
 	 * @return
 	 */
@@ -31,5 +34,17 @@ public class CheckController extends AbstractController{
 	public ResponseEntity<JsonResponse<JSONable>> applicationOnlineCheck() {
 		UserDto user = new UserDto();
 		return returnSuccess(user, HttpStatus.OK);
+	}
+
+	/**
+	 * 
+	 * @param password
+	 * @return
+	 */
+	@RequestMapping(value = "/c_password", method = RequestMethod.GET)
+	public ResponseEntity<String> applicationPasswordCheck(final String password) {
+		PasswordEncoder passwordEncoder = new StandardPasswordEncoder();
+		String encodedPassword = passwordEncoder.encode(password);
+		return new ResponseEntity<String>(encodedPassword, HttpStatus.OK);
 	}
 }

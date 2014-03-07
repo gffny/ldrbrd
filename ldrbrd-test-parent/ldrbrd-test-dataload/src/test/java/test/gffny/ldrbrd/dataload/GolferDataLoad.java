@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -46,15 +47,18 @@ public class GolferDataLoad {
 		golfer.setEmailAddress("john@gffny.com");
 		golfer.setHandicap(13);
 		golfer.setHandedness(Dominance.RIGHT);
-		golfer.setPassword("fidelity");
+		// encode the password using the StandardPassword encoder
+		golfer.setPassword(new StandardPasswordEncoder().encode("fidelity"));
 		golfer.setProfileImageRef("http://distilleryimage7.s3.amazonaws.com/26adcca2488511e3aec5128fd569807c_8.jpg");
 		personService.addGolferProfile(golfer);
 	}
 
+	/**
+	 * 
+	 */
 	@Test
 	public void testGetGolferByName() {
 		GolferProfile golfer = personService.getGolferByEmail("john@gffny.com");
 		System.out.println(golfer.getId());
 	}
-
 }

@@ -21,9 +21,9 @@
 		<security:intercept-url pattern="/resources/**"
 			access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<security:intercept-url pattern="/playgolf/**"
-			access="ROLE_USER" />
+			access="ROLE_GOLFER" />
 		<security:intercept-url pattern="/course/**"
-			access="ROLE_USER" />
+			access="ROLE_GOLFER" />
 	</security:http>
 
 	<security:authentication-manager alias="authenticationManager" erase-credentials="true" >

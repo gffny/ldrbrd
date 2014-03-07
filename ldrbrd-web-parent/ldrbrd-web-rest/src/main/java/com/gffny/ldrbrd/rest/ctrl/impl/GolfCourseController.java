@@ -47,6 +47,7 @@ public class GolfCourseController extends AbstractController {
 	@RequestMapping(value = "/test")
 	public ResponseEntity<JsonResponse<JSONable>> test() {
 		CourseInformationResponse resp = new CourseInformationResponse();
+
 		return returnSuccess(resp, HttpStatus.OK);
 	}
 

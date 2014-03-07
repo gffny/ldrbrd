@@ -101,6 +101,7 @@ public class AuthorisationService implements IAuthorisationService,
 				Authentication auth = new UsernamePasswordAuthenticationToken(
 						golfer.getProfileHandle(), golfer.getPassword(),
 						grantedAuths);
+
 				return auth;
 			}
 		} catch (DataAccessException dae) {
