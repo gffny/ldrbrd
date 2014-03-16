@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
 import com.gffny.ldrbrd.common.exception.DataAccessException;
+import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.enums.ClubCategory;
 import com.gffny.ldrbrd.common.model.enums.ClubType;
 import com.gffny.ldrbrd.common.model.enums.Manufacturer;
@@ -47,16 +48,17 @@ public class GolfClubDataLoad {
 	}
 
 	@Test
-	public void testLoadDefaultGolfClubList() {
+	public void testLoadDefaultGolfClubList() throws ServiceException {
 		GolferProfile gffny = profileService.getGolferByEmail("john@gffny.com");
 		profileService.createDefaultGolfBagForGolfer(gffny);
 	}
 
 	/**
+	 * @throws DataAccessException
 	 * 
 	 */
 	@Test
-	public void testCreateGolfClubData() {
+	public void testCreateGolfClubData() throws DataAccessException {
 
 		GolfClub[] allClubsArray = new GolfClub[ClubType
 				.getDefaultClubQuantity()];
@@ -109,11 +111,7 @@ public class GolfClubDataLoad {
 
 		// TODO PERSIST THE NEWLY CREATED CLUBS!
 		for (GolfClub gc : allClubsArray) {
-			try {
-				golfClubDao.persist(gc);
-			} catch (DataAccessException daEx) {
-				System.out.println(daEx.getMessage());
-			}
+			golfClubDao.persist(gc);
 		}
 	}
 

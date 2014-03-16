@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.enums.TeeColour;
 import com.gffny.ldrbrd.common.model.impl.Competition;
 import com.gffny.ldrbrd.common.model.impl.Course;
@@ -43,10 +44,11 @@ public class CompetitionDataLoad {
 	}
 
 	/**
+	 * @throws ServiceException
 	 * 
 	 */
 	@Test
-	public void testCreateCompetitionData() {
+	public void testCreateCompetitionData() throws ServiceException {
 
 		Course course = courseClubService.getCourseByNameAndTeeColour(
 				"test course", TeeColour.WHITE);
