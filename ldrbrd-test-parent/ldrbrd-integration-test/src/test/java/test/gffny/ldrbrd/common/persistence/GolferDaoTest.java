@@ -3,9 +3,6 @@
  */
 package test.gffny.ldrbrd.common.persistence;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -66,13 +63,7 @@ public class GolferDaoTest {
 	}
 
 	@Test
-	public void test() {
-		try {
-			golferDao.persist(testProfile);
-		} catch (DataAccessException dae) {
-			fail(dae.getMessage());
-		} finally {
-			assertTrue(true);
-		}
+	public void test() throws DataAccessException {
+		golferDao.persist(testProfile);
 	}
 }
