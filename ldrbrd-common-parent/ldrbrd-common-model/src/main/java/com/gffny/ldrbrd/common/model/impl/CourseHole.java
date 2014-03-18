@@ -48,6 +48,8 @@ public class CourseHole extends CommonUUIDEntity {
 
 	private Course course;
 
+	// TODO ADD HOLE PAR!
+
 	/**
 	 * 
 	 * @param name

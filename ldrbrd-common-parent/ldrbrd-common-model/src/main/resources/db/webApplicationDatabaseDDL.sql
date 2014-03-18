@@ -83,7 +83,7 @@ CREATE  TABLE IF NOT EXISTS `ldrbrd`.`t_golfer` (
   `frst_nm` VARCHAR(45) NULL ,
   `lst_nm` VARCHAR(45) NULL ,
   `eml_addrss` VARCHAR(45) NULL ,
-  `psswrd` VARCHAR(45) NULL ,
+  `psswrd` VARCHAR(110) NULL ,
   `dsply_nm` VARCHAR(45) NULL ,
   `is_nbld` TINYINT(1) NULL ,
   `lst_lgn_dt` TIMESTAMP NULL ,
@@ -334,7 +334,7 @@ CREATE  TABLE IF NOT EXISTS `ldrbrd`.`t_user` (
   `frst_nm` VARCHAR(45) NOT NULL ,
   `lst_nm` VARCHAR(45) NOT NULL ,
   `eml_addrss` VARCHAR(45) NULL DEFAULT NULL ,
-  `psswrd` VARCHAR(45) NULL DEFAULT NULL ,
+  `psswrd` VARCHAR(110) NULL ,
   `dsply_nm` VARCHAR(45) NOT NULL ,
   `img_ref` VARCHAR(200) NULL ,
   `is_nbld` TINYINT(1) NOT NULL DEFAULT '1' ,
@@ -411,6 +411,77 @@ CREATE  TABLE IF NOT EXISTS `ldrbrd`.`t_competition_round` (
   CONSTRAINT `cmpttn_rnd_crs_fk`
     FOREIGN KEY (`crs_id` )
     REFERENCES `ldrbrd`.`t_course` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+ )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+-- -----------------------------------------------------
+-- Table `ldrbrd`.`t_favourite_course`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ldrbrd`.`t_favourite_course` ;
+
+CREATE  TABLE IF NOT EXISTS `ldrbrd`.`t_favourite_course` (
+  `id` VARCHAR(45) NOT NULL ,
+  `glfr_id` VARCHAR(45) NOT NULL ,
+  `crs_id` VARCHAR(45) NOT NULL ,
+  `fvrt_pstn` INT(3) NOT NULL ,
+  `vrsn` INT(11) NULL DEFAULT NULL ,
+  `crtdby` VARCHAR(45) NULL DEFAULT NULL ,
+  `updtdby` VARCHAR(45) NULL DEFAULT NULL ,
+  `crtddt` DATETIME NULL DEFAULT NULL ,
+  `updtddt` DATETIME NULL DEFAULT NULL ,
+  `skpcrtddt` TINYINT(1) NULL DEFAULT NULL ,
+  `syncvrsnid` INT(11) NULL DEFAULT NULL ,
+  `obslt` TINYINT(1) NULL DEFAULT NULL ,
+  `archv` TINYINT(1) NULL DEFAULT NULL ,
+  `dlt` TINYINT(1) NULL DEFAULT NULL ,
+  PRIMARY KEY (`id`) ,
+  CONSTRAINT `fvrt_crs_glfr_fk`
+    FOREIGN KEY (`glfr_id` )
+    REFERENCES `ldrbrd`.`t_golfer` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fvrt_crs_crs_fk`
+    FOREIGN KEY (`crs_id` )
+    REFERENCES `ldrbrd`.`t_course` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+ )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `ldrbrd`.`t_competition_registration`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ldrbrd`.`t_competition_registration` ;
+
+CREATE  TABLE IF NOT EXISTS `ldrbrd`.`t_competition_registration` (
+  `id` VARCHAR(45) NOT NULL ,
+  `glfr_id` VARCHAR(45) NOT NULL ,
+  `cmpttn_id` VARCHAR(45) NOT NULL ,
+  `cmpttn_hndcp` INT(3) NULL ,
+  `vrsn` INT(11) NULL DEFAULT NULL ,
+  `crtdby` VARCHAR(45) NULL DEFAULT NULL ,
+  `updtdby` VARCHAR(45) NULL DEFAULT NULL ,
+  `crtddt` DATETIME NULL DEFAULT NULL ,
+  `updtddt` DATETIME NULL DEFAULT NULL ,
+  `skpcrtddt` TINYINT(1) NULL DEFAULT NULL ,
+  `syncvrsnid` INT(11) NULL DEFAULT NULL ,
+  `obslt` TINYINT(1) NULL DEFAULT NULL ,
+  `archv` TINYINT(1) NULL DEFAULT NULL ,
+  `dlt` TINYINT(1) NULL DEFAULT NULL ,
+  PRIMARY KEY (`id`) ,
+  CONSTRAINT `fvrt_crs_glfr_fk`
+    FOREIGN KEY (`glfr_id` )
+    REFERENCES `ldrbrd`.`t_golfer` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fvrt_crs_crs_fk`
+    FOREIGN KEY (`cmpttn_id` )
+    REFERENCES `ldrbrd`.`t_competition` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
  )

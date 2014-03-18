@@ -105,6 +105,9 @@ public class GolfClubService implements IGolfClubService {
 		} catch (DataAccessException daEx) {
 			LOG.error("error getting the list of default golf clubs : "
 					+ daEx.getMessage());
+
+			// TODO Throw SeviceExceptions where there are currently captured
+			// exceptions
 		}
 		return new ArrayList<GolfClub>();
 	}

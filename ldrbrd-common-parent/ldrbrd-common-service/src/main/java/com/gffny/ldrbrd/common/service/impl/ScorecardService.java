@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
 import com.gffny.ldrbrd.common.exception.DataAccessException;
+import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.impl.Competition;
 import com.gffny.ldrbrd.common.model.impl.CompetitionRound;
 import com.gffny.ldrbrd.common.model.impl.Course;
@@ -37,6 +38,10 @@ import com.gffny.ldrbrd.common.utils.StringUtils;
 @Service
 public class ScorecardService extends AbstractService implements
 		IScorecardService {
+
+	private static final int NEED_TO_BE_PUSHED_INTO_PROFILE = 5;
+
+	private static final int EXISTING_GOLFER_HANDICAP = -1;
 
 	/** The Constant log. */
 	static final Logger LOG = LoggerFactory.getLogger(ScorecardService.class);
@@ -89,13 +94,12 @@ public class ScorecardService extends AbstractService implements
 	@Autowired
 	private ICompetitionService competitionService;
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.gffny.ldrbrd.common.service.IScorecardService#startGeneralScorecard
-	 * (java.lang.String, java.lang.String, java.util.HashMap,
-	 * java.util.LinkedList)
+	 * @see com.gffny.ldrbrd.common.service.IScorecardService#startGeneralScorecard
+	 *      (java.lang.String, java.lang.String, java.util.HashMap,
+	 *      java.util.LinkedList)
 	 */
 	public Scorecard startGeneralScorecard(String golferId, String courseId,
 			HashMap<String, String> hashMap, LinkedList<GolfClub> clubList) {
@@ -105,13 +109,12 @@ public class ScorecardService extends AbstractService implements
 				clubList);
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.gffny.ldrbrd.common.service.IScorecardService#startGeneralScorecard
-	 * (java.lang.String, java.lang.String, int, java.util.HashMap,
-	 * java.util.LinkedList)
+	 * @see com.gffny.ldrbrd.common.service.IScorecardService#startGeneralScorecard
+	 *      (java.lang.String, java.lang.String, int, java.util.HashMap,
+	 *      java.util.LinkedList)
 	 */
 	public Scorecard startGeneralScorecard(String golferId, String courseId,
 			int handicap, HashMap<String, String> hashMap,
@@ -122,13 +125,12 @@ public class ScorecardService extends AbstractService implements
 				hashMap, clubList);
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.gffny.ldrbrd.common.service.IScorecardService#startGeneralScorecard
-	 * (java.lang.String, java.lang.String, java.lang.String, java.util.HashMap,
-	 * java.util.LinkedList)
+	 * @see com.gffny.ldrbrd.common.service.IScorecardService#startGeneralScorecard
+	 *      (java.lang.String, java.lang.String, java.lang.String,
+	 *      java.util.HashMap, java.util.LinkedList)
 	 */
 	public Scorecard startGeneralScorecard(String golferId,
 			String scoreKeeperId, String courseId,
@@ -153,13 +155,12 @@ public class ScorecardService extends AbstractService implements
 		return null;
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.gffny.ldrbrd.common.service.IScorecardService#startGeneralScorecard
-	 * (java.lang.String, java.lang.String, java.lang.String, int,
-	 * java.util.HashMap, java.util.LinkedList)
+	 * @see com.gffny.ldrbrd.common.service.IScorecardService#startGeneralScorecard
+	 *      (java.lang.String, java.lang.String, java.lang.String, int,
+	 *      java.util.HashMap, java.util.LinkedList)
 	 */
 	public Scorecard startGeneralScorecard(String golferId,
 			String scoreKeeperId, String courseId, int handicap,
@@ -182,16 +183,33 @@ public class ScorecardService extends AbstractService implements
 		return null;
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.gffny.ldrbrd.common.service.impl.IScorecardService#
-	 * startCompetitionScorecard(java.lang.String, java.lang.String,
-	 * java.lang.String, java.lang.Integer, java.util.LinkedList)
+	 * @see com.gffny.ldrbrd.common.service.IScorecardService#startCompetitionScorecard
+	 *      (java.lang.String, java.lang.String, java.lang.String, int,
+	 *      java.util.LinkedList)
 	 */
 	public Scorecard startCompetitionScorecard(String golferId,
 			String scoreKeeperId, String competitionId, int roundNumber,
-			LinkedList<GolfClub> clubList) {
+			LinkedList<GolfClub> clubList) throws ServiceException {
+
+		// if there is no handicap passed, use the golfer's existing handicap
+		return startCompetitionScorecard(golferId, scoreKeeperId,
+				competitionId, roundNumber, clubList, EXISTING_GOLFER_HANDICAP);
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gffny.ldrbrd.common.service.impl.IScorecardService#
+	 *      startCompetitionScorecard(java.lang.String, java.lang.String,
+	 *      java.lang.String, java.lang.Integer, java.util.LinkedList)
+	 */
+	public Scorecard startCompetitionScorecard(String golferId,
+			String scoreKeeperId, String competitionId, int roundNumber,
+			LinkedList<GolfClub> clubList, int competitionHandicap)
+			throws ServiceException {
 		Scorecard result = null;
 		try {
 			// create parameter map
@@ -231,26 +249,39 @@ public class ScorecardService extends AbstractService implements
 							+ result.getCompetitionRound().getId()
 							+ ") and golfer (" + result.getGolfer().getId()
 							+ ")");
+					return result;
 				} else {
 					// no scorecard exists
 					GolferProfile golfer = golferDao.findById(
 							GolferProfile.class, golferId);
 					GolferProfile scoreKeeper = golferDao.findById(
 							GolferProfile.class, scoreKeeperId);
-					CompetitionRound competitionRound = competitionService
-							.getCompetitionRound(competitionId, roundNumber);
+					// CompetitionRound competitionRound = competitionService
+					// .getCompetitionRound(competitionId, roundNumber);
+					CompetitionRound competitionRound = competitionRoundList
+							.get(0);
 					if (scoreKeeper != null && golfer != null
 							&& competitionRound != null) {
 						LOG.debug("creating new scorecard for competition round ("
 								+ competitionRound.getId()
 								+ ") and golfer ("
 								+ golfer.getId() + ")");
-						result = scorecardDao.persist(Scorecard
-								.createNewCompetitionScorecard(golfer,
-										scoreKeeper, competitionRound,
-										golfer.getHandicap()));
+						if (competitionHandicap < 0) {
+							result = scorecardDao.persist(Scorecard
+									.createNewCompetitionScorecard(golfer,
+											scoreKeeper, competitionRound,
+											golfer.getHandicap()));
+						} else {
+							result = scorecardDao.persist(Scorecard
+									.createNewCompetitionScorecard(golfer,
+											scoreKeeper, competitionRound,
+											competitionHandicap));
+						}
+						return result;
 					} else {
 						LOG.error("one of the following is null: compeition round, score keeper golfer profile, or golfer profile");
+						throw new ServiceException(
+								"one of the following is null: compeition round, score keeper golfer profile, or golfer profile");
 					}
 				}
 			} else {
@@ -259,22 +290,26 @@ public class ScorecardService extends AbstractService implements
 				// generated dynamically
 				LOG.error("no competition round exists for competition id: "
 						+ competitionId + " and round number: " + roundNumber);
+				throw new ServiceException(
+						"no competition round exists for competition id: "
+								+ competitionId + " and round number: "
+								+ roundNumber);
 			}
 		} catch (DataAccessException daEx) {
-			LOG.error("error with competition scorecard");
+			LOG.error("{} error with competition scorecard", daEx.getClass()
+					.getName());
+			throw new ServiceException(daEx);
 		}
-		return result;
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.gffny.ldrbrd.common.service.IScorecardService#scoreHoleScoreMap(java
-	 * .lang.String, java.util.Map)
+	 * @see com.gffny.ldrbrd.common.service.IScorecardService#scoreHoleScoreMap(java
+	 *      .lang.String, java.util.Map)
 	 */
 	public void scoreHoleScoreMap(String scorecardId,
-			Map<Integer, Integer> holeScoreMap) {
+			Map<Integer, Integer> holeScoreMap) throws ServiceException {
 
 		// check is list is valid
 		if (holeScoreMap != null) {
@@ -290,12 +325,11 @@ public class ScorecardService extends AbstractService implements
 
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.gffny.ldrbrd.common.service.IScorecardService#scoreShotMap(java.lang
-	 * .String, java.util.Map)
+	 * @see com.gffny.ldrbrd.common.service.IScorecardService#scoreShotMap(java.lang
+	 *      .String, java.util.Map)
 	 */
 	public void scoreShotMap(String scorecardId,
 			Map<Integer, HoleShot> holeShotMap) {
@@ -309,15 +343,14 @@ public class ScorecardService extends AbstractService implements
 		}
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.gffny.ldrbrd.common.service.IScorecardService#scoreHole(com.gffny
-	 * .ldrbrd.common.model.impl.HoleScore)
+	 * @see com.gffny.ldrbrd.common.service.IScorecardService#scoreHole(com.gffny
+	 *      .ldrbrd.common.model.impl.HoleScore)
 	 */
 	public void scoreHole(String scorecardId, Integer holeNumber,
-			Integer holeScore) {
+			Integer holeScore) throws ServiceException {
 		// check hole validity
 		if (scorecardId != null && holeNumber != null && holeScore != null) {
 			try {
@@ -364,21 +397,26 @@ public class ScorecardService extends AbstractService implements
 						LOG.error("a score below 1 is attempted to be stored");
 					}
 				}
-			} catch (DataAccessException daex) {
-				LOG.error(daex.getMessage());
+			} catch (DataAccessException daEx) {
+				LOG.error("{} error with competition scorecard", daEx
+						.getClass().getName());
+				throw new ServiceException(daEx);
+			} catch (ServiceException srvEx) {
+				LOG.error("{} error with competition scorecard", srvEx
+						.getClass().getName());
+				throw srvEx;
 			}
 		} else {
 			LOG.error("one of scorecardId, holeNumber, or holeScore is null");
 		}
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.gffny.ldrbrd.common.service.IScorecardService#scoreHoleShot(java.
-	 * lang.String, java.lang.Integer,
-	 * com.gffny.ldrbrd.common.model.impl.HoleShot)
+	 * @see com.gffny.ldrbrd.common.service.IScorecardService#scoreHoleShot(java.
+	 *      lang.String, java.lang.Integer,
+	 *      com.gffny.ldrbrd.common.model.impl.HoleShot)
 	 */
 	public void scoreHoleShot(String scorecardId, Integer holeNumber,
 			HoleShot shot) {
@@ -393,12 +431,11 @@ public class ScorecardService extends AbstractService implements
 		}
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.gffny.ldrbrd.common.service.IScorecardService#checkScorecardScoreKeeper
-	 * (java.lang.String, java.lang.String)
+	 * @see com.gffny.ldrbrd.common.service.IScorecardService#checkScorecardScoreKeeper
+	 *      (java.lang.String, java.lang.String)
 	 */
 	public boolean checkScorecardScoreKeeper(String scorecardId,
 			String scoreKeeperId) {
@@ -425,12 +462,11 @@ public class ScorecardService extends AbstractService implements
 		return false;
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.gffny.ldrbrd.common.service.IScorecardService#submitScorecard(java
-	 * .lang.String, java.lang.String, java.lang.String)
+	 * @see com.gffny.ldrbrd.common.service.IScorecardService#submitScorecard(java
+	 *      .lang.String, java.lang.String, java.lang.String)
 	 */
 	public void submitScorecard(String scorecardId, String scoreKeeperId,
 			String competitionId) {
@@ -457,12 +493,11 @@ public class ScorecardService extends AbstractService implements
 		}
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.gffny.ldrbrd.common.service.IScorecardService#signScorecard(java.
-	 * lang.String, java.lang.String, java.lang.String)
+	 * @see com.gffny.ldrbrd.common.service.IScorecardService#signScorecard(java.
+	 *      lang.String, java.lang.String, java.lang.String)
 	 */
 	public void signScorecard(String scorecardId, String scoreKeeperId,
 			String competitionId) {
@@ -504,5 +539,44 @@ public class ScorecardService extends AbstractService implements
 		// don't return null as there may be operations applied to the return
 		// value
 		return new String("");
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.gffny.ldrbrd.common.service.IScorecardService#getLastXScorecards(
+	 * java.lang.String, int)
+	 */
+	public List<Scorecard> getLastXScorecards(String golferId, int xScorecards)
+			throws ServiceException {
+		if (!StringUtils.isEmpty(golferId) && xScorecards > 0) {
+			try {
+				Map<String, String> paramMap = new HashMap<String, String>();
+				paramMap.put("golferId", golferId);
+				return scorecardDao.findByNamedQuery(
+						Scorecard.FIND_SCORECARDS_BY_GOLFER_ID_AND_QUANTITY,
+						paramMap, xScorecards);
+			} catch (DataAccessException daEx) {
+				LOG.error(daEx.getMessage());
+				throw new ServiceException(daEx);
+			}
+		} else {
+			LOG.error("");
+			throw new ServiceException("");
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.gffny.ldrbrd.common.service.IScorecardService#getLastXScorecards(
+	 * java.lang.String)
+	 */
+	public List<Scorecard> getLastXScorecards(String golferId)
+			throws ServiceException {
+		// TODO add the "last x" value to the profile
+		return getLastXScorecards(golferId, NEED_TO_BE_PUSHED_INTO_PROFILE);
 	}
 }

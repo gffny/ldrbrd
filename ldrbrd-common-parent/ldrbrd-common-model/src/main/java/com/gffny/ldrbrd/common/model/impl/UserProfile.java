@@ -8,7 +8,9 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlTransient;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
 
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
@@ -118,6 +120,8 @@ public abstract class UserProfile extends CommonUUIDEntity {
 	/**
 	 * @see com.gffny.leaderboard.model.IGolfer#getPassword()
 	 */
+	@XmlTransient
+	@JsonIgnore
 	@Column(name = "psswrd")
 	public String getPassword() {
 		return this.password;

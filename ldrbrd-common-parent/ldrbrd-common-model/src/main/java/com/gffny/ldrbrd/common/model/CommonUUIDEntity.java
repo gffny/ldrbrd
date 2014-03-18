@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.xml.bind.annotation.XmlElement;
 
+import org.hibernate.validator.constraints.Length;
+
 /**
  * @author jdgaffney
  * 
@@ -29,7 +31,7 @@ public abstract class CommonUUIDEntity extends CommonEntity {
 	/**
 	 * 
 	 */
-	//@Id
+	// @Id
 	@XmlElement
 	private String id;
 
@@ -82,8 +84,9 @@ public abstract class CommonUUIDEntity extends CommonEntity {
 	 * 
 	 * @return
 	 */
-	@Column(name = ID_FIELD, nullable = false, length = 36)
 	@Id
+	@Length(min = 36, max = 36)
+	@Column(name = ID_FIELD, nullable = false, length = 36)
 	public String getId() {
 		return id;
 	}

@@ -80,7 +80,7 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	 * 
 	 * @return the entity manager
 	 */
-	protected EntityManager getEntityManager() {
+	public EntityManager getEntityManager() {
 		return em;
 	}
 

@@ -27,7 +27,6 @@ import com.gffny.ldrbrd.common.model.enums.TeeColour;
  */
 @NamedQueries({
 		@NamedQuery(name = Course.FIND_BY_NAME_AND_TEE_COLOUR, query = "SELECT c FROM Course c WHERE c.courseName = :courseName and c.teeColour = :teeColour"),
-		@NamedQuery(name = Course.FAVOURITE_LIST_BY_GOLFER_ID, query = "SELECT c FROM Course c WHERE c.courseName = :courseName and c.teeColour = :teeColour"),
 		@NamedQuery(name = Course.FIND_BY_CLUB_ID_AND_COURSE_NAME, query = "SELECT c FROM Course c WHERE c.club.id = :clubId and c.courseName = :courseName") })
 @Entity
 @Table(name = "t_course")
@@ -42,11 +41,6 @@ public class Course extends CommonUUIDEntity {
 	 * 
 	 */
 	public static final String FIND_BY_NAME_AND_TEE_COLOUR = "find_by_name_and_tee_colour";
-
-	/**
-	 * 
-	 */
-	public static final String FAVOURITE_LIST_BY_GOLFER_ID = "favourite_list_by_golfer_id";
 
 	/**
 	 * 

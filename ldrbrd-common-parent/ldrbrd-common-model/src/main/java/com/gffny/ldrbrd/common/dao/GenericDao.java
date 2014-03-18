@@ -6,6 +6,8 @@ package com.gffny.ldrbrd.common.dao;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+
 import com.gffny.ldrbrd.common.exception.DataAccessException;
 import com.gffny.ldrbrd.common.model.CommonEntity;
 
@@ -53,7 +55,8 @@ public interface GenericDao<T> {
 	 *            params
 	 * @return
 	 */
-	List<T> findByNamedQuery(String name, Map<String, ?> parameters) throws DataAccessException;
+	List<T> findByNamedQuery(String name, Map<String, ?> parameters)
+			throws DataAccessException;
 
 	/**
 	 * 
@@ -64,7 +67,8 @@ public interface GenericDao<T> {
 	 * @param maxResults
 	 * @return
 	 */
-	List<T> findByNamedQuery(String name, Map<String, ?> parameters, int maxResults) throws DataAccessException;
+	List<T> findByNamedQuery(String name, Map<String, ?> parameters,
+			int maxResults) throws DataAccessException;
 
 	/**
 	 * 1 Find by using a query
@@ -76,7 +80,8 @@ public interface GenericDao<T> {
 	 *            params
 	 * @return
 	 */
-	List<T> findByQuery(String query, Map<String, ?> parameters) throws DataAccessException;
+	List<T> findByQuery(String query, Map<String, ?> parameters)
+			throws DataAccessException;
 
 	/**
 	 * Returns a single result. Caller would cast returned value as needed. For
@@ -86,7 +91,8 @@ public interface GenericDao<T> {
 	 * @param parameters
 	 * @return single result
 	 */
-	Object findByAggregateNamedQuerySingleResult(String namedQuery,	Map<String, ?> parameters) throws DataAccessException;
+	Object findByAggregateNamedQuerySingleResult(String namedQuery,
+			Map<String, ?> parameters) throws DataAccessException;
 
 	/**
 	 * Finds all of the rows associated with the class
@@ -94,7 +100,8 @@ public interface GenericDao<T> {
 	 * @param clazz
 	 * @return
 	 */
-	List<T> findAll(Class<? extends CommonEntity> clazz) throws DataAccessException;
+	List<T> findAll(Class<? extends CommonEntity> clazz)
+			throws DataAccessException;
 
 	/**
 	 * Update by using Named query
@@ -103,7 +110,8 @@ public interface GenericDao<T> {
 	 * @param parameters
 	 * @return returns update count - total number of rows updated
 	 */
-	int updateByNamedQuery(String query, Map<String, ?> parameters) throws DataAccessException;
+	int updateByNamedQuery(String query, Map<String, ?> parameters)
+			throws DataAccessException;
 
 	/**
 	 * Update using query and parameters
@@ -112,6 +120,13 @@ public interface GenericDao<T> {
 	 * @param parameters
 	 * @return returns update count
 	 */
-	int updateByQuery(String query, Map<String, ?> parameters) throws DataAccessException;
+	int updateByQuery(String query, Map<String, ?> parameters)
+			throws DataAccessException;
+
+	/**
+	 * 
+	 * @return
+	 */
+	public EntityManager getEntityManager();
 
 }

@@ -15,6 +15,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.ForeignKey;
 import org.joda.time.DateTime;
 
@@ -42,22 +43,22 @@ public class CompetitionRound extends CommonUUIDEntity {
 	/**
 	 * 
 	 */
+	protected DateTime roundDate;
+
+	/**
+	 * 
+	 */
+	protected Course course;
+
+	/**
+	 * 
+	 */
 	private int roundNumber;
 
 	/**
 	 * 
 	 */
 	private Competition competition;
-
-	/**
-	 * 
-	 */
-	private DateTime roundDate;
-
-	/**
-	 * 
-	 */
-	private Course course;
 
 	/**
 	 * 
@@ -76,7 +77,7 @@ public class CompetitionRound extends CommonUUIDEntity {
 	 * 
 	 */
 	public CompetitionRound() {
-		//hibernate required non-private zero-argument constructor
+		// hibernate required non-private zero-argument constructor
 	}
 
 	/**
@@ -88,9 +89,9 @@ public class CompetitionRound extends CommonUUIDEntity {
 	private CompetitionRound(Competition competition, DateTime roundDate,
 			Integer roundNumber, Course course) {
 		this.competition = competition;
-		this.roundDate = roundDate;
 		this.roundNumber = getDefaultNotNullValue(roundNumber, 0);
 		this.course = course;
+		this.roundDate = roundDate;
 	}
 
 	/**
@@ -114,7 +115,8 @@ public class CompetitionRound extends CommonUUIDEntity {
 	 * 
 	 * @return
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "cmpttn_id", nullable = false)
 	@ForeignKey(name = "id")
 	public Competition getCompetition() {
@@ -133,7 +135,8 @@ public class CompetitionRound extends CommonUUIDEntity {
 	 * 
 	 * @return
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "crs_id", nullable = false)
 	@ForeignKey(name = "id")
 	public Course getCourse() {

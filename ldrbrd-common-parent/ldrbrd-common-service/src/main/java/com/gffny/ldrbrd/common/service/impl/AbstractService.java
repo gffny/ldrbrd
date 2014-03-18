@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
 import com.gffny.ldrbrd.common.exception.DataAccessException;
+import com.gffny.ldrbrd.common.exception.ServiceException;
 
 public class AbstractService {
 
@@ -24,7 +25,8 @@ public class AbstractService {
 	 * @return
 	 */
 	protected <T> T namedQuerySingleResultOrNull(GenericDao<T> genericDao,
-			String namedQuery, Map<String, Object> params) {
+			String namedQuery, Map<String, Object> params)
+			throws ServiceException {
 
 		// get the result list
 		try {
@@ -38,6 +40,7 @@ public class AbstractService {
 			// else kick up a fuss and return null
 		} catch (DataAccessException e) {
 			LOG.error(e.getMessage());
+			throw new ServiceException(e);
 		}
 		return null;
 	}

@@ -3,6 +3,7 @@ package com.gffny.ldrbrd.common.service;
 import java.util.List;
 import java.util.Map;
 
+import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.enums.TeeColour;
 import com.gffny.ldrbrd.common.model.impl.Club;
 import com.gffny.ldrbrd.common.model.impl.Course;
@@ -49,11 +50,21 @@ public interface ICourseClubService {
 	/**
 	 * 
 	 * @param golferId
+	 * @return
+	 * @throws ServiceException
+	 */
+	public abstract List<Course> getFavouriteCourseList(String golferId)
+			throws ServiceException;
+
+	/**
+	 * 
+	 * @param golferId
 	 * @param favouriteLimit
 	 * @return
+	 * @throws ServiceException
 	 */
 	public abstract List<Course> getFavouriteCourseList(String golferId,
-			int favouriteLimit);
+			int favouriteLimit) throws ServiceException;
 
 	/**
 	 * 

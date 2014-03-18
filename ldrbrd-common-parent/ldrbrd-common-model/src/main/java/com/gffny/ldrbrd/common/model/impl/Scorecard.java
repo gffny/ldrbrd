@@ -14,9 +14,10 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.ForeignKey;
-import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
 import org.joda.time.DateTime;
 
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
@@ -26,9 +27,10 @@ import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
  * 
  */
 
-@NamedQueries({	
-	@NamedQuery(name = Scorecard.FIND_SCORECARD_BY_COMPETITION_ROUND_AND_GOLFER, query = "SELECT s FROM Scorecard s WHERE s.competitionRound.id = :competitionRoundId AND s.golfer.id  = :golferId")
-})
+@NamedQueries({
+		@NamedQuery(name = Scorecard.FIND_SCORECARD_BY_COMPETITION_ROUND_AND_GOLFER, query = "SELECT s FROM Scorecard s WHERE s.competitionRound.id = :competitionRoundId AND s.golfer.id  = :golferId"),
+		// TODO Check that the scorecards are returned by in the right order
+		@NamedQuery(name = Scorecard.FIND_SCORECARDS_BY_GOLFER_ID_AND_QUANTITY, query = "SELECT s FROM Scorecard s WHERE s.golfer.id  = :golferId ORDER BY s.scorecardDate") })
 @Entity
 @Table(name = "t_scorecard")
 public class Scorecard extends CommonUUIDEntity {
@@ -38,11 +40,22 @@ public class Scorecard extends CommonUUIDEntity {
 	 */
 	private static final long serialVersionUID = 641411664200798837L;
 
+	/**
+	 * 
+	 */
 	public static final String FIND_SCORECARD_BY_COMPETITION_ROUND_AND_GOLFER = "findScorecardByCompetitionRoundAndGolfer";
 
+	/**
+	 * 
+	 */
+	public static final String FIND_SCORECARDS_BY_GOLFER_ID_AND_QUANTITY = "findScorecardsByGolferId";
+
 	private GolferProfile golfer;
+	private String golferName;
 	private GolferProfile scoringGolfer;
+	private String scoringGolferName;
 	private Course course;
+	private String courseName;
 	private CompetitionRound competitionRound;
 	private String teesPlayedOff = new String();
 	private int[] scoreArray = new int[18];
@@ -58,9 +71,10 @@ public class Scorecard extends CommonUUIDEntity {
 	 * @param handicap
 	 * @return
 	 */
-	public static Scorecard createNewScorecard(GolferProfile golfer, GolferProfile scoreKeeper,
-			Course course, int handicap) {
-		Scorecard scorecard = new Scorecard(golfer, scoreKeeper, course, handicap);
+	public static Scorecard createNewScorecard(GolferProfile golfer,
+			GolferProfile scoreKeeper, Course course, int handicap) {
+		Scorecard scorecard = new Scorecard(golfer, scoreKeeper, course,
+				handicap);
 		scorecard.initDates(new DateTime(System.currentTimeMillis()));
 		return scorecard;
 	}
@@ -73,8 +87,9 @@ public class Scorecard extends CommonUUIDEntity {
 	 * @param handicap
 	 * @return
 	 */
-	public static Scorecard createNewCompetitionScorecard(GolferProfile golfer, GolferProfile scoreKeeper,
-			CompetitionRound competitionRound, int handicap) {
+	public static Scorecard createNewCompetitionScorecard(GolferProfile golfer,
+			GolferProfile scoreKeeper, CompetitionRound competitionRound,
+			int handicap) {
 		Scorecard scorecard = new Scorecard(golfer, scoreKeeper,
 				competitionRound.getCourse(), handicap);
 		scorecard.setCompetitionRound(competitionRound);
@@ -86,7 +101,7 @@ public class Scorecard extends CommonUUIDEntity {
 	 *
 	 */
 	public Scorecard() {
-		//hibernate required non-private zero-argument constructor
+		// hibernate required non-private zero-argument constructor
 	}
 
 	/**
@@ -96,10 +111,16 @@ public class Scorecard extends CommonUUIDEntity {
 	 * @param course
 	 * @param handicap
 	 */
-	private Scorecard(GolferProfile golfer, GolferProfile scoreKeeper, Course course, int handicap) {
+	private Scorecard(GolferProfile golfer, GolferProfile scoreKeeper,
+			Course course, int handicap) {
 		this.golfer = golfer;
+		this.golferName = golfer.getFirstName() + " " + golfer.getLastName();
 		this.scoringGolfer = scoreKeeper;
+		this.scoringGolferName = scoringGolfer.getFirstName() + " "
+				+ scoringGolfer.getLastName();
 		this.course = course;
+		this.courseName = course.getClub().getClubName() + " "
+				+ course.getCourseName();
 		this.handicap = handicap;
 	}
 
@@ -107,9 +128,9 @@ public class Scorecard extends CommonUUIDEntity {
 	 * 
 	 */
 	public void signScorecard(String signature) {
-		//TODO research what I could do to "sign" a scorecard 
-		//(look at adding a "isSubmitted" bool to the entity)
-		//(signing time stamp)
+		// TODO research what I could do to "sign" a scorecard
+		// (look at adding a "isSubmitted" bool to the entity)
+		// (signing time stamp)
 		this.scorecardNotes = signature;
 	}
 
@@ -117,9 +138,9 @@ public class Scorecard extends CommonUUIDEntity {
 	 * 
 	 */
 	public void submitScorecard(String submission) {
-		//TODO research what I should do to submit a scorecard 
-		//(look at adding a "isSubmitted" bool to the entity)
-		//(signing time stamp)
+		// TODO research what I should do to submit a scorecard
+		// (look at adding a "isSubmitted" bool to the entity)
+		// (signing time stamp)
 		this.scorecardNotes = submission;
 	}
 
@@ -127,6 +148,7 @@ public class Scorecard extends CommonUUIDEntity {
 	 * 
 	 * @return
 	 */
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "glfr_id", nullable = false)
 	@ForeignKey(name = "id")
@@ -140,12 +162,14 @@ public class Scorecard extends CommonUUIDEntity {
 	 */
 	public void setGolfer(GolferProfile golfer) {
 		this.golfer = golfer;
+		this.golferName = golfer.getFirstName() + " " + golfer.getLastName();
 	}
-	
+
 	/**
 	 * 
 	 * @return
 	 */
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "scrng_glfr_id", nullable = false)
 	@ForeignKey(name = "id")
@@ -159,13 +183,15 @@ public class Scorecard extends CommonUUIDEntity {
 	 */
 	public void setScoringGolfer(GolferProfile golfer) {
 		this.scoringGolfer = golfer;
+		this.scoringGolferName = scoringGolfer.getFirstName() + " "
+				+ scoringGolfer.getLastName();
 	}
-
 
 	/**
 	 * 
 	 * @return
 	 */
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "crs_id", nullable = false)
 	@ForeignKey(name = "id")
@@ -179,6 +205,8 @@ public class Scorecard extends CommonUUIDEntity {
 	 */
 	public void setCourse(Course course) {
 		this.course = course;
+		this.courseName = course.getClub().getClubName() + " "
+				+ course.getCourseName();
 	}
 
 	/**
@@ -346,8 +374,8 @@ public class Scorecard extends CommonUUIDEntity {
 	public int grossScore() {
 		// create return value
 		int totalScore = 0;
-		//iterate the score array and total score
-		for(int holeScore : scoreArray) {
+		// iterate the score array and total score
+		for (int holeScore : scoreArray) {
 			totalScore += holeScore;
 		}
 		return totalScore;
@@ -360,11 +388,36 @@ public class Scorecard extends CommonUUIDEntity {
 	@Transient
 	public String encodingSignature() {
 		String signature = new String();
-		signature+=((golfer != null ? golfer.getId() : ""));
-		signature+=(String.valueOf(grossScore()));
-		signature+=(ArrayUtils.toString(scoreArray));
-		signature+=((scoringGolfer != null ? scoringGolfer.getId() : ""));
-		signature+=((scoringGolfer != null ? scoringGolfer.getProfileHandle() : ""));
+		signature += ((golfer != null ? golfer.getId() : ""));
+		signature += (String.valueOf(grossScore()));
+		signature += (ArrayUtils.toString(scoreArray));
+		signature += ((scoringGolfer != null ? scoringGolfer.getId() : ""));
+		signature += ((scoringGolfer != null ? scoringGolfer.getProfileHandle()
+				: ""));
 		return signature;
+	}
+
+	/**
+	 * @return the golferName
+	 */
+	@Transient
+	public String getGolferName() {
+		return golferName;
+	}
+
+	/**
+	 * @return the scoringGolferName
+	 */
+	@Transient
+	public String getScoringGolferName() {
+		return scoringGolferName;
+	}
+
+	/**
+	 * @return the courseName
+	 */
+	@Transient
+	public String getCourseName() {
+		return courseName;
 	}
 }

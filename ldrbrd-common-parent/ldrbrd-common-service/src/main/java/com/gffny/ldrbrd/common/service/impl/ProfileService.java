@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
 import com.gffny.ldrbrd.common.exception.DataAccessException;
+import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.impl.GolfClub;
 import com.gffny.ldrbrd.common.model.impl.GolferClubDetail;
 import com.gffny.ldrbrd.common.model.impl.GolferProfile;
@@ -57,13 +58,14 @@ public class ProfileService extends AbstractService implements
 	 * com.gffny.ldrbrd.common.service.impl.IPersonService#addPerson(com.gffny
 	 * .ldrbrd.common.model.impl.GolferProfile)
 	 */
-	public void addGolferProfile(GolferProfile golfer) {
+	public void addGolferProfile(GolferProfile golfer) throws ServiceException {
 		if (golfer != null) {
 			LOG.debug("persisting golfer: " + golfer.toString());
 			try {
 				personDao.persist(golfer);
 			} catch (DataAccessException e) {
 				LOG.error(e.getMessage());
+				throw new ServiceException(e);
 			}
 		} else {
 			LOG.error("golfer is null");
@@ -76,7 +78,7 @@ public class ProfileService extends AbstractService implements
 	 * @see
 	 * com.gffny.ldrbrd.common.service.impl.IPersonService#fetchAllPersons()
 	 */
-	public List<GolferProfile> fetchAllPersons() {
+	public List<GolferProfile> fetchAllPersons() throws ServiceException {
 		return new ArrayList<GolferProfile>();
 	}
 
@@ -87,7 +89,8 @@ public class ProfileService extends AbstractService implements
 	 * com.gffny.ldrbrd.common.service.impl.IPersonService#authenticateUser(
 	 * com.gffny.ldrbrd.common.security.token.AuthenticationToken)
 	 */
-	public AuthenticationResult authenticateUser(AuthenticationToken authToken) {
+	public AuthenticationResult authenticateUser(AuthenticationToken authToken)
+			throws ServiceException {
 		// check if authToken is not null
 		if (authToken != null) {
 			// check token type
@@ -125,7 +128,8 @@ public class ProfileService extends AbstractService implements
 	 * createDefaultGolfBagForGolfer
 	 * (com.gffny.ldrbrd.common.model.impl.GolferProfile)
 	 */
-	public void createDefaultGolfBagForGolfer(GolferProfile golfer) {
+	public void createDefaultGolfBagForGolfer(GolferProfile golfer)
+			throws ServiceException {
 		if (golfer != null) {
 			try {
 				GolferProfile updatedGolfer = personDao.findById(
@@ -150,7 +154,8 @@ public class ProfileService extends AbstractService implements
 	 * com.gffny.ldrbrd.common.service.IUserProfileService#getGolferWithBagByHandle
 	 * (java.lang.String)
 	 */
-	public GolferProfile getGolferWithBagByHandle(String golferHandle) {
+	public GolferProfile getGolferWithBagByHandle(String golferHandle)
+			throws ServiceException {
 		GolferProfile golferProfile = getGolferByHandle(golferHandle);
 		Hibernate.initialize(golferProfile.getGolfBag());
 		return golferProfile;
@@ -163,7 +168,8 @@ public class ProfileService extends AbstractService implements
 	 * com.gffny.ldrbrd.common.service.IUserProfileService#getGolferByHandle
 	 * (java.lang.String)
 	 */
-	public GolferProfile getGolferByHandle(String golferHandle) {
+	public GolferProfile getGolferByHandle(String golferHandle)
+			throws ServiceException {
 		if (golferHandle != null) {
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("profileHandle", golferHandle);
@@ -181,7 +187,8 @@ public class ProfileService extends AbstractService implements
 	 * com.gffny.ldrbrd.common.service.IUserProfileService#getGolferByEmail(
 	 * java.lang.String)
 	 */
-	public GolferProfile getGolferByEmail(String golferEmail) {
+	public GolferProfile getGolferByEmail(String golferEmail)
+			throws ServiceException {
 		if (golferEmail != null) {
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("emailAddress", golferEmail);

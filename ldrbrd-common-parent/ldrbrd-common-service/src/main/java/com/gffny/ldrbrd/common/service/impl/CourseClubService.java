@@ -15,10 +15,12 @@ import org.springframework.stereotype.Service;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
 import com.gffny.ldrbrd.common.exception.DataAccessException;
+import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.enums.TeeColour;
 import com.gffny.ldrbrd.common.model.impl.Club;
 import com.gffny.ldrbrd.common.model.impl.Course;
 import com.gffny.ldrbrd.common.model.impl.CourseHole;
+import com.gffny.ldrbrd.common.model.mapping.FavouriteCourse;
 import com.gffny.ldrbrd.common.service.ICourseClubService;
 import com.gffny.ldrbrd.common.utils.StringUtils;
 
@@ -54,6 +56,12 @@ public class CourseClubService implements ICourseClubService {
 	 */
 	@Autowired
 	private GenericDao<CourseHole> courseHoleDao;
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private GenericDao<FavouriteCourse> favouriteCourseDao;
 
 	/*
 	 * (non-Javadoc)
@@ -104,6 +112,7 @@ public class CourseClubService implements ICourseClubService {
 			// TODO use the super.namedQueryResultOrNullMethod
 			List<Course> courseList = courseDao.findByNamedQuery(
 					Course.FIND_BY_NAME_AND_TEE_COLOUR, params);
+
 			if (courseList != null) {
 				return courseList.get(0);
 			} else {
@@ -123,9 +132,10 @@ public class CourseClubService implements ICourseClubService {
 	 * 
 	 * @see
 	 * com.gffny.ldrbrd.common.service.ICourseClubService#getFavouriteCourseList
-	 * (java.lang.String, int)
+	 * (java.lang.String)
 	 */
-	public List<Course> getFavouriteCourseList(String golferId) {
+	public List<Course> getFavouriteCourseList(String golferId)
+			throws ServiceException {
 		if (StringUtils.isNotEmpty(golferId)) {
 			return getFavouriteCourseList(golferId, 0);
 		}
@@ -141,25 +151,38 @@ public class CourseClubService implements ICourseClubService {
 	 * (java.lang.String, int)
 	 */
 	public List<Course> getFavouriteCourseList(String golferId,
-			int favouriteLimit) {
-		List<Course> result;
+			int favouriteLimit) throws ServiceException {
+
+		// TODO refactor to remove the two stage result getting (i.e. from
+		// List<FC> to List<C>)
+		List<Course> favouriteList = new ArrayList<Course>();
 		if (StringUtils.isNotEmpty(golferId)) {
 			Map<String, String> params = new HashMap<String, String>();
 			params.put("golferId", golferId);
 			try {
+				// get list of favourite courses from database
+				List<FavouriteCourse> result;
 				if (favouriteLimit > 0) {
-					result = courseDao.findByNamedQuery(
-							Course.FAVOURITE_LIST_BY_GOLFER_ID, params,
-							favouriteLimit);
+					result = favouriteCourseDao.findByNamedQuery(
+							FavouriteCourse.FAVOURITE_LIST_BY_GOLFER_ID,
+							params, favouriteLimit);
 				} else {
-					result = courseDao.findByNamedQuery(
-							Course.FAVOURITE_LIST_BY_GOLFER_ID, params);
+					result = favouriteCourseDao
+							.findByNamedQuery(
+									FavouriteCourse.FAVOURITE_LIST_BY_GOLFER_ID,
+									params);
+				}
+				// parse list and build result set
+				if (result != null && result.size() > 0) {
+					for (FavouriteCourse course : result) {
+						favouriteList.add(course.getCourse());
+					}
 				}
 			} catch (DataAccessException e) {
 				LOG.error(e.getMessage());
-				result = new ArrayList<Course>();
+				throw new ServiceException(e);
 			}
-			return result;
+			return favouriteList;
 		}
 		LOG.error("golfer id is empty or favourite limit is less than one");
 		return new ArrayList<Course>();

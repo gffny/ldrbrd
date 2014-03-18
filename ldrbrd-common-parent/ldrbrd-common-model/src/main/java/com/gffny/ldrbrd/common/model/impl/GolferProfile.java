@@ -15,6 +15,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlTransient;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.gffny.ldrbrd.common.model.enums.Dominance;
 
@@ -25,7 +28,7 @@ import com.gffny.ldrbrd.common.model.enums.Dominance;
 @NamedQueries({
 		@NamedQuery(name = GolferProfile.FIND_BY_HANDLE, query = "select golfer from GolferProfile golfer where golfer.profileHandle = :profileHandle"),
 		@NamedQuery(name = GolferProfile.FIND_BY_EMAIL, query = "select golfer from GolferProfile golfer where golfer.emailAddress = :emailAddress")
-// golfer.isObsolete = false and ...
+// TODO golfer.isObsolete = false and ...
 })
 @Entity
 @Table(name = "t_golfer")
@@ -60,6 +63,11 @@ public class GolferProfile extends UserProfile {
 	 * 
 	 */
 	private List<GolferClubDetail> golfBag;
+
+	/**
+	 * 
+	 */
+	private List<Course> favouriteCourseList;
 
 	/**
 	 * 
@@ -122,6 +130,26 @@ public class GolferProfile extends UserProfile {
 	 */
 	public void setGolfBag(List<GolferClubDetail> golfBag) {
 		this.golfBag = golfBag;
+	}
+
+	/**
+	 * @return the favouriteCourseList
+	 */
+	// @JoinTable(name = "t_favourite_course", joinColumns = @JoinColumn(name =
+	// "project_id"), inverseJoinColumns = @JoinColumn(name = "task_id"))
+	@XmlTransient
+	@JsonIgnore
+	@Transient
+	public List<Course> getFavouriteCourseList() {
+		return favouriteCourseList;
+	}
+
+	/**
+	 * @param favouriteCourseList
+	 *            the favouriteCourseList to set
+	 */
+	public void setFavouriteCourseList(List<Course> favouriteCourseList) {
+		this.favouriteCourseList = favouriteCourseList;
 	}
 
 	/**
