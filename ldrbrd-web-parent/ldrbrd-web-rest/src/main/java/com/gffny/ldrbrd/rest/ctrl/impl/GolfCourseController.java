@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.service.ICourseClubService;
 import com.gffny.ldrbrd.common.utils.CollectionUtils;
 import com.gffny.ldrbrd.rest.ctrl.AbstractController;
@@ -106,15 +107,22 @@ public class GolfCourseController extends AbstractController {
 	@RequestMapping(value = "/listFromFavourite", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<JsonResponse<JSONable>> getCourseListFromFavourite(
 			@RequestBody final CourseRequest golferId) {
-		CourseInformationResponse response = new CourseInformationResponse();
-		if (null != golferId && null != golferId.getId()
-				&& null != golferId.getGolferId()) {
-			response.setCourseList(courseClubService.getFavouriteCourseList(
-					golferId.getGolferId(), golferId.getFavouriteLimit()));
-			return returnSuccess(response, HttpStatus.OK);
+		try {
+			CourseInformationResponse response = new CourseInformationResponse();
+			if (null != golferId && null != golferId.getId()
+					&& null != golferId.getGolferId()) {
+				response.setCourseList(courseClubService
+						.getFavouriteCourseList(golferId.getGolferId(),
+								golferId.getFavouriteLimit()));
+				return returnSuccess(response, HttpStatus.OK);
+			}
+			return returnError(
+					"golfer id or favourite length is not available ",
+					HttpStatus.BAD_REQUEST);
+		} catch (ServiceException e) {
+			// TODO handle service exception
+			return returnError(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-		return returnError("golfer id or favourite length is not available ",
-				HttpStatus.BAD_REQUEST);
 	}
 
 	/**

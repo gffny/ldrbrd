@@ -10,4 +10,12 @@
 	<artifactId>ldrbrd-web-common</artifactId>
 	<name>web common</name>
 	<packaging>jar</packaging>
+	<dependencies>
+		<!-- @Inject -->
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<version>1</version>
+		</dependency>
+	</dependencies>
 </project>

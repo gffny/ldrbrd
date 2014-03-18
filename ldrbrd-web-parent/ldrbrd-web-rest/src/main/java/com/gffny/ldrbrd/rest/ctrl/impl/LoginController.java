@@ -13,10 +13,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.core.userdetails.cache.NullUserCache;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,7 +48,7 @@ public class LoginController extends AbstractController {
 	/**
 	 * 
 	 */
-	private UserCache userCache = new NullUserCache();
+	// private UserCache userCache = new NullUserCache();
 
 	/**
 	 * 
@@ -67,12 +65,14 @@ public class LoginController extends AbstractController {
 	public ResponseEntity<JsonResponse<JSONable>> loginWithUsername(
 			HttpServletRequest request, String username, final String password) {
 
+		// TODO May not be necessary to do this! Authentication is handled by
+		// the server or something!
+
 		UserDto userDto = new UserDto();
 		try {
 
 			UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
 					username, password);
-			authenticationDetailsSource.buildDetails(request);
 			authRequest.setDetails(authenticationDetailsSource
 					.buildDetails(request));
 

@@ -25,7 +25,8 @@ public class CompetitionDto extends BaseDto {
 
 	private Map<Integer, CompetitionRound> roundNumberMap;
 	private Map<Date, CompetitionRound> roundDateMap;
-//	private static final int DEFAULT_ROUND_NUMBER = 4;
+
+	// private static final int DEFAULT_ROUND_NUMBER = 4;
 
 	/**
 	 * 
@@ -120,9 +121,11 @@ public class CompetitionDto extends BaseDto {
 	}
 
 	/**
-	 * @param competitionScoringSystem the competitionScoringSystem to set
+	 * @param competitionScoringSystem
+	 *            the competitionScoringSystem to set
 	 */
-	public void setCompetitionScoringSystem(CompetitionType competitionScoringSystem) {
+	public void setCompetitionScoringSystem(
+			CompetitionType competitionScoringSystem) {
 		this.competitionScoringSystem = competitionScoringSystem;
 	}
 
@@ -192,7 +195,7 @@ public class CompetitionDto extends BaseDto {
 	 */
 	public void addCompetitionRoundList(
 			List<CompetitionRound> competitionRoundList) {
-		for(CompetitionRound cr : competitionRoundList) {
+		for (CompetitionRound cr : competitionRoundList) {
 			roundNumberMap.put(cr.getRoundNumber(), cr);
 		}
 	}

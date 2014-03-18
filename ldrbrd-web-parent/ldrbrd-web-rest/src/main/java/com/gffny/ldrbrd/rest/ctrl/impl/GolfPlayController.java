@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.impl.Scorecard;
 import com.gffny.ldrbrd.common.service.ICompetitionService;
 import com.gffny.ldrbrd.common.service.IScorecardService;
@@ -60,63 +61,74 @@ public class GolfPlayController extends AbstractController {
 	public ResponseEntity<JsonResponse<JSONable>> startCompetitionScorecard(
 			@RequestBody final ScorecardRequest scorecardRequest) {
 
-		// create response object
-		ScorecardResponse response = new ScorecardResponse();
+		try {
+			// create response object
+			ScorecardResponse response = new ScorecardResponse();
 
-		// check for parameter validity
-		if (null != scorecardRequest
-				&& StringUtils.isNotEmpty(scorecardRequest.getCompetitionId())
-				&& StringUtils.isNotEmpty(scorecardRequest.getScoreKeeperId())) {
+			// check for parameter validity
+			if (null != scorecardRequest
+					&& StringUtils.isNotEmpty(scorecardRequest
+							.getCompetitionId())
+					&& StringUtils.isNotEmpty(scorecardRequest
+							.getScoreKeeperId())) {
 
-			// create golfer/scorecard map
-			Map<String, String> golferScorecardMap = new HashMap<String, String>();
+				// create golfer/scorecard map
+				Map<String, String> golferScorecardMap = new HashMap<String, String>();
 
-			// populate the map
+				// populate the map
 
-			Scorecard competitionScorecard = scorecardService
-					.startCompetitionScorecard(
-							scorecardRequest.getScoreKeeperId(),
-							scorecardRequest.getScoreKeeperId(),
-							scorecardRequest.getCompetitionId(),
-							scorecardRequest.getRoundNumber(), null);
-			if (competitionScorecard != null) {
-				golferScorecardMap.put(scorecardRequest.getScoreKeeperId(),
-						competitionScorecard.getId());
-				// check if there are other golfers (which there should be from
-				// a business logic perspective)
-				if (ArrayUtils.isNotEmpty(scorecardRequest.getGolferArray())) {
-					for (String golferId : scorecardRequest.getGolferArray()) {
-						competitionScorecard = scorecardService
-								.startCompetitionScorecard(golferId,
-										scorecardRequest.getScoreKeeperId(),
-										scorecardRequest.getCompetitionId(),
-										scorecardRequest.getRoundNumber(), null);
-						if (competitionScorecard != null) {
-							golferScorecardMap.put(golferId,
-									competitionScorecard.getId());
-						} else {
-							LOG.error("scorecard is null for golferId: {}",
-									golferId);
+				Scorecard competitionScorecard = scorecardService
+						.startCompetitionScorecard(
+								scorecardRequest.getScoreKeeperId(),
+								scorecardRequest.getScoreKeeperId(),
+								scorecardRequest.getCompetitionId(),
+								scorecardRequest.getRoundNumber(), null);
+				if (competitionScorecard != null) {
+					golferScorecardMap.put(scorecardRequest.getScoreKeeperId(),
+							competitionScorecard.getId());
+					// check if there are other golfers (which there should be
+					// from
+					// a business logic perspective)
+					if (ArrayUtils
+							.isNotEmpty(scorecardRequest.getGolferArray())) {
+						for (String golferId : scorecardRequest
+								.getGolferArray()) {
+							competitionScorecard = scorecardService
+									.startCompetitionScorecard(
+											golferId,
+											scorecardRequest.getScoreKeeperId(),
+											scorecardRequest.getCompetitionId(),
+											scorecardRequest.getRoundNumber(),
+											null);
+							if (competitionScorecard != null) {
+								golferScorecardMap.put(golferId,
+										competitionScorecard.getId());
+							} else {
+								LOG.error("scorecard is null for golferId: {}",
+										golferId);
+							}
 						}
+					} else {
+						LOG.error("no other golfers other than the scorer in the group");
 					}
 				} else {
-					LOG.error("no other golfers other than the scorer in the group");
+					return returnError("no scorecard returned for parameters",
+							HttpStatus.OK);
 				}
-			} else {
-				return returnError("no scorecard returned for parameters",
-						HttpStatus.OK);
-			}
-			// set the response map value
-			response.setCompetitionId(scorecardRequest.getCompetitionId());
-			response.setGolferScorecardMap(golferScorecardMap);
+				// set the response map value
+				response.setCompetitionId(scorecardRequest.getCompetitionId());
+				response.setGolferScorecardMap(golferScorecardMap);
 
-			// return the response with a success code
-			return returnSuccess(response, HttpStatus.OK);
+				// return the response with a success code
+				return returnSuccess(response, HttpStatus.OK);
+			}
+			LOG.error("scorecard request is null or scoring golfer id/competition id is null");
+			return returnError(
+					"scorecard request is null or scoring golfer id/competition id is null",
+					HttpStatus.OK);
+		} catch (ServiceException srvEx) {
+			return returnError(srvEx.getMessage(), HttpStatus.OK);
 		}
-		LOG.error("scorecard request is null or scoring golfer id/competition id is null");
-		return returnError(
-				"scorecard request is null or scoring golfer id/competition id is null",
-				HttpStatus.OK);
 	}
 
 	// 1) start score card
@@ -189,39 +201,44 @@ public class GolfPlayController extends AbstractController {
 	// , method = RequestMethod.GET)
 	public ResponseEntity<JsonResponse<JSONable>> scoreHoleList(
 			@RequestBody final ScorecardRequest scorecardRequest) {
-		// check if the request is valid
-		if (null != scorecardRequest
-				&& null != scorecardRequest.getScorecardHoleScoreMap()) {
-			// get the set of keys for the scorecard map
-			Set<String> keySet = scorecardRequest.getScorecardHoleScoreMap()
-					.keySet();
-			// traverse key set to check each scorecard in the scorecard map
-			for (String key : keySet) {
-				HoleScoreMap holeScoreMap = scorecardRequest
-						.getScorecardHoleScoreMap().get(key);
-				// check if score map is valid (for the basic score)
-				if (holeScoreMap.getScorecardScoreHoleMap() != null) {
-					// check if score map is valid (for the shot map)
-					if (holeScoreMap.doesIncludeShots()
-							&& holeScoreMap.getScorecardScoreShotMap() != null) {
-						// score shot map
-						scorecardService.scoreShotMap(key,
-								holeScoreMap.getScorecardScoreShotMap());
+		try {
+			// check if the request is valid
+			if (null != scorecardRequest
+					&& null != scorecardRequest.getScorecardHoleScoreMap()) {
+				// get the set of keys for the scorecard map
+				Set<String> keySet = scorecardRequest
+						.getScorecardHoleScoreMap().keySet();
+				// traverse key set to check each scorecard in the scorecard map
+				for (String key : keySet) {
+					HoleScoreMap holeScoreMap = scorecardRequest
+							.getScorecardHoleScoreMap().get(key);
+					// check if score map is valid (for the basic score)
+					if (holeScoreMap.getScorecardScoreHoleMap() != null) {
+						// check if score map is valid (for the shot map)
+						if (holeScoreMap.doesIncludeShots()
+								&& holeScoreMap.getScorecardScoreShotMap() != null) {
+							// score shot map
+							scorecardService.scoreShotMap(key,
+									holeScoreMap.getScorecardScoreShotMap());
+							// TODO potentially score this to a redis server for
+							// the
+							// "shot analysis"
+						}
+						// score hole map
+						scorecardService.scoreHoleScoreMap(key,
+								holeScoreMap.getScorecardScoreHoleMap());
 						// TODO potentially score this to a redis server for the
-						// "shot analysis"
+						// "live scoreboard"
 					}
-					// score hole map
-					scorecardService.scoreHoleScoreMap(key,
-							holeScoreMap.getScorecardScoreHoleMap());
-					// TODO potentially score this to a redis server for the
-					// "live scoreboard"
 				}
+			} else {
+				LOG.error("request not valid");
+				return returnError("request not valid", HttpStatus.BAD_REQUEST);
 			}
-		} else {
-			LOG.error("request not valid");
-			return returnError("request not valid", HttpStatus.BAD_REQUEST);
+			return returnSuccess(HttpStatus.OK);
+		} catch (ServiceException srvEx) {
+			return returnError(srvEx.getMessage(), HttpStatus.OK);
 		}
-		return returnSuccess(HttpStatus.OK);
 	}
 
 	// n-1) submit card

@@ -3,6 +3,8 @@
  */
 package com.gffny.ldrbrd.rest.ctrl.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +26,10 @@ import com.gffny.ldrbrd.web.model.dto.UserDto;
 @RequestMapping("/check")
 public class CheckController extends AbstractController {
 
+	/** The Constant log. */
+	private static final Logger LOG = LoggerFactory
+			.getLogger(CheckController.class);
+
 	/**
 	 * Check to see if the controller is online!
 	 * 
@@ -43,6 +49,7 @@ public class CheckController extends AbstractController {
 	 */
 	@RequestMapping(value = "/c_password", method = RequestMethod.GET)
 	public ResponseEntity<String> applicationPasswordCheck(final String password) {
+		LOG.debug("encoding password: {}", password);
 		PasswordEncoder passwordEncoder = new StandardPasswordEncoder();
 		String encodedPassword = passwordEncoder.encode(password);
 		return new ResponseEntity<String>(encodedPassword, HttpStatus.OK);
