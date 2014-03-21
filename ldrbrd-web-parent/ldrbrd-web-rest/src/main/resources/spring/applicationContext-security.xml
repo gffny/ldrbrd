@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+	<!-- server/auth/** should be ANONYMOUS server/css & other resources should 
+		be ANONYMOUS server/course & other services should be auth -->
+
+	<!-- AUTHENTICATION PROCESS: 1. Token Filter (check if token exists and 
+		handle) 2. Basic Authentication Filter (check credentials and handle) -->
+
+	<security:http auto-config="false" use-expressions="true"
+		create-session="stateless" entry-point-ref="authenticationEntryPoint"
+		authentication-manager-ref="authenticationManager">
+		<security:intercept-url pattern="/auth/*"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<security:intercept-url pattern="/resources/**"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<security:intercept-url pattern="/**"
+			access="hasRole('ROLE_USER')" />
+		<security:custom-filter position="PRE_AUTH_FILTER"
+			ref="atpf" />
+		<security:custom-filter position="BASIC_AUTH_FILTER"
+			ref="bapf" />
+	</security:http>
+
+	<bean id="authenticationEntryPoint"
+		class="com.gffny.ldrbrd.web.auth.entrypoint.LdrbrdAuthenticationEntryPoint" />
+
+	<bean id="atpf"
+		class="com.gffny.ldrbrd.web.auth.filter.AuthenticationTokenProcessingFilter">
+		<property name="authenticationManager" ref="authenticationManager" />
+	</bean>
+
+	<bean id="bapf"
+		class="com.gffny.ldrbrd.web.auth.filter.BasicAuthenticationProcessingFilter">
+		<property name="authenticationManager" ref="authenticationManager" />
+	</bean>
+
+	<!-- IT MAY NOT BE NECESSARY TO WRITE A BESPOKE LOGOUT FILTER -->
+	<bean id="lpf" class="com.gffny.ldrbrd.web.auth.filter.LogoutProcessingFilter">
+		<property name="authenticationManager" ref="authenticationManager" />
+	</bean>
+
+	<!-- IT MAY BE POSSIBLE TO USE THIS FILTER
+	<bean id="lpf"
+		class="org.springframework.security.web.authentication.logout.LogoutFilter">
+	</bean>
+	-->
+
+	<bean id="passwordEncoder"
+		class="org.springframework.security.crypto.password.StandardPasswordEncoder" />
+
+	<security:authentication-manager alias="authenticationManager"
+		id="authenticationManager" erase-credentials="true">
+		<security:authentication-provider
+			user-service-ref="authorisationService">
+			<security:password-encoder ref="passwordEncoder" />
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+	<bean id="springSecurityFilterChain" class="org.springframework.security.web.FilterChainProxy">
+		<security:filter-chain-map path-type="ant">
+			<!-- FOR ANY REQUEST TO /AUTH/LOGIN PROCESS THE TOKEN AND THEN THE BASIC 
+				AUTHENTICATION PARAMS -->
+			<security:filter-chain pattern="/auth/login"
+				filters="atpf" />
+			<!-- filters="atpf, bapf" /> -->
+			<!-- FOR ANY REQUEST TO /AUTH/LOGOUT PROCESS THE TOKEN AND THEN LOGOUT -->
+			<security:filter-chain pattern="/auth/logout"
+				filters="lpf" />
+			<!-- FOR ANY REQUEST TO ANY OTHER PROCESS THE TOKEN AND THEN THE BASIC 
+				AUTHENTICATION PARAMS -->
+			<security:filter-chain pattern="/**" filters="atpf" />
+		</security:filter-chain-map>
+	</bean>
+</beans>
