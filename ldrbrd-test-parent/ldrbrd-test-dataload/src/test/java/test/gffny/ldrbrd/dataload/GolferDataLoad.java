@@ -116,12 +116,11 @@ public class GolferDataLoad {
 	@Test
 	public void testLoadGolferCompetitionRegistrationList()
 			throws ServiceException {
+
 		GolferProfile golfer = personService.getGolferByHandle("gffny");
 		Competition competition = competitionService
 				.getCompetitionByName("test competition");
 		int handicap = golfer.getHandicap();
-
-		// TODO fix the UUID too long issue
 		competitionService.registerGolferForCompetitionWithHandicap(golfer,
 				competition, handicap);
 	}

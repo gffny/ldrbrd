@@ -25,7 +25,7 @@
 		<param-name>contextConfigLocation</param-name> 
 		<param-value>
 			classpath*:spring/applicationContext-webservices.xml,
-			classpath*:spring/spring-security.xml
+			classpath*:spring/applicationContext-security.xml
 		</param-value>
 	</context-param> 
 

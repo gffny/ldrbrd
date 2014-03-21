@@ -69,12 +69,12 @@ public class CourseClubService implements ICourseClubService {
 	 * @see
 	 * com.gffny.ldrbrd.common.service.impl.ICourseClubService#getClubList()
 	 */
-	public List<Club> getClubList() {
+	public List<Club> getClubList() throws ServiceException {
 		try {
 			return clubDao.findAll(Club.class);
 		} catch (DataAccessException daex) {
-			// TODO fix this
-			return null;
+			LOG.error(daex.getMessage());
+			throw new ServiceException(daex.getMessage());
 		}
 	}
 

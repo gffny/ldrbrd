@@ -40,7 +40,7 @@ public class GolfClubService implements IGolfClubService {
 	 * .ldrbrd.common.model.impl.GolfClub)
 	 */
 	public void addGolfClub(GolfClub golfClub) {
-		// TODO Auto-generated method stub
+		// TODO implement addGolfClub
 
 	}
 
@@ -52,7 +52,7 @@ public class GolfClubService implements IGolfClubService {
 	 * .util.List)
 	 */
 	public void addGolfClubList(List<GolfClub> golfClub) {
-		// TODO Auto-generated method stub
+		// TODO implement addGolfClubList
 
 	}
 
@@ -64,7 +64,7 @@ public class GolfClubService implements IGolfClubService {
 	 * (com.gffny.ldrbrd.common.model.enums.Manufacturer)
 	 */
 	public List<GolfClub> getAllClubsByManufacturer(Manufacturer manufacturer) {
-		// TODO Auto-generated method stub
+		// TODO implement getAllClubsByManufacturer
 		return null;
 	}
 
@@ -76,7 +76,7 @@ public class GolfClubService implements IGolfClubService {
 	 * .gffny.ldrbrd.common.model.enums.ClubType)
 	 */
 	public List<GolfClub> getAllClubsByType(ClubType type) {
-		// TODO Auto-generated method stub
+		// TODO implement getAllClubsByType
 		return null;
 	}
 
@@ -88,7 +88,7 @@ public class GolfClubService implements IGolfClubService {
 	 * (com.gffny.ldrbrd.common.model.enums.ClubType)
 	 */
 	public List<GolfClub> getAllClubsByCategory(ClubType category) {
-		// TODO Auto-generated method stub
+		// TODO implement getAllClubsByCategory
 		return null;
 	}
 

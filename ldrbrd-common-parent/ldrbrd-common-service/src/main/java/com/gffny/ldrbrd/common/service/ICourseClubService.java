@@ -29,8 +29,9 @@ public interface ICourseClubService {
 	/**
 	 * 
 	 * @return
+	 * @throws ServiceException
 	 */
-	public abstract List<Club> getClubList();
+	public abstract List<Club> getClubList() throws ServiceException;
 
 	/**
 	 * 

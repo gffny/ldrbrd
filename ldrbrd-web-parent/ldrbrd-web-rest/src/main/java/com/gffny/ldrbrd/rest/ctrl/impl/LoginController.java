@@ -8,25 +8,18 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.gffny.ldrbrd.common.service.impl.AuthorisationService;
 import com.gffny.ldrbrd.rest.ctrl.AbstractController;
-import com.gffny.ldrbrd.web.model.JSONable;
-import com.gffny.ldrbrd.web.model.JsonResponse;
-import com.gffny.ldrbrd.web.model.dto.UserDto;
 
 /**
- * @author jdgaffney
+ * @author John Gaffney | gffny.com
  * 
  */
 @Controller
@@ -46,49 +39,28 @@ public class LoginController extends AbstractController {
 	private AuthenticationManager authenticationManager;
 
 	/**
-	 * 
-	 */
-	// private UserCache userCache = new NullUserCache();
-
-	/**
-	 * 
-	 */
-	private AuthenticationDetailsSource<HttpServletRequest, ?> authenticationDetailsSource = new WebAuthenticationDetailsSource();
-
-	/**
 	 * Check to see if the controller is online!
 	 * 
 	 * @param input
 	 * @return
 	 */
 	@RequestMapping(value = "loginusername")
-	public ResponseEntity<JsonResponse<JSONable>> loginWithUsername(
-			HttpServletRequest request, String username, final String password) {
+	public ResponseEntity<String> loginWithUsername(HttpServletRequest request,
+			String username, final String password) {
 
 		// TODO May not be necessary to do this! Authentication is handled by
 		// the server or something!
 
-		UserDto userDto = new UserDto();
 		try {
 
-			UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
-					username, password);
-			authRequest.setDetails(authenticationDetailsSource
-					.buildDetails(request));
-
-			// check if userDetails is null!
-			Authentication authentication = authenticationManager
-					.authenticate(authRequest);
-
-			SecurityContextHolder.getContext()
-					.setAuthentication(authentication);
 			// check something to do with authentication
-			return returnSuccess(userDto, HttpStatus.OK);
+			return new ResponseEntity<String>(new String("blah!"),
+					HttpStatus.OK);
 		} catch (UsernameNotFoundException unfex) {
-			return returnError(unfex.getLocalizedMessage(),
+			return new ResponseEntity<String>(unfex.getMessage(),
 					HttpStatus.UNAUTHORIZED);
 		} catch (Exception ex) {
-			return returnError(ex.getLocalizedMessage(),
+			return new ResponseEntity<String>(ex.getLocalizedMessage(),
 					HttpStatus.UNAUTHORIZED);
 		}
 	}

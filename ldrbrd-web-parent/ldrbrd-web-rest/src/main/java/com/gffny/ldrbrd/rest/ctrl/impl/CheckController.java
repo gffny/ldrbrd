@@ -14,12 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.gffny.ldrbrd.rest.ctrl.AbstractController;
-import com.gffny.ldrbrd.web.model.JSONable;
-import com.gffny.ldrbrd.web.model.JsonResponse;
-import com.gffny.ldrbrd.web.model.dto.UserDto;
 
 /**
- * @author jdgaffney
+ * @author John Gaffney | gffny.com
  * 
  */
 @Controller
@@ -37,9 +34,9 @@ public class CheckController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping(value = "/c_online", method = RequestMethod.GET)
-	public ResponseEntity<JsonResponse<JSONable>> applicationOnlineCheck() {
-		UserDto user = new UserDto();
-		return returnSuccess(user, HttpStatus.OK);
+	public ResponseEntity<String> applicationOnlineCheck() {
+		return new ResponseEntity<String>(new String("Online"), HttpStatus.OK);
+
 	}
 
 	/**

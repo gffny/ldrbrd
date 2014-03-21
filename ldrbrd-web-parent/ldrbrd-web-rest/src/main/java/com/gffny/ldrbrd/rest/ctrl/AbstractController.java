@@ -35,83 +35,51 @@ public abstract class AbstractController extends WebContentGenerator {
 		return RequestContext.get().getServletData();
 	}
 
-//	protected ModelAndView getDefaultView() {
-//		// TODO Make this configurable
-//		return new ModelAndView("redirect:/competition/create/initial");
-//	}
-//
-//	protected ModelAndView getLoginView() {
-//		// TODO Make this configurable
-//		return new ModelAndView("redirect:/authentication/login");
-//	}
-//
-//	protected ModelAndView getErrorModel(ServiceException serEx) {
-//		// TODO Auto-generated method stub
-//		return getErrorModel(serEx.getMessage());
-//	}
-//
-//	protected ModelAndView getErrorModel(String errorMessage) {
-//		// TODO Auto-generated method stub
-//		ModelAndView mv = new ModelAndView("error");
-//		mv.addObject("errorString", errorMessage);
-//		return mv;
-//	}
-//
-//	protected InitResponseDto getUserSessionState(HttpSession session) {
-//		if (session.getAttribute(INIT_RESPONSE_SESSION_KEY) != null) {
-//			InitResponseDto dto = (InitResponseDto) session
-//					.getAttribute(INIT_RESPONSE_SESSION_KEY);
-//			return dto;
-//		}
-//		throw new UnauthorizedAccessException("User state not found");
-//	}
-//
-//	protected void setUserSessionState(HttpSession session, InitResponseDto dto) {
-//		session.setAttribute(INIT_RESPONSE_SESSION_KEY, dto);
-//	}
-//
-//	@ExceptionHandler(UnauthorizedAccessException.class)
-//	protected ResponseEntity<JsonResponse<JSONable>> handleUnauthorizedAccessException(
-//			UnauthorizedAccessException ex) {
-//		return returnError("Unauthorized Access: " + ex.getMessage(),
-//				HttpStatus.UNAUTHORIZED);
-//	}
-//
-//	@ExceptionHandler(AccessDeniedException.class)
-//	protected ResponseEntity<JsonResponse<JSONable>> handleUnauthorizedAccessException(
-//			AccessDeniedException ex) {
-//		return returnError("Unauthorized Access: " + ex.getMessage(),
-//				HttpStatus.UNAUTHORIZED);
-//	}
-//
-//	@ExceptionHandler(LockedException.class)
-//	protected ResponseEntity<JsonResponse<JSONable>> handleLockedException(
-//			LockedException ex) {
-//		return returnError(ex.getMessage(), HttpStatus.LOCKED);
-//	}
-//
-//	@ExceptionHandler(Throwable.class)
-//	protected ResponseEntity<JsonResponse<JSONable>> handleUnexpectedException(
-//			Throwable ex) {
-//		ex.printStackTrace();
-//		return returnError("Unexpected exception: " + ex.getMessage(),
-//				HttpStatus.INTERNAL_SERVER_ERROR);
-//	}
-//
-//	@ExceptionHandler(JsonParseException.class)
-//	protected ResponseEntity<JsonResponse<JSONable>> handleJsonException(
-//			JsonParseException ex) {
-//		return returnError("INVALID JSON: " + ex.getMessage(),
-//				HttpStatus.BAD_REQUEST);
-//	}
-//
-//	@ExceptionHandler(JsonMappingException.class)
-//	protected ResponseEntity<JsonResponse<JSONable>> handleJsonException(
-//			JsonMappingException ex) {
-//		return returnError("INVALID JSON: " + ex.getMessage(),
-//				HttpStatus.BAD_REQUEST);
-//	}
-//
+	// @ExceptionHandler(UnauthorizedAccessException.class)
+	// protected ResponseEntity<JsonResponse<JSONable>>
+	// handleUnauthorizedAccessException(
+	// UnauthorizedAccessException ex) {
+	// return returnError("Unauthorized Access: " + ex.getMessage(),
+	// HttpStatus.UNAUTHORIZED);
+	// }
+	//
+	// @ExceptionHandler(AccessDeniedException.class)
+	// protected ResponseEntity<JsonResponse<JSONable>>
+	// handleUnauthorizedAccessException(
+	// AccessDeniedException ex) {
+	// return returnError("Unauthorized Access: " + ex.getMessage(),
+	// HttpStatus.UNAUTHORIZED);
+	// }
+	//
+	// @ExceptionHandler(LockedException.class)
+	// protected ResponseEntity<JsonResponse<JSONable>> handleLockedException(
+	// LockedException ex) {
+	// return returnError(ex.getMessage(), HttpStatus.LOCKED);
+	// }
+	//
+	// @ExceptionHandler(Throwable.class)
+	// protected ResponseEntity<JsonResponse<JSONable>>
+	// handleUnexpectedException(
+	// Throwable ex) {
+	// ex.printStackTrace();
+	// return returnError("Unexpected exception: " + ex.getMessage(),
+	// HttpStatus.INTERNAL_SERVER_ERROR);
+	// }
+	//
+	// @ExceptionHandler(JsonParseException.class)
+	// protected ResponseEntity<JsonResponse<JSONable>> handleJsonException(
+	// JsonParseException ex) {
+	// return returnError("INVALID JSON: " + ex.getMessage(),
+	// HttpStatus.BAD_REQUEST);
+	// }
+	//
+	// @ExceptionHandler(JsonMappingException.class)
+	// protected ResponseEntity<JsonResponse<JSONable>> handleJsonException(
+	// JsonMappingException ex) {
+	// return returnError("INVALID JSON: " + ex.getMessage(),
+	// HttpStatus.BAD_REQUEST);
+	// }
+	//
 	//
 	// response methods
 	//

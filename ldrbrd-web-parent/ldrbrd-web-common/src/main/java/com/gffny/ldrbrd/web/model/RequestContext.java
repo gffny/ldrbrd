@@ -228,7 +228,7 @@ public class RequestContext {
 	}
 
 	public Locale userLocaleFromDb() {
-		// TODO Auto-generated method stub
+		// TODO implement userLocaleFromDb
 		return null;
 	}
 }

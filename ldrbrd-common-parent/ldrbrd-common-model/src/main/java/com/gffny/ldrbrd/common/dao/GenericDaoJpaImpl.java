@@ -124,7 +124,7 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	 * 
 	 */
 	public List<T> findByQuery(String query, Map<String, ?> parameters) {
-		// TODO Auto-generated method stub
+		// TODO implement findByQuery
 		return null;
 	}
 
@@ -167,7 +167,7 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	 */
 	public Object findByAggregateNamedQuerySingleResult(String namedQuery,
 			Map<String, ?> parameters) {
-		// TODO Auto-generated method stub
+		// TODO implement findByAggregateNamedQuery....
 		return null;
 	}
 
@@ -175,7 +175,7 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	 * 
 	 */
 	public int updateByNamedQuery(String query, Map<String, ?> parameters) {
-		// TODO Auto-generated method stub
+		// TODO implement updateByNamedQuery
 		return 0;
 	}
 
@@ -183,7 +183,7 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	 * 
 	 */
 	public int updateByQuery(String query, Map<String, ?> parameters) {
-		// TODO Auto-generated method stub
+		// TODO implement updateByQuery
 		return 0;
 	}
 

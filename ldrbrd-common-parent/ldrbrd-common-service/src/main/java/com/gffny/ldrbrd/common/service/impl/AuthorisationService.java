@@ -114,7 +114,8 @@ public class AuthorisationService implements IAuthorisationService,
 	}
 
 	public boolean supports(Class<?> authentication) {
-		// TODO Auto-generated method stub
+		// TODO add the tokens that are supported
+
 		return false;
 	}
 
