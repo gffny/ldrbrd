@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.enums.TeeColour;
 import com.gffny.ldrbrd.common.model.impl.Club;
 import com.gffny.ldrbrd.common.model.impl.Course;
@@ -42,10 +43,11 @@ public class CourseDataLoad {
 	}
 
 	/**
+	 * @throws ServiceException
 	 * 
 	 */
 	@Test
-	public void testCreate18HoleCourseData() {
+	public void testCreate18HoleCourseData() throws ServiceException {
 		club = courseClubService.createClub("test club");
 		course = courseClubService.createCourse("test course", club,
 				TeeColour.WHITE, 114.5d, 72, "test course image reference");
@@ -60,7 +62,7 @@ public class CourseDataLoad {
 	}
 
 	@Test
-	public void testCreate9HoleCourseData() {
+	public void testCreate9HoleCourseData() throws ServiceException {
 		club = courseClubService.createClub("test club 2");
 		course = courseClubService.createCourse("test three hole course", club,
 				TeeColour.WHITE, 114.5d, 36, "test course image reference");
@@ -75,7 +77,7 @@ public class CourseDataLoad {
 	}
 
 	@Test
-	public void testGetMyFuckingCourseData() {
+	public void testGetMyFuckingCourseData() throws ServiceException {
 		course = courseClubService.getCourseByNameAndTeeColour(
 				"test three hole course", TeeColour.WHITE);
 		System.out.println("\n\n\n\n\n\n" + course.getId());

@@ -218,7 +218,6 @@ public class ScorecardService extends AbstractService implements
 			params.put("roundNumber", Integer.valueOf(roundNumber));
 			// get the competition round (so that you can get it's id!
 
-			// TODO use the super.namedQueryResultOrNullMethod
 			List<CompetitionRound> competitionRoundList = competitionRoundDao
 					.findByNamedQuery(
 							CompetitionRound.FIND_BY_COMP_ID_AND_RND_NMBR,
@@ -235,7 +234,6 @@ public class ScorecardService extends AbstractService implements
 				params.put("golferId", golferId);
 				// query scorecard table
 
-				// TODO use the super.namedQueryResultOrNullMethod
 				List<Scorecard> scorecardList = scorecardDao
 						.findByNamedQuery(
 								Scorecard.FIND_SCORECARD_BY_COMPETITION_ROUND_AND_GOLFER,

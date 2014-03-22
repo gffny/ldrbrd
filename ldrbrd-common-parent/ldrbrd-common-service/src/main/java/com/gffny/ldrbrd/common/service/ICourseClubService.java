@@ -14,17 +14,18 @@ public interface ICourseClubService {
 	/**
 	 * 
 	 * @return
+	 * @throws ServiceException
 	 */
 	public abstract Course createCourse(String courseName, Club club,
 			TeeColour teeColour, Double slopeIndex, Integer par,
-			String courseImageReference);
+			String courseImageReference) throws ServiceException;
 
 	/**
 	 * 
 	 * @param clubName
 	 * @return
 	 */
-	public abstract Club createClub(String clubName);
+	public abstract Club createClub(String clubName) throws ServiceException;
 
 	/**
 	 * 
@@ -38,15 +39,16 @@ public interface ICourseClubService {
 	 * @param courseName
 	 * @param teeColour
 	 * @return
+	 * @throws ServiceException
 	 */
 	public abstract Course getCourseByNameAndTeeColour(String courseName,
-			TeeColour teeColour);
+			TeeColour teeColour) throws ServiceException;
 
 	/**
 	 * 
 	 * @param id
 	 */
-	public abstract Course getCourseById(String id);
+	public abstract Course getCourseById(String id) throws ServiceException;
 
 	/**
 	 * 
@@ -71,14 +73,16 @@ public interface ICourseClubService {
 	 * 
 	 * @param courseHole
 	 */
-	public abstract void saveOrUpdateHole(CourseHole courseHole);
+	public abstract void saveOrUpdateHole(CourseHole courseHole)
+			throws ServiceException;
 
 	/**
 	 * 
 	 * @param id
 	 * @return
 	 */
-	public abstract Map<Integer, CourseHole> getHoleListByCourseId(String id);
+	public abstract Map<Integer, CourseHole> getHoleListByCourseId(String id)
+			throws ServiceException;
 
 	/**
 	 * 
@@ -87,6 +91,6 @@ public interface ICourseClubService {
 	 * @return
 	 */
 	public abstract Map<Integer, CourseHole> getHoleListByCourseId(String id,
-			boolean isNineHole);
+			boolean isNineHole) throws ServiceException;
 
 }

@@ -41,18 +41,6 @@ public class GolfCourseController extends AbstractController {
 	private ICourseClubService courseClubService;
 
 	/**
-	 * Test method for iPhone Dev
-	 * 
-	 * @return
-	 */
-	@RequestMapping(value = "/test")
-	public ResponseEntity<JsonResponse<JSONable>> test() {
-		CourseInformationResponse resp = new CourseInformationResponse();
-
-		return returnSuccess(resp, HttpStatus.OK);
-	}
-
-	/**
 	 * 
 	 * @param courseId
 	 * @return
@@ -64,19 +52,25 @@ public class GolfCourseController extends AbstractController {
 			@RequestBody final CourseRequest courseId) {
 		CourseInformationResponse response = new CourseInformationResponse();
 		if (null != courseId && null != courseId.getId()) {
-			response.setCourse(courseClubService.getCourseById(courseId.getId()));
-			if (response.getCourse() != null) {
-				response.addCourseHoleMap(response.getCourse().getId(),
-						courseClubService.getHoleListByCourseId(response
-								.getCourse().getId(), response.getCourse()
-								.isNineHole()));
-			} else {
-				LOG.error("course id {} does not return a valid course",
-						courseId);
-				return returnError("course id does not return a valid course",
-						HttpStatus.BAD_REQUEST);
+			try {
+				response.setCourse(courseClubService.getCourseById(courseId
+						.getId()));
+				if (response.getCourse() != null) {
+					response.addCourseHoleMap(response.getCourse().getId(),
+							courseClubService.getHoleListByCourseId(response
+									.getCourse().getId(), response.getCourse()
+									.isNineHole()));
+					return returnSuccess(response, HttpStatus.OK);
+				} else {
+					LOG.error("course id {} does not return a valid course",
+							courseId);
+					return returnError(
+							"course id does not return a valid course",
+							HttpStatus.BAD_REQUEST);
+				}
+			} catch (ServiceException serEx) {
+				return returnError(serEx.getMessage(), HttpStatus.BAD_REQUEST);
 			}
-			return returnSuccess(response, HttpStatus.OK);
 		}
 		LOG.error("error with request parameters");
 		return returnError("course id is not available", HttpStatus.BAD_REQUEST);
@@ -92,9 +86,13 @@ public class GolfCourseController extends AbstractController {
 			@RequestBody final CourseRequest clubId) {
 		CourseInformationResponse response = new CourseInformationResponse();
 		if (null != clubId && null != clubId.getId()) {
-			response.setCourseList(CollectionUtils.asList(courseClubService
-					.getCourseById(clubId.getId())));
-			return returnSuccess(response, HttpStatus.OK);
+			try {
+				response.setCourseList(CollectionUtils.asList(courseClubService
+						.getCourseById(clubId.getId())));
+				return returnSuccess(response, HttpStatus.OK);
+			} catch (ServiceException serEx) {
+				return returnError(serEx.getMessage(), HttpStatus.BAD_REQUEST);
+			}
 		}
 		return returnError("course id is not available", HttpStatus.BAD_REQUEST);
 	}
@@ -120,7 +118,6 @@ public class GolfCourseController extends AbstractController {
 					"golfer id or favourite length is not available ",
 					HttpStatus.BAD_REQUEST);
 		} catch (ServiceException e) {
-			// TODO handle service exception
 			return returnError(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}

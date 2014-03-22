@@ -29,7 +29,8 @@ import com.gffny.ldrbrd.common.utils.StringUtils;
  * 
  */
 @Service
-public class CourseClubService implements ICourseClubService {
+public class CourseClubService extends AbstractService implements
+		ICourseClubService {
 
 	private static final int EIGHTTEEN_HOLE = 18;
 
@@ -85,15 +86,14 @@ public class CourseClubService implements ICourseClubService {
 	 * com.gffny.ldrbrd.common.service.ICourseClubService#getCourseById(java
 	 * .lang.String)
 	 */
-	public Course getCourseById(final String courseId) {
+	public Course getCourseById(final String courseId) throws ServiceException {
 		LOG.debug("getting course with id: " + courseId);
-		Course result = null;
 		try {
-			result = courseDao.findById(Course.class, courseId);
+			return courseDao.findById(Course.class, courseId);
 		} catch (DataAccessException e) {
 			LOG.error(e.getMessage());
+			throw new ServiceException(e.getMessage());
 		}
-		return result;
 	}
 
 	/*
@@ -104,27 +104,19 @@ public class CourseClubService implements ICourseClubService {
 	 * com.gffny.ldrbrd.common.model.enums.TeeColour)
 	 */
 	public Course getCourseByNameAndTeeColour(String courseName,
-			TeeColour teeColour) {
+			TeeColour teeColour) throws ServiceException {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("courseName", courseName);
 		params.put("teeColour", teeColour);
 		try {
-			// TODO use the super.namedQueryResultOrNullMethod
-			List<Course> courseList = courseDao.findByNamedQuery(
+			return namedQuerySingleResultOrNull(courseDao,
 					Course.FIND_BY_NAME_AND_TEE_COLOUR, params);
-
-			if (courseList != null) {
-				return courseList.get(0);
-			} else {
-
-				// TODO fix this
-				return null;
-			}
-		} catch (DataAccessException daex) {
-
-			// TODO fix this
-			return null;
+		} catch (ServiceException serEx) {
+			LOG.error("result set for course {} and tee colour {} is null",
+					courseName, teeColour);
+			throw serEx;
 		}
+
 	}
 
 	/*
@@ -140,7 +132,7 @@ public class CourseClubService implements ICourseClubService {
 			return getFavouriteCourseList(golferId, 0);
 		}
 		LOG.error("golfer id is empty");
-		return new ArrayList<Course>();
+		throw new ServiceException("golfer id is empty");
 	}
 
 	/*
@@ -155,8 +147,8 @@ public class CourseClubService implements ICourseClubService {
 
 		// TODO refactor to remove the two stage result getting (i.e. from
 		// List<FC> to List<C>)
-		List<Course> favouriteList = new ArrayList<Course>();
 		if (StringUtils.isNotEmpty(golferId)) {
+			List<Course> favouriteList = new ArrayList<Course>();
 			Map<String, String> params = new HashMap<String, String>();
 			params.put("golferId", golferId);
 			try {
@@ -185,7 +177,8 @@ public class CourseClubService implements ICourseClubService {
 			return favouriteList;
 		}
 		LOG.error("golfer id is empty or favourite limit is less than one");
-		return new ArrayList<Course>();
+		throw new ServiceException(
+				"golfer id is empty or favourite limit is less than 1");
 	}
 
 	/*
@@ -195,7 +188,8 @@ public class CourseClubService implements ICourseClubService {
 	 * com.gffny.ldrbrd.common.service.ICourseClubService#getHoleListByCourseId
 	 * (java.lang.String)
 	 */
-	public Map<Integer, CourseHole> getHoleListByCourseId(String courseId) {
+	public Map<Integer, CourseHole> getHoleListByCourseId(String courseId)
+			throws ServiceException {
 		return getHoleListByCourseId(courseId, false);
 	}
 
@@ -207,8 +201,7 @@ public class CourseClubService implements ICourseClubService {
 	 * (java.lang.String, boolean)
 	 */
 	public Map<Integer, CourseHole> getHoleListByCourseId(String courseId,
-			boolean isNineHole) {
-		Map<Integer, CourseHole> courseDetailMap = new HashMap<Integer, CourseHole>();
+			boolean isNineHole) throws ServiceException {
 		if (courseId != null) {
 			Map<String, String> params = new HashMap<String, String>();
 			params.put("courseId", courseId);
@@ -221,14 +214,20 @@ public class CourseClubService implements ICourseClubService {
 						// limit the result set based on isNineHole
 								(isNineHole ? NINE_HOLE : EIGHTTEEN_HOLE));
 				// iterate over the list and build map with hole number as key
+				Map<Integer, CourseHole> courseDetailMap = new HashMap<Integer, CourseHole>();
 				for (CourseHole hole : courseHoleList) {
 					courseDetailMap.put(hole.getHoleNumber() - 1, hole);
 				}
+				return courseDetailMap;
 			} catch (DataAccessException e) {
 				LOG.error("no course holes returned for course id {}", courseId);
+				throw new ServiceException(
+						"no course holes returned for course id " + courseId);
 			}
+		} else {
+			LOG.error("invalid parameters; courseId was null");
+			throw new ServiceException("invalid parameters; courseId was null");
 		}
-		return courseDetailMap;
 	}
 
 	/*
@@ -242,27 +241,25 @@ public class CourseClubService implements ICourseClubService {
 	 */
 	public Course createCourse(String courseName, Club club,
 			TeeColour teeColour, Double slopeIndex, Integer par,
-			String courseImageReference) {
-		Course result = null;
+			String courseImageReference) throws ServiceException {
 		try {
 			Map<String, String> params = new HashMap<String, String>();
 			params.put("clubId", club.getId());
 			params.put("courseName", courseName);
-			// TODO use the super.namedQueryResultOrNullMethod
 			List<Course> courseList = courseDao.findByNamedQuery(
 					Course.FIND_BY_CLUB_ID_AND_COURSE_NAME, params);
 			if (courseList != null && courseList.size() > 0
 					&& courseList.get(0) != null) {
-				result = courseList.get(0);
+				return courseList.get(0);
 			} else {
-				result = Course.createCourse(courseName, club, teeColour,
-						slopeIndex, par, courseImageReference);
-				return courseDao.persist(result);
+				Course newCourse = Course.createCourse(courseName, club,
+						teeColour, slopeIndex, par, courseImageReference);
+				return courseDao.persist(newCourse);
 			}
 		} catch (DataAccessException daEx) {
-			LOG.error(daEx.toString());
+			LOG.error(daEx.getMessage());
+			throw new ServiceException(daEx.getMessage());
 		}
-		return result;
 	}
 
 	/*
@@ -272,25 +269,23 @@ public class CourseClubService implements ICourseClubService {
 	 * com.gffny.ldrbrd.common.service.impl.ICourseClubService#createClub(java
 	 * .lang.String)
 	 */
-	public Club createClub(final String clubName) {
-		Club result = null;
+	public Club createClub(final String clubName) throws ServiceException {
 		try {
 			Map<String, String> params = new HashMap<String, String>();
 			params.put("clubName", clubName);
-			// TODO use the super.namedQueryResultOrNullMethod
 			List<Club> clubList = clubDao.findByNamedQuery(
 					Club.FIND_CLUB_BY_CLUB_NAME, params);
 			if (clubList != null && clubList.size() > 0
 					&& clubList.get(0) != null) {
-				result = clubList.get(0);
+				return clubList.get(0);
 			} else {
-				result = Club.createClub(clubName);
-				return clubDao.persist(result);
+				Club newClub = Club.createClub(clubName);
+				return clubDao.persist(newClub);
 			}
 		} catch (DataAccessException daEx) {
-			LOG.error(daEx.toString());
+			LOG.error(daEx.getMessage());
+			throw new ServiceException(daEx.getMessage());
 		}
-		return result;
 	}
 
 	/*
@@ -300,19 +295,19 @@ public class CourseClubService implements ICourseClubService {
 	 * com.gffny.ldrbrd.common.service.ICourseClubService#saveOrUpdateHole(com
 	 * .gffny.ldrbrd.common.model.impl.CourseHole)
 	 */
-	public void saveOrUpdateHole(final CourseHole courseHole) {
+	public void saveOrUpdateHole(final CourseHole courseHole)
+			throws ServiceException {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("courseId", courseHole.getCourse().getId());
 		params.put("holeNumber", Integer.valueOf(courseHole.getHoleNumber()));
 		List<CourseHole> existingCourseList = null;
 		try {
-			// TODO use the super.namedQueryResultOrNullMethod
 			existingCourseList = courseHoleDao.findByNamedQuery(
 					CourseHole.FIND_BY_COURSE_ID_AND_HOLE_NUMBER, params);
 			if (null != existingCourseList && 0 < existingCourseList.size()
 					&& null != existingCourseList.get(0)) {
 				// update
-				LOG.error("NOT IMPLEMENTED ****************");
+				throw new ServiceException("update method not yet implemented");
 			} else if (null == existingCourseList
 					|| 0 == existingCourseList.size()
 					|| null == existingCourseList.get(0)) {
@@ -323,6 +318,7 @@ public class CourseClubService implements ICourseClubService {
 			}
 		} catch (DataAccessException e) {
 			LOG.error(e.getMessage());
+			throw new ServiceException(e.getMessage());
 		}
 	}
 }

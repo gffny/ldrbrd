@@ -52,7 +52,7 @@ public class GolferProfile extends UserProfile {
 	/**
 	 * 
 	 */
-	private Dominance handedness;
+	private Dominance handDominance;
 
 	/**
 	 * 
@@ -92,7 +92,7 @@ public class GolferProfile extends UserProfile {
 	 */
 	@Column(name = "hnddnss")
 	public Dominance getHandedness() {
-		return handedness;
+		return handDominance;
 	}
 
 	/**
@@ -100,18 +100,16 @@ public class GolferProfile extends UserProfile {
 	 * @return
 	 */
 	@Transient
-	public String getHandednessValue() {
-		// TODO check if I want to call this value or something else
-		// change to dominance
-		return handedness.toString();
+	public String getHandDominanceValue() {
+		return handDominance.getName();
 	}
 
 	/**
 	 * 
 	 * @see com.gffny.leaderboard.model.IGolfer#setLocation(java.lang.String)
 	 */
-	public void setHandedness(Dominance handedness) {
-		this.handedness = handedness;
+	public void setHandedness(Dominance handDominance) {
+		this.handDominance = handDominance;
 	}
 
 	/**

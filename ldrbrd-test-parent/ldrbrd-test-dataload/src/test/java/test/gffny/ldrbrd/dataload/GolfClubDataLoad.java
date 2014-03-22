@@ -42,7 +42,7 @@ public class GolfClubDataLoad {
 	private IUserProfileService profileService;
 
 	@Test
-	public void testDefaultGolfClubList() {
+	public void testDefaultGolfClubList() throws ServiceException {
 		List<GolfClub> golfClubList = golfClubService.getDefaultGolfClubList();
 		golfClubList.size();
 	}
@@ -109,7 +109,7 @@ public class GolfClubDataLoad {
 		GolfClub putter = testClub(ClubCategory.PUTTER, 0, ClubType.PUTTER);
 		allClubsArray[j++] = putter;
 
-		// TODO PERSIST THE NEWLY CREATED CLUBS!
+		// persist the newly created clubs
 		for (GolfClub gc : allClubsArray) {
 			golfClubDao.persist(gc);
 		}

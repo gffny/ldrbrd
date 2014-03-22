@@ -29,7 +29,8 @@ import com.gffny.ldrbrd.common.service.ICompetitionService;
  * 
  */
 @Service
-public class CompetitionService implements ICompetitionService {
+public class CompetitionService extends AbstractService implements
+		ICompetitionService {
 
 	/** The Constant log. */
 	private static final Logger LOG = LoggerFactory
@@ -183,17 +184,9 @@ public class CompetitionService implements ICompetitionService {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("competitionId", competitionId);
 		params.put("roundNumber", roundNumber);
-		try {
-			// TODO use the super.namedQueryResultOrNullMethod
-			List<CompetitionRound> competitionRoundList = competitionRoundDao
-					.findByNamedQuery(
-							CompetitionRound.FIND_BY_COMP_ID_AND_RND_NMBR,
-							params);
-			return competitionRoundList.get(0);
-		} catch (DataAccessException daEx) {
-			LOG.error(daEx.getMessage());
-			throw new ServiceException(daEx);
-		}
+		return namedQuerySingleResultOrNull(competitionRoundDao,
+				CompetitionRound.FIND_BY_COMP_ID_AND_RND_NMBR, params);
+
 	}
 
 	/*

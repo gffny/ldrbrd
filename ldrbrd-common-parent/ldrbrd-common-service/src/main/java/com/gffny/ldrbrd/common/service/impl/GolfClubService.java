@@ -3,7 +3,6 @@
  */
 package com.gffny.ldrbrd.common.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
 import com.gffny.ldrbrd.common.exception.DataAccessException;
+import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.enums.ClubType;
 import com.gffny.ldrbrd.common.model.enums.Manufacturer;
 import com.gffny.ldrbrd.common.model.impl.GolfClub;
@@ -39,9 +39,9 @@ public class GolfClubService implements IGolfClubService {
 	 * com.gffny.ldrbrd.common.service.IGolfClubService#addGolfClub(com.gffny
 	 * .ldrbrd.common.model.impl.GolfClub)
 	 */
-	public void addGolfClub(GolfClub golfClub) {
+	public void addGolfClub(GolfClub golfClub) throws ServiceException {
 		// TODO implement addGolfClub
-
+		throw new ServiceException();
 	}
 
 	/*
@@ -51,8 +51,10 @@ public class GolfClubService implements IGolfClubService {
 	 * com.gffny.ldrbrd.common.service.IGolfClubService#addGolfClubList(java
 	 * .util.List)
 	 */
-	public void addGolfClubList(List<GolfClub> golfClub) {
+	public void addGolfClubList(List<GolfClub> golfClub)
+			throws ServiceException {
 		// TODO implement addGolfClubList
+		throw new ServiceException();
 
 	}
 
@@ -63,9 +65,10 @@ public class GolfClubService implements IGolfClubService {
 	 * com.gffny.ldrbrd.common.service.IGolfClubService#getAllClubsByManufacturer
 	 * (com.gffny.ldrbrd.common.model.enums.Manufacturer)
 	 */
-	public List<GolfClub> getAllClubsByManufacturer(Manufacturer manufacturer) {
+	public List<GolfClub> getAllClubsByManufacturer(Manufacturer manufacturer)
+			throws ServiceException {
 		// TODO implement getAllClubsByManufacturer
-		return null;
+		throw new ServiceException();
 	}
 
 	/*
@@ -75,9 +78,10 @@ public class GolfClubService implements IGolfClubService {
 	 * com.gffny.ldrbrd.common.service.IGolfClubService#getAllClubsByType(com
 	 * .gffny.ldrbrd.common.model.enums.ClubType)
 	 */
-	public List<GolfClub> getAllClubsByType(ClubType type) {
+	public List<GolfClub> getAllClubsByType(ClubType type)
+			throws ServiceException {
 		// TODO implement getAllClubsByType
-		return null;
+		throw new ServiceException();
 	}
 
 	/*
@@ -87,9 +91,10 @@ public class GolfClubService implements IGolfClubService {
 	 * com.gffny.ldrbrd.common.service.IGolfClubService#getAllClubsByCategory
 	 * (com.gffny.ldrbrd.common.model.enums.ClubType)
 	 */
-	public List<GolfClub> getAllClubsByCategory(ClubType category) {
+	public List<GolfClub> getAllClubsByCategory(ClubType category)
+			throws ServiceException {
 		// TODO implement getAllClubsByCategory
-		return null;
+		throw new ServiceException();
 	}
 
 	/*
@@ -98,18 +103,14 @@ public class GolfClubService implements IGolfClubService {
 	 * @see
 	 * com.gffny.ldrbrd.common.service.IGolfClubService#getDefaultGolfClubList()
 	 */
-	public List<GolfClub> getDefaultGolfClubList() {
+	public List<GolfClub> getDefaultGolfClubList() throws ServiceException {
 		try {
 			return golfClubDao.findByNamedQuery(
 					GolfClub.DEFAULT_CLUB_LIST_QUERY, null, 100);
 		} catch (DataAccessException daEx) {
 			LOG.error("error getting the list of default golf clubs : "
 					+ daEx.getMessage());
-
-			// TODO Throw SeviceExceptions where there are currently captured
-			// exceptions
+			throw new ServiceException(daEx.getMessage());
 		}
-		return new ArrayList<GolfClub>();
 	}
-
 }
