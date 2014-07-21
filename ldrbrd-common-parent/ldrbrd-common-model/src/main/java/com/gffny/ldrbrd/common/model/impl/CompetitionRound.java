@@ -25,6 +25,9 @@ import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
  * @author jdgaffney
  * 
  */
+
+// TODO REFACTOR TO EXTRACT INTERFACE COMMON TO NON COMPETITION ROUND AND COMP
+// ROUND
 @NamedQueries({ @NamedQuery(name = CompetitionRound.FIND_BY_COMP_ID_AND_RND_NMBR, query = "SELECT cr FROM CompetitionRound cr WHERE cr.roundNumber = :roundNumber AND cr.competition.id  = :competitionId") })
 @Entity
 @Table(name = "t_competition_round")

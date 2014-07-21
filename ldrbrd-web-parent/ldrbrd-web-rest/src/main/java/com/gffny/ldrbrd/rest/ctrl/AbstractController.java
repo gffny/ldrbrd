@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.support.WebContentGenerator;
 
 import com.gffny.ldrbrd.common.model.impl.GolferProfile;
@@ -23,14 +24,35 @@ import com.gffny.ldrbrd.web.model.ServletData;
 
 public abstract class AbstractController extends WebContentGenerator {
 
+	/**
+	 * 
+	 */
 	public static final String INIT_RESPONSE_SESSION_KEY = "INIT_RESPONSE_SESSION_KEY";
 
+	/**
+	 * 
+	 */
 	protected static ObjectMapper objectMapper = new ObjectMapper();
 
+	/**
+	 * 
+	 * @return
+	 */
 	public GolferProfile getUser() {
-		return RequestContext.get().getUser();
+		Object principal = SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+		if (principal != null && principal instanceof GolferProfile) {
+			return (GolferProfile) principal;
+		} else {
+			// TODO should there be another way to return the user profile?
+			return null;
+		}
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public ServletData getServletData() {
 		return RequestContext.get().getServletData();
 	}

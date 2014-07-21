@@ -30,7 +30,7 @@ import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
 @NamedQueries({
 		@NamedQuery(name = Scorecard.FIND_SCORECARD_BY_COMPETITION_ROUND_AND_GOLFER, query = "SELECT s FROM Scorecard s WHERE s.competitionRound.id = :competitionRoundId AND s.golfer.id  = :golferId"),
 		// TODO Check that the scorecards are returned by in the right order
-		@NamedQuery(name = Scorecard.FIND_SCORECARDS_BY_GOLFER_ID_AND_QUANTITY, query = "SELECT s FROM Scorecard s WHERE s.golfer.id  = :golferId ORDER BY s.scorecardDate") })
+		@NamedQuery(name = Scorecard.FIND_SCORECARDS_BY_GOLFER_ID, query = "SELECT s FROM Scorecard s WHERE s.golfer.id  = :golferId ORDER BY s.scorecardDate") })
 @Entity
 @Table(name = "t_scorecard")
 public class Scorecard extends CommonUUIDEntity {
@@ -48,7 +48,7 @@ public class Scorecard extends CommonUUIDEntity {
 	/**
 	 * 
 	 */
-	public static final String FIND_SCORECARDS_BY_GOLFER_ID_AND_QUANTITY = "findScorecardsByGolferId";
+	public static final String FIND_SCORECARDS_BY_GOLFER_ID = "findScorecardsByGolferId";
 
 	private GolferProfile golfer;
 	private String golferName;

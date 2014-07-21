@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -27,7 +25,9 @@ import org.springframework.web.filter.GenericFilterBean;
  */
 public class BasicAuthenticationProcessingFilter extends GenericFilterBean {
 
-	private AuthenticationManager authenticationManager;
+	// TODO subclass one of the other custom filters
+
+	// private AuthenticationManager authenticationManager;
 	private AuthenticationEntryPoint authenticationEntryPoint;
 
 	/**
@@ -58,7 +58,7 @@ public class BasicAuthenticationProcessingFilter extends GenericFilterBean {
 	public BasicAuthenticationProcessingFilter(
 			AuthenticationManager authenticationManager,
 			AuthenticationEntryPoint authenticationEntryPoint) {
-		this.authenticationManager = authenticationManager;
+		// this.authenticationManager = authenticationManager;
 		this.authenticationEntryPoint = authenticationEntryPoint;
 	}
 
@@ -77,18 +77,9 @@ public class BasicAuthenticationProcessingFilter extends GenericFilterBean {
 			HttpServletRequest request = ((HttpServletRequest) servletRequest);
 			HttpServletResponse response = ((HttpServletResponse) servletResponse);
 
-			// get the username/password pair from the header
-			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-					"gffny", "fidelity");
-
+			// Try to authenticate
 			try {
-				// Request the authentication manager to authenticate the token
-				Authentication successfulAuthentication = authenticationManager
-						.authenticate(authentication);
-				// Pass the successful token to the SecurityHolder where it can
-				// be retrieved by this thread at any stage.
-				SecurityContextHolder.getContext().setAuthentication(
-						successfulAuthentication);
+
 				// Continue with the Filters
 				filterChain.doFilter(request, response);
 			} catch (AuthenticationException authenticationException) {
@@ -109,7 +100,7 @@ public class BasicAuthenticationProcessingFilter extends GenericFilterBean {
 	 */
 	public void setAuthenticationManager(
 			AuthenticationManager authenticationManager) {
-		this.authenticationManager = authenticationManager;
+		// this.authenticationManager = authenticationManager;
 	}
 
 }

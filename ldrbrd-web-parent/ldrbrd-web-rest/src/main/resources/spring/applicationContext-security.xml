@@ -9,23 +9,35 @@
 
 	<!-- server/auth/** should be ANONYMOUS server/css & other resources should 
 		be ANONYMOUS server/course & other services should be auth -->
+	<security:http pattern="/auth/**" security="none" />
+	<security:http pattern="/resources/**" security="none" />
+	<security:http pattern="/check/**" security="none" />
 
 	<!-- AUTHENTICATION PROCESS: 1. Token Filter (check if token exists and 
 		handle) 2. Basic Authentication Filter (check credentials and handle) -->
-
-	<security:http auto-config="false" use-expressions="true"
+	<security:http auto-config="false" use-expressions="true" 
 		create-session="stateless" entry-point-ref="authenticationEntryPoint"
 		authentication-manager-ref="authenticationManager">
+<!-- 	
 		<security:intercept-url pattern="/auth/*"
-			access="IS_AUTHENTICATED_ANONYMOUSLY" />
+			access="isAnonymous()" /> 
 		<security:intercept-url pattern="/resources/**"
-			access="IS_AUTHENTICATED_ANONYMOUSLY" />
-		<security:intercept-url pattern="/**"
+			access="isAnonymous()" />
+		<security:intercept-url pattern="/check/**"
+			access="isAnonymous(), hasRole('ROLE_USER')" />
+-->
+ 		<security:intercept-url pattern="/**"
 			access="hasRole('ROLE_USER')" />
+<!-- 
+		<security:intercept-url pattern="/**"
+			access="isAnonymous()" />
+-->
 		<security:custom-filter position="PRE_AUTH_FILTER"
 			ref="atpf" />
+<!-- 
 		<security:custom-filter position="BASIC_AUTH_FILTER"
 			ref="bapf" />
+-->
 	</security:http>
 
 	<bean id="authenticationEntryPoint"
@@ -67,12 +79,10 @@
 		<security:filter-chain-map path-type="ant">
 			<!-- FOR ANY REQUEST TO /AUTH/LOGIN PROCESS THE TOKEN AND THEN THE BASIC 
 				AUTHENTICATION PARAMS -->
-			<security:filter-chain pattern="/auth/login"
-				filters="atpf" />
+			<security:filter-chain pattern="/auth/login" filters="atpf" />
 			<!-- filters="atpf, bapf" /> -->
 			<!-- FOR ANY REQUEST TO /AUTH/LOGOUT PROCESS THE TOKEN AND THEN LOGOUT -->
-			<security:filter-chain pattern="/auth/logout"
-				filters="lpf" />
+			<security:filter-chain pattern="/auth/logout" filters="lpf" />
 			<!-- FOR ANY REQUEST TO ANY OTHER PROCESS THE TOKEN AND THEN THE BASIC 
 				AUTHENTICATION PARAMS -->
 			<security:filter-chain pattern="/**" filters="atpf" />

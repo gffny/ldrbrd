@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.codec.Base64;
@@ -22,15 +21,13 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.web.filter.GenericFilterBean;
 
-import com.gffny.ldrbrd.web.auth.token.LeaderboardRestToken;
-
 /**
  * @author jdgaffney
  * 
  */
 public class LogoutProcessingFilter extends GenericFilterBean {
 
-	private AuthenticationManager authenticationManager;
+	// private AuthenticationManager authenticationManager;
 	private AuthenticationEntryPoint authenticationEntryPoint;
 
 	/**
@@ -57,7 +54,7 @@ public class LogoutProcessingFilter extends GenericFilterBean {
 	 */
 	public LogoutProcessingFilter(AuthenticationManager authenticationManager,
 			AuthenticationEntryPoint authenticationEntryPoint) {
-		this.authenticationManager = authenticationManager;
+		// this.authenticationManager = authenticationManager;
 		this.authenticationEntryPoint = authenticationEntryPoint;
 	}
 
@@ -75,32 +72,34 @@ public class LogoutProcessingFilter extends GenericFilterBean {
 			HttpServletRequest request = ((HttpServletRequest) servletRequest);
 			HttpServletResponse response = ((HttpServletResponse) servletResponse);
 			// Pull out the Authorization header
-			String authorization = request.getHeader("Authorization");
+			// String authorization = request.getHeader("Authorization");
 
 			// If the Authorization header is null, let the
 			// ExceptionTranslationFilter provided by
 			// the <http> namespace kick of the BasicAuthenticationEntryPoint to
 			// provide the username and password dialog box
-			if (authorization == null) {
-				filterChain.doFilter(request, response);
-				return;
-			}
-
-			String[] credentials = decodeHeader(authorization);
-			assert credentials.length == 2;
+			// TODO change to the line below
+			// if (authorization == null) {
+			// if (authorization != null) {
+			// filterChain.doFilter(request, response);
+			// return;
+			// }
+			//
+			// String[] credentials = decodeHeader(authorization);
+			// assert credentials.length == 2;
 
 			// TODO decide what needs to go into the token and then validate it
-			Authentication authentication = new LeaderboardRestToken(
-					credentials[0]);
+			// Authentication authentication = null;
 
 			try {
 				// Request the authentication manager to authenticate the token
-				Authentication successfulAuthentication = authenticationManager
-						.authenticate(authentication);
+				// Authentication successfulAuthentication =
+				// authenticationManager
+				// .authenticate(authentication);
 				// Pass the successful token to the SecurityHolder where it can
 				// be retrieved by this thread at any stage.
-				SecurityContextHolder.getContext().setAuthentication(
-						successfulAuthentication);
+				// SecurityContextHolder.getContext().setAuthentication(
+				// successfulAuthentication);
 				// Continue with the Filters
 				filterChain.doFilter(request, response);
 			} catch (AuthenticationException authenticationException) {
@@ -121,7 +120,7 @@ public class LogoutProcessingFilter extends GenericFilterBean {
 	 */
 	public void setAuthenticationManager(
 			AuthenticationManager authenticationManager) {
-		this.authenticationManager = authenticationManager;
+		// this.authenticationManager = authenticationManager;
 		this.authenticationEntryPoint = new BasicAuthenticationEntryPoint();
 		((BasicAuthenticationEntryPoint) this.authenticationEntryPoint)
 				.setRealmName("Username: jack Password: jill");

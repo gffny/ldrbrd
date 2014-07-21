@@ -6,6 +6,7 @@ package com.gffny.ldrbrd.rest.ctrl.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.gffny.ldrbrd.rest.ctrl.AbstractController;
+import com.gffny.ldrbrd.rest.resp.StatusResponse;
+import com.gffny.ldrbrd.rest.resp.StatusResponse.StatusCode;
 
 /**
  * @author John Gaffney | gffny.com
@@ -33,9 +36,10 @@ public class CheckController extends AbstractController {
 	 * @param input
 	 * @return
 	 */
-	@RequestMapping(value = "/c_online", method = RequestMethod.GET)
-	public ResponseEntity<String> applicationOnlineCheck() {
-		return new ResponseEntity<String>(new String("Online"), HttpStatus.OK);
+	@RequestMapping(value = "/c_online", method = RequestMethod.GET, consumes = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<StatusResponse> applicationOnlineCheck() {
+		return new ResponseEntity<StatusResponse>(new StatusResponse(
+				StatusCode.SUCCESS, "Online"), HttpStatus.OK);
 
 	}
 

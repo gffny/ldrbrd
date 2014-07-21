@@ -5,6 +5,8 @@ package com.gffny.ldrbrd.web.auth.filter;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -13,15 +15,21 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.web.filter.GenericFilterBean;
 
+import com.gffny.ldrbrd.common.exception.ServiceException;
+import com.gffny.ldrbrd.common.model.impl.UserProfile;
+import com.gffny.ldrbrd.common.service.IUserProfileService;
 import com.gffny.ldrbrd.web.auth.token.LeaderboardRestToken;
 
 /**
@@ -30,9 +38,26 @@ import com.gffny.ldrbrd.web.auth.token.LeaderboardRestToken;
  */
 public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
 
-	private AuthenticationManager authenticationManager;
+	/**
+	 * 
+	 */
+	private Logger LOG = LoggerFactory
+			.getLogger(AuthenticationTokenProcessingFilter.class);
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private IUserProfileService userProfileService;
+
+	/**
+	 * 
+	 */
 	private AuthenticationEntryPoint authenticationEntryPoint;
 
+	/**
+	 * 
+	 */
 	public AuthenticationTokenProcessingFilter() {
 
 	}
@@ -56,7 +81,7 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
 	public AuthenticationTokenProcessingFilter(
 			AuthenticationManager authenticationManager,
 			AuthenticationEntryPoint authenticationEntryPoint) {
-		this.authenticationManager = authenticationManager;
+		// this.authenticationManager = authenticationManager;
 		this.authenticationEntryPoint = authenticationEntryPoint;
 	}
 
@@ -75,32 +100,36 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
 			HttpServletRequest request = ((HttpServletRequest) servletRequest);
 			HttpServletResponse response = ((HttpServletResponse) servletResponse);
 			// Pull out the Authorization header
-			String authorization = request.getHeader("Authorization");
+			// String authorization = request.getHeader("Authorization");
 
 			// If the Authorization header is null, let the
 			// ExceptionTranslationFilter provided by
 			// the <http> namespace kick of the BasicAuthenticationEntryPoint to
 			// provide the username and password dialog box
-			if (authorization == null) {
-				filterChain.doFilter(request, response);
-				return;
-			}
-
-			String[] credentials = decodeHeader(authorization);
-			assert credentials.length == 2;
-
-			// TODO decide what needs to go into the token and then validate it
-			Authentication authentication = new LeaderboardRestToken(
-					credentials[0]);
+			// if (authorization == null) {
+			// filterChain.doFilter(request, response);
+			// return;
+			// }
 
 			try {
+				UserProfile userProfile = userProfileService
+						.getGolferByHandle("gffny");
+				// TODO add mechanism to get the role authorities from the
+				// database
+				Collection<SimpleGrantedAuthority> grantedAuthorityCollection = new ArrayList<SimpleGrantedAuthority>();
+				SimpleGrantedAuthority authority = new SimpleGrantedAuthority(
+						"ROLE_USER");
+				grantedAuthorityCollection.add(authority);
+
+				LeaderboardRestToken authentication = new LeaderboardRestToken(
+						"gffny", grantedAuthorityCollection, userProfile);
+
 				// Request the authentication manager to authenticate the token
-				Authentication successfulAuthentication = authenticationManager
-						.authenticate(authentication);
+
 				// Pass the successful token to the SecurityHolder where it can
 				// be retrieved by this thread at any stage.
 				SecurityContextHolder.getContext().setAuthentication(
-						successfulAuthentication);
+						authentication);
 				// Continue with the Filters
 				filterChain.doFilter(request, response);
 			} catch (AuthenticationException authenticationException) {
@@ -109,10 +138,11 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
 				SecurityContextHolder.clearContext();
 				authenticationEntryPoint.commence(request, response,
 						authenticationException);
+			} catch (ServiceException e) {
+				LOG.error(e.getMessage());
+				throw new ServletException(e.getMessage());
 			}
-
 		}
-		filterChain.doFilter(servletRequest, servletResponse);
 	}
 
 	public String[] decodeHeader(String authorization) {
@@ -133,7 +163,7 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
 	 */
 	public void setAuthenticationManager(
 			AuthenticationManager authenticationManager) {
-		this.authenticationManager = authenticationManager;
+		// this.authenticationManager = authenticationManager;
 	}
 
 }

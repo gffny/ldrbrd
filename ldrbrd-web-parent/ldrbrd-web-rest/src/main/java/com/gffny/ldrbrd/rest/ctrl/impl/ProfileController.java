@@ -106,8 +106,10 @@ public class ProfileController extends AbstractController {
 		profileHandle = getProfileHandle();
 		if (profileHandle != null) {
 			try {
-				GolferProfile profile = profileService
-						.getGolferByHandle(profileHandle);
+				GolferProfile profile = getUser();
+				if (profile == null) {
+					profile = profileService.getGolferByHandle(profileHandle);
+				}
 				if (profile != null) {
 					// create the response object instance
 					GolferDigestResponse response = new GolferDigestResponse(
@@ -159,7 +161,7 @@ public class ProfileController extends AbstractController {
 	 */
 	private String getProfileHandle() {
 		String profileHandle = (String) (principal = SecurityContextHolder
-				.getContext().getAuthentication().getPrincipal());
+				.getContext().getAuthentication().getName());
 		if ((String) principal == "anonymousUser") {
 			// which it will be until authentication is sorted (most likely)
 			profileHandle = "gffny";

@@ -553,8 +553,8 @@ public class ScorecardService extends AbstractService implements
 				Map<String, String> paramMap = new HashMap<String, String>();
 				paramMap.put("golferId", golferId);
 				return scorecardDao.findByNamedQuery(
-						Scorecard.FIND_SCORECARDS_BY_GOLFER_ID_AND_QUANTITY,
-						paramMap, xScorecards);
+						Scorecard.FIND_SCORECARDS_BY_GOLFER_ID, paramMap,
+						xScorecards);
 			} catch (DataAccessException daEx) {
 				LOG.error(daEx.getMessage());
 				throw new ServiceException(daEx);

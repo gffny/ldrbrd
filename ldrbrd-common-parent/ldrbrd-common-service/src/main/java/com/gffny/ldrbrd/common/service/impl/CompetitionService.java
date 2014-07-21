@@ -177,7 +177,6 @@ public class CompetitionService extends AbstractService implements
 	 * com.gffny.ldrbrd.common.service.impl.ICompetitionService#getCompetitionRound
 	 * (java.lang.String, java.lang.Integer)
 	 */
-	// TODO consider changing return type to List<CompetitionRound>
 	@Transactional(readOnly = true)
 	public CompetitionRound getCompetitionRound(String competitionId,
 			Integer roundNumber) throws ServiceException {
