@@ -17,7 +17,6 @@ import com.gffny.ldrbrd.common.model.enums.Dominance;
 
 /**
  * @author
- * 
  */
 @NamedQueries({
 		@NamedQuery(name = Golfer.FIND_BY_HANDLE, query = "select glfr from Golfer glfr where glfr.profileHandle = :profileHandle"),
@@ -64,7 +63,6 @@ public class Golfer extends UserProfile {
 	private List<Course> favouriteCourseList;
 
 	/**
-	 * 
 	 * @see com.gffny.leaderboard.model.IGolfer#getHandicap()
 	 */
 	@Column(name = "handicap")
@@ -73,7 +71,6 @@ public class Golfer extends UserProfile {
 	}
 
 	/**
-	 * 
 	 * @see com.gffny.leaderboard.model.IGolfer#setHandicap(java.lang.String)
 	 */
 	public void setHandicap(int handicap) {
@@ -81,7 +78,6 @@ public class Golfer extends UserProfile {
 	}
 
 	/**
-	 * 
 	 * @see com.gffny.leaderboard.model.IGolfer#getLocation()
 	 */
 	@Transient
@@ -90,7 +86,6 @@ public class Golfer extends UserProfile {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	@Transient
@@ -99,7 +94,6 @@ public class Golfer extends UserProfile {
 	}
 
 	/**
-	 * 
 	 * @see com.gffny.leaderboard.model.IGolfer#setLocation(java.lang.String)
 	 */
 	public void setHandedness(Dominance handDominance) {
@@ -107,7 +101,6 @@ public class Golfer extends UserProfile {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	@Transient
@@ -116,7 +109,6 @@ public class Golfer extends UserProfile {
 	}
 
 	/**
-	 * 
 	 * @param golfBag
 	 */
 	public void setGolfBag(List<GolferClubDetail> golfBag) {
@@ -143,7 +135,8 @@ public class Golfer extends UserProfile {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return this.getFirstName() + " " + this.getLastName() + " "
-				+ this.getId();
+		return "[" + this.getFirstName() + " " + this.getLastName() + " | id: " + this.getId()
+				+ "]";
+
 	}
 }

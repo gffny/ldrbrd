@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
-import com.gffny.ldrbrd.common.exception.DataAccessException;
+import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
 
 public class AbstractService {
@@ -38,7 +38,7 @@ public class AbstractService {
 				return resultList.get(0);
 			}
 			// else kick up a fuss and return null
-		} catch (DataAccessException e) {
+		} catch (PersistenceException e) {
 			LOG.error(e.getMessage());
 			throw new ServiceException(e);
 		}

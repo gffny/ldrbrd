@@ -3,10 +3,15 @@
  */
 package com.gffny.ldrbrd.common.model.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -15,7 +20,6 @@ import javax.persistence.Transient;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.NamedQueries;
-import org.hibernate.annotations.NamedQuery;
 import org.joda.time.DateTime;
 
 import com.gffny.ldrbrd.common.model.CommonIDEntity;
@@ -26,9 +30,12 @@ import com.gffny.ldrbrd.common.model.Constant;
  */
 
 @NamedQueries({
-		@NamedQuery(name = Scorecard.FIND_SCORECARD_BY_COMPETITION_ROUND_AND_GOLFER, query = "SELECT s FROM Scorecard s WHERE s.competitionRound.id = :competitionRoundId AND s.golfer.id  = :golferId"),
-		// TODO Check that the scorecards are returned by in the right order
-		@NamedQuery(name = Scorecard.FIND_SCORECARDS_BY_GOLFER_ID, query = "SELECT s FROM Scorecard s WHERE s.golfer.id  = :golferId ORDER BY s.scorecardDate") })
+// @NamedQuery(name = Scorecard.FIND_SCORECARD_BY_COMPETITION_ROUND_AND_GOLFER, query =
+// "SELECT s FROM Scorecard s WHERE s.competitionRound.id = :competitionRoundId AND s.golfer.id  = :golferId"),
+// TODO Check that the scorecards are returned by in the right order
+// @NamedQuery(name = Scorecard.FIND_SCORECARDS_BY_GOLFER_ID, query =
+// "SELECT s FROM Scorecard s WHERE s.golfer.id  = :golferId ORDER BY s.scorecardDate") })
+})
 @Entity
 @Table(name = Constant.DB_TABLE_SCORECARD)
 public class Scorecard extends CommonIDEntity {
@@ -48,13 +55,29 @@ public class Scorecard extends CommonIDEntity {
 	 */
 	public static final String FIND_SCORECARDS_BY_GOLFER_ID = "findScorecardsByGolferId";
 
+	/** */
 	private Golfer golfer;
+
+	/** */
 	private String courseDocumentId;
+
+	/** */
 	private Course course;
+
+	/** */
 	private DateTime roundDate;
+
+	/** */
 	private int handicap;
+
+	/** */
 	private String conditions;
+
+	/** */
 	private String scorecardNotes;
+
+	/** */
+	private List<Integer> holeScoreArray = new ArrayList<Integer>();
 
 	/**
 	 * Factory method to create a instance of Scorecard
@@ -142,15 +165,15 @@ public class Scorecard extends CommonIDEntity {
 	/**
 	 * 
 	 */
-	@Column(name = "scrcrd_d")
-	public Date getScorecardDate() {
+	@Column(name = "round_date")
+	public Date getRoundDate() {
 		return this.roundDate.toDate();
 	}
 
 	/**
 	 * @param scorecardDate
 	 */
-	public void setScorecardDate(Date scorecardDate) {
+	public void setRoundDate(Date scorecardDate) {
 		this.roundDate = new DateTime(scorecardDate);
 	}
 
@@ -158,7 +181,7 @@ public class Scorecard extends CommonIDEntity {
 	 * @return
 	 */
 	@Transient
-	public DateTime getScorecardDateDT() {
+	public DateTime getRoundDateDT() {
 		return this.roundDate;
 	}
 
@@ -166,7 +189,7 @@ public class Scorecard extends CommonIDEntity {
 	 * @param scorecardDateTime
 	 */
 	@Transient
-	public void setScorecardDateDT(DateTime scorecardDateTime) {
+	public void setRoundDateDT(DateTime scorecardDateTime) {
 		this.roundDate = scorecardDateTime;
 	}
 
@@ -216,10 +239,27 @@ public class Scorecard extends CommonIDEntity {
 	}
 
 	/**
+	 * @return
+	 */
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = Constant.DB_TABLE_HOLE_SCORE, joinColumns = @JoinColumn(name = "scorecard_id"))
+	@Column(name = "score")
+	public List<Integer> getHoleScoreArray() {
+		return this.holeScoreArray;
+	}
+
+	/**
+	 * @param holeScoreArray
+	 */
+	public void setHoleScoreArray(List<Integer> holeScoreArray) {
+		this.holeScoreArray = holeScoreArray;
+	}
+
+	/**
 	 * @param dateTime
 	 */
 	private void initDates(DateTime dateTime) {
-		this.setScorecardDateDT(dateTime);
+		this.setRoundDateDT(dateTime);
 		this.setCreatedDateDT(dateTime);
 	}
 
@@ -231,9 +271,10 @@ public class Scorecard extends CommonIDEntity {
 	@Transient
 	@Override
 	public String toString() {
-		final int maxLen = 18;
-		return "Scorecard [scorecardNotes=" + scorecardNotes + ", scorecardDate=" + roundDate
-				+ ", handicap=" + getHandicap() + "]";
+		return "Scorecard [golfer=" + golfer + ", courseDocumentId=" + courseDocumentId
+				+ ", course=" + course + ", roundDate=" + roundDate + ", handicap=" + handicap
+				+ ", conditions=" + conditions + ", scorecardNotes=" + scorecardNotes
+				+ ", holeScoreArray=" + holeScoreArray + "]";
 	}
 
 	/** TODO move to a scorecard utils class */

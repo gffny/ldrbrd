@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
-import com.gffny.ldrbrd.common.exception.DataAccessException;
+import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.impl.Competition;
 import com.gffny.ldrbrd.common.model.impl.CompetitionRound;
@@ -147,7 +147,7 @@ public class ScorecardService extends AbstractService implements
 			} else {
 				LOG.error("golfer is null: " + golferId);
 			}
-		} catch (DataAccessException daEx) {
+		} catch (PersistenceException daEx) {
 			LOG.error(daEx.toString());
 		}
 
@@ -177,7 +177,7 @@ public class ScorecardService extends AbstractService implements
 			} else {
 				LOG.error("golfer is null: " + golferId);
 			}
-		} catch (DataAccessException daEx) {
+		} catch (PersistenceException daEx) {
 			LOG.error(daEx.toString());
 		}
 		return null;
@@ -293,7 +293,7 @@ public class ScorecardService extends AbstractService implements
 								+ competitionId + " and round number: "
 								+ roundNumber);
 			}
-		} catch (DataAccessException daEx) {
+		} catch (PersistenceException daEx) {
 			LOG.error("{} error with competition scorecard", daEx.getClass()
 					.getName());
 			throw new ServiceException(daEx);
@@ -395,7 +395,7 @@ public class ScorecardService extends AbstractService implements
 						LOG.error("a score below 1 is attempted to be stored");
 					}
 				}
-			} catch (DataAccessException daEx) {
+			} catch (PersistenceException daEx) {
 				LOG.error("{} error with competition scorecard", daEx
 						.getClass().getName());
 				throw new ServiceException(daEx);
@@ -450,7 +450,7 @@ public class ScorecardService extends AbstractService implements
 				} else {
 					LOG.error("scorecard is null for id: " + scorecardId);
 				}
-			} catch (DataAccessException daEx) {
+			} catch (PersistenceException daEx) {
 				LOG.error(daEx.getMessage());
 				return false;
 			}
@@ -483,7 +483,7 @@ public class ScorecardService extends AbstractService implements
 				} else {
 					LOG.error("scorecard is null for id: " + scorecardId);
 				}
-			} catch (DataAccessException daEx) {
+			} catch (PersistenceException daEx) {
 				LOG.error(daEx.getMessage());
 			}
 		} else {
@@ -514,7 +514,7 @@ public class ScorecardService extends AbstractService implements
 				} else {
 					LOG.error("scorecard is null for id: " + scorecardId);
 				}
-			} catch (DataAccessException daEx) {
+			} catch (PersistenceException daEx) {
 				LOG.error(daEx.getMessage());
 			}
 		} else {
@@ -555,7 +555,7 @@ public class ScorecardService extends AbstractService implements
 				return scorecardDao.findByNamedQuery(
 						Scorecard.FIND_SCORECARDS_BY_GOLFER_ID, paramMap,
 						xScorecards);
-			} catch (DataAccessException daEx) {
+			} catch (PersistenceException daEx) {
 				LOG.error(daEx.getMessage());
 				throw new ServiceException(daEx);
 			}

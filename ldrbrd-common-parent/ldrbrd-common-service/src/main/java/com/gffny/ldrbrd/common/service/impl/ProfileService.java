@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
-import com.gffny.ldrbrd.common.exception.DataAccessException;
+import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.impl.GolfClub;
 import com.gffny.ldrbrd.common.model.impl.GolferClubDetail;
@@ -63,7 +63,7 @@ public class ProfileService extends AbstractService implements
 			LOG.debug("persisting golfer: " + golfer.toString());
 			try {
 				personDao.persist(golfer);
-			} catch (DataAccessException e) {
+			} catch (PersistenceException e) {
 				LOG.error(e.getMessage());
 				throw new ServiceException(e);
 			}
@@ -113,7 +113,7 @@ public class ProfileService extends AbstractService implements
 					}
 					// update user login attempts
 					return AuthenticationResult.FAILED;
-				} catch (DataAccessException daex) {
+				} catch (PersistenceException daex) {
 					return AuthenticationResult.ERROR;
 				}
 			}
@@ -140,7 +140,7 @@ public class ProfileService extends AbstractService implements
 				}
 				updatedGolfer.setGolfBag(defaultGolfBag);
 				personDao.merge(updatedGolfer);
-			} catch (DataAccessException daEx) {
+			} catch (PersistenceException daEx) {
 				LOG.error("error creating default golf bag for golfer id: "
 						+ golfer.getId() + ". Excpt: " + daEx.getMessage());
 			}

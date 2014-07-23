@@ -26,6 +26,7 @@
 		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
 		<property name="database" value="MYSQL" />
 		<property name="databasePlatform" value="org.hibernate.dialect.MySQL5Dialect" />
+		<property name="showSql" value="true" />
 	</bean>
 
 	<bean id="ldrbrd_jpaDialect" class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
@@ -33,7 +34,7 @@
 	<bean id="ldrbrd_dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/ldrbrd" />
+		<property name="url" value="jdbc:mysql://localhost:3306/ldrbrdv2" />
 		<property name="username" value="ldrbrd" />
 		<property name="password" value="password" />
 	</bean>

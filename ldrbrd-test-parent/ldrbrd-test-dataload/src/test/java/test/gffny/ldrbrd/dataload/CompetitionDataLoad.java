@@ -20,7 +20,6 @@ import com.gffny.ldrbrd.common.service.ICourseClubService;
 
 /**
  * @author jdgaffney
- * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "classpath*:spring/applicationContext-model.xml",
@@ -28,12 +27,15 @@ import com.gffny.ldrbrd.common.service.ICourseClubService;
 		"classpath*:spring/applicationContext-service.xml" })
 public class CompetitionDataLoad {
 
+	/** */
 	@Autowired
 	private ICompetitionService competitionService;
 
+	/** */
 	@Autowired
 	private ICourseClubService courseClubService;
 
+	/** */
 	private Competition competition;
 
 	/**
@@ -45,18 +47,15 @@ public class CompetitionDataLoad {
 
 	/**
 	 * @throws ServiceException
-	 * 
 	 */
 	@Test
 	public void testCreateCompetitionData() throws ServiceException {
 
-		Course course = courseClubService.getCourseByNameAndTeeColour(
-				"test course", TeeColour.WHITE);
+		Course course = courseClubService.getCourseByNameAndTeeColour("test course",
+				TeeColour.WHITE);
 
 		DateTime roundDate = new DateTime();
-		competition = competitionService.createCompetition("test competition");
-		competitionService.createCompetitionRound(competition, roundDate, 1,
-				course);
+		competition = competitionService.createCompetition("test testCompetition");
+		competitionService.createCompetitionRound(competition, roundDate, 1, course);
 	}
-
 }

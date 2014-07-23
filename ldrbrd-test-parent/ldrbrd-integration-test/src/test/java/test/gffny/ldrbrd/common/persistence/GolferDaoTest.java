@@ -12,7 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
-import com.gffny.ldrbrd.common.exception.DataAccessException;
+import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.model.enums.Dominance;
 import com.gffny.ldrbrd.common.model.impl.GolferProfile;
 
@@ -63,7 +63,7 @@ public class GolferDaoTest {
 	}
 
 	@Test
-	public void test() throws DataAccessException {
+	public void test() throws PersistenceException {
 		golferDao.persist(testProfile);
 	}
 }

@@ -9,4 +9,11 @@
 	</parent>
 	<artifactId>ldrbrd-test-dataload</artifactId>
 	<name>data load</name>
+	<dependencies>
+		<dependency>
+			<groupId>com.gffny.ldrbrd</groupId>
+			<artifactId>ldrbrd-persistence</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 </project>

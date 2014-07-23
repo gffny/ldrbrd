@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.gffny.ldrbrd</groupId>
-	<artifactId>ldrbrd-common-parent</artifactId>
+	<artifactId>ldrbrd</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>common parent</name>
 	<packaging>pom</packaging>
@@ -11,6 +11,7 @@
 		<module>ldrbrd-common-model</module>
 		<module>ldrbrd-common-service</module>
 		<module>ldrbrd-common-utils</module>
+		<module>ldrbrd-persistence</module>
 	</modules>
 
 	<properties>

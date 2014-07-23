@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
-import com.gffny.ldrbrd.common.exception.DataAccessException;
+import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.impl.Competition;
 import com.gffny.ldrbrd.common.model.impl.CompetitionRound;
@@ -75,7 +75,7 @@ public class CompetitionService extends AbstractService implements
 						.createNewCompetition(competitionName);
 				return competitionDao.persist(newCompetition);
 			}
-		} catch (DataAccessException daEx) {
+		} catch (PersistenceException daEx) {
 			LOG.error(daEx.toString());
 			throw new ServiceException(daEx);
 		}
@@ -97,7 +97,7 @@ public class CompetitionService extends AbstractService implements
 						course);
 		try {
 			return competitionRoundDao.persist(newCompetitionRound);
-		} catch (DataAccessException daEx) {
+		} catch (PersistenceException daEx) {
 			LOG.error(daEx.toString());
 			throw new ServiceException(daEx);
 		}
@@ -116,7 +116,7 @@ public class CompetitionService extends AbstractService implements
 			// get the competition by ID!
 			return competitionDao.findById(Competition.class, competitionId);
 			// contain error and bubble (expected pattern)
-		} catch (DataAccessException daEx) {
+		} catch (PersistenceException daEx) {
 			LOG.error(daEx.toString());
 			throw new ServiceException(daEx);
 		}
@@ -164,7 +164,7 @@ public class CompetitionService extends AbstractService implements
 						"error with the result set returned for the competition name "
 								+ competitionName);
 			}
-		} catch (DataAccessException daEx) {
+		} catch (PersistenceException daEx) {
 			LOG.error(daEx.toString());
 			throw new ServiceException(daEx);
 		}
@@ -216,7 +216,7 @@ public class CompetitionService extends AbstractService implements
 				LOG.error("competition list return is null");
 				throw new ServiceException("competition list return is null");
 			}
-		} catch (DataAccessException daEx) {
+		} catch (PersistenceException daEx) {
 			// log 'n' bubble pattern
 			LOG.error(daEx.getMessage());
 			throw new ServiceException(daEx);
@@ -249,7 +249,7 @@ public class CompetitionService extends AbstractService implements
 					throw new ServiceException(
 							"incorrect results from the competition registration query");
 				}
-			} catch (DataAccessException daEx) {
+			} catch (PersistenceException daEx) {
 				LOG.error(daEx.getMessage());
 				throw new ServiceException(daEx);
 			}
@@ -276,7 +276,7 @@ public class CompetitionService extends AbstractService implements
 				CompetitionRegistration registration = new CompetitionRegistration(
 						golfer, competition, handicap);
 				competitionRegistrationDao.persist(registration);
-			} catch (DataAccessException daEx) {
+			} catch (PersistenceException daEx) {
 				// log 'n' bubble
 				LOG.error(daEx.getMessage());
 				throw new ServiceException(daEx);

@@ -12,7 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
-import com.gffny.ldrbrd.common.exception.DataAccessException;
+import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.enums.ClubCategory;
 import com.gffny.ldrbrd.common.model.enums.ClubType;
@@ -54,11 +54,11 @@ public class GolfClubDataLoad {
 	}
 
 	/**
-	 * @throws DataAccessException
+	 * @throws PersistenceException
 	 * 
 	 */
 	@Test
-	public void testCreateGolfClubData() throws DataAccessException {
+	public void testCreateGolfClubData() throws PersistenceException {
 
 		GolfClub[] allClubsArray = new GolfClub[ClubType
 				.getDefaultClubQuantity()];

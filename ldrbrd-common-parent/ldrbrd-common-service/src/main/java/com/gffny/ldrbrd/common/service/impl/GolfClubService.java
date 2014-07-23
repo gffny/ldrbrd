@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
-import com.gffny.ldrbrd.common.exception.DataAccessException;
+import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.enums.ClubType;
 import com.gffny.ldrbrd.common.model.enums.Manufacturer;
@@ -107,7 +107,7 @@ public class GolfClubService implements IGolfClubService {
 		try {
 			return golfClubDao.findByNamedQuery(
 					GolfClub.DEFAULT_CLUB_LIST_QUERY, null, 100);
-		} catch (DataAccessException daEx) {
+		} catch (PersistenceException daEx) {
 			LOG.error("error getting the list of default golf clubs : "
 					+ daEx.getMessage());
 			throw new ServiceException(daEx.getMessage());

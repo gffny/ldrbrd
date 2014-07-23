@@ -22,7 +22,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
-import com.gffny.ldrbrd.common.exception.DataAccessException;
+import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.model.impl.GolferProfile;
 import com.gffny.ldrbrd.common.model.impl.LeaderboardUserDetails;
 import com.gffny.ldrbrd.common.service.IAuthorisationService;
@@ -78,7 +78,7 @@ public class AuthorisationService implements IAuthorisationService,
 				log.error("other issues here");
 				throw new UsernameNotFoundException("Other issues!");
 			}
-		} catch (DataAccessException dae) {
+		} catch (PersistenceException dae) {
 			log.error("User (" + username + ") has not been found");
 			throw new UsernameNotFoundException("User (" + username
 					+ ") has not been found");
@@ -104,7 +104,7 @@ public class AuthorisationService implements IAuthorisationService,
 
 				return auth;
 			}
-		} catch (DataAccessException dae) {
+		} catch (PersistenceException dae) {
 			log.error("User (" + authentication.getName()
 					+ ") has not been found");
 			throw new UsernameNotFoundException("User ("

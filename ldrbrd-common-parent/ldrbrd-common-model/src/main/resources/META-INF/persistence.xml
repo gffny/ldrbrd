@@ -5,22 +5,5 @@
 	<persistence-unit name="ldrbrd_pu"	transaction-type="RESOURCE_LOCAL">
 		<description>Persistence Unit</description>
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<class>com.gffny.ldrbrd.common.model.impl.CourseHole</class>
-		<class>com.gffny.ldrbrd.common.model.impl.GolfClub</class>
-		<class>com.gffny.ldrbrd.common.model.impl.GolferProfile</class>
-		<class>com.gffny.ldrbrd.common.model.impl.Scorecard</class>
-		<class>com.gffny.ldrbrd.common.model.impl.UserProfile</class>
-		
-		<properties>
-<!--
-			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
- 			<property name="hibernate.connection.autocommit" value="true"/>
-			<property name="hibernate.show_sql" value="true"/>
-			<property name="hibernate.hbm2ddl.auto" value="validate"/>
-			<property name="hibernate.default_schema" value="ldrbrd"/>
-			<property name="hibernate.cache.region.factory_class" value="net.sf.ehcache.hibernate.EhCacheRegionFactory"/>
-			<property name="hibernate.cache.use_second_level_cache" value="false"/>
-			<property name="hibernate.cache.default_cache_concurrency_strategy" value="READ_WRITE"/> -->
-		</properties>
 	</persistence-unit>
 </persistence>

@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
-import com.gffny.ldrbrd.common.exception.DataAccessException;
+import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.enums.TeeColour;
 import com.gffny.ldrbrd.common.model.impl.Club;
@@ -73,7 +73,7 @@ public class CourseClubService extends AbstractService implements
 	public List<Club> getClubList() throws ServiceException {
 		try {
 			return clubDao.findAll(Club.class);
-		} catch (DataAccessException daex) {
+		} catch (PersistenceException daex) {
 			LOG.error(daex.getMessage());
 			throw new ServiceException(daex.getMessage());
 		}
@@ -90,7 +90,7 @@ public class CourseClubService extends AbstractService implements
 		LOG.debug("getting course with id: " + courseId);
 		try {
 			return courseDao.findById(Course.class, courseId);
-		} catch (DataAccessException e) {
+		} catch (PersistenceException e) {
 			LOG.error(e.getMessage());
 			throw new ServiceException(e.getMessage());
 		}
@@ -170,7 +170,7 @@ public class CourseClubService extends AbstractService implements
 						favouriteList.add(course.getCourse());
 					}
 				}
-			} catch (DataAccessException e) {
+			} catch (PersistenceException e) {
 				LOG.error(e.getMessage());
 				throw new ServiceException(e);
 			}
@@ -219,7 +219,7 @@ public class CourseClubService extends AbstractService implements
 					courseDetailMap.put(hole.getHoleNumber() - 1, hole);
 				}
 				return courseDetailMap;
-			} catch (DataAccessException e) {
+			} catch (PersistenceException e) {
 				LOG.error("no course holes returned for course id {}", courseId);
 				throw new ServiceException(
 						"no course holes returned for course id " + courseId);
@@ -256,7 +256,7 @@ public class CourseClubService extends AbstractService implements
 						teeColour, slopeIndex, par, courseImageReference);
 				return courseDao.persist(newCourse);
 			}
-		} catch (DataAccessException daEx) {
+		} catch (PersistenceException daEx) {
 			LOG.error(daEx.getMessage());
 			throw new ServiceException(daEx.getMessage());
 		}
@@ -282,7 +282,7 @@ public class CourseClubService extends AbstractService implements
 				Club newClub = Club.createClub(clubName);
 				return clubDao.persist(newClub);
 			}
-		} catch (DataAccessException daEx) {
+		} catch (PersistenceException daEx) {
 			LOG.error(daEx.getMessage());
 			throw new ServiceException(daEx.getMessage());
 		}
@@ -316,7 +316,7 @@ public class CourseClubService extends AbstractService implements
 				courseHole.getCourse().getId().length();
 				courseDao.persist(courseHole);
 			}
-		} catch (DataAccessException e) {
+		} catch (PersistenceException e) {
 			LOG.error(e.getMessage());
 			throw new ServiceException(e.getMessage());
 		}

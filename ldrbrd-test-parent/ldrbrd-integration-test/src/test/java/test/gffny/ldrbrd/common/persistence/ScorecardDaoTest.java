@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.gffny.ldrbrd.common.exception.DataAccessException;
+import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.impl.GolferProfile;
 import com.gffny.ldrbrd.common.model.impl.Scorecard;
@@ -46,7 +46,7 @@ public class ScorecardDaoTest {
 	}
 
 	@Test
-	public void test() throws DataAccessException, ServiceException {
+	public void test() throws PersistenceException, ServiceException {
 		if (testProfile != null) {
 			List<Scorecard> scorecardList = scorecardService
 					.getLastXScorecards(testProfile.getId(), 5);
