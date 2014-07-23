@@ -18,7 +18,7 @@ import org.hibernate.annotations.ForeignKey;
 
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
 import com.gffny.ldrbrd.common.model.impl.Competition;
-import com.gffny.ldrbrd.common.model.impl.GolferProfile;
+import com.gffny.ldrbrd.common.model.impl.Golfer;
 
 /**
  * @author jdgaffney
@@ -49,7 +49,7 @@ public class CompetitionRegistration extends CommonUUIDEntity {
 	/**
 	 * 
 	 */
-	private GolferProfile golfer;
+	private Golfer golfer;
 
 	/**
 	 * 
@@ -73,7 +73,7 @@ public class CompetitionRegistration extends CommonUUIDEntity {
 	 * @param golfer
 	 * @param course
 	 */
-	public CompetitionRegistration(GolferProfile golfer, Competition competition) {
+	public CompetitionRegistration(Golfer golfer, Competition competition) {
 		super();
 		this.golfer = golfer;
 		this.competition = competition;
@@ -85,7 +85,7 @@ public class CompetitionRegistration extends CommonUUIDEntity {
 	 * @param competition
 	 * @param handicap
 	 */
-	public CompetitionRegistration(GolferProfile golfer,
+	public CompetitionRegistration(Golfer golfer,
 			Competition competition, int handicap) {
 		super();
 		this.competition = competition;
@@ -101,7 +101,7 @@ public class CompetitionRegistration extends CommonUUIDEntity {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "glfr_id", nullable = false)
 	@ForeignKey(name = "id")
-	public GolferProfile getGolfer() {
+	public Golfer getGolfer() {
 		return golfer;
 	}
 
@@ -109,7 +109,7 @@ public class CompetitionRegistration extends CommonUUIDEntity {
 	 * @param golfer
 	 *            the golfer to set
 	 */
-	public void setGolfer(GolferProfile golfer) {
+	public void setGolfer(Golfer golfer) {
 		this.golfer = golfer;
 	}
 

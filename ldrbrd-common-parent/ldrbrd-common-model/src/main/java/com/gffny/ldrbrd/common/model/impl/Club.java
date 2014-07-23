@@ -13,12 +13,10 @@ import org.hibernate.annotations.NamedQuery;
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
 
 /**
- * @author jdgaffney
+ * @author John D. Gaffney | gffny.com
  * 
  */
-@NamedQueries({
-	@NamedQuery(name = Club.FIND_CLUB_BY_CLUB_NAME, query = "SELECT c FROM Club c WHERE c.clubName = :clubName")
-})
+@NamedQueries({ @NamedQuery(name = Club.FIND_CLUB_BY_CLUB_NAME, query = "SELECT c FROM Club c WHERE c.clubName = :clubName") })
 @Entity
 @Table(name = "t_club")
 public class Club extends CommonUUIDEntity {

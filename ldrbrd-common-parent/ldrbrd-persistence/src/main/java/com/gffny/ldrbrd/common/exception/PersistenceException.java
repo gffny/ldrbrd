@@ -4,10 +4,10 @@
 package com.gffny.ldrbrd.common.exception;
 
 /**
- * @author jdgaffney
- *
+ * @author John D. Gaffney | gffny.com
+ * 
  */
-public class DataAccessException extends Exception {
+public class PersistenceException extends LdrbrdException {
 
 	/**
 	 * 
@@ -17,21 +17,21 @@ public class DataAccessException extends Exception {
 	/**
 	 * 
 	 */
-	public DataAccessException() {
+	public PersistenceException() {
 		super();
 	}
 
 	/**
 	 * @param message
 	 */
-	public DataAccessException(String message) {
+	public PersistenceException(String message) {
 		super(message);
 	}
 
 	/**
 	 * @param cause
 	 */
-	public DataAccessException(Throwable cause) {
+	public PersistenceException(Throwable cause) {
 		super(cause);
 	}
 
@@ -39,7 +39,7 @@ public class DataAccessException extends Exception {
 	 * @param message
 	 * @param cause
 	 */
-	public DataAccessException(String message, Throwable cause) {
+	public PersistenceException(String message, Throwable cause) {
 		super(message, cause);
 	}
 

@@ -5,20 +5,14 @@ package com.gffny.ldrbrd.common.model.impl;
 
 import java.util.List;
 
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.xml.bind.annotation.XmlTransient;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
+import com.gffny.ldrbrd.common.model.Constant;
 import com.gffny.ldrbrd.common.model.enums.Dominance;
 
 /**
@@ -26,13 +20,13 @@ import com.gffny.ldrbrd.common.model.enums.Dominance;
  * 
  */
 @NamedQueries({
-		@NamedQuery(name = GolferProfile.FIND_BY_HANDLE, query = "select golfer from GolferProfile golfer where golfer.profileHandle = :profileHandle"),
-		@NamedQuery(name = GolferProfile.FIND_BY_EMAIL, query = "select golfer from GolferProfile golfer where golfer.emailAddress = :emailAddress")
+		@NamedQuery(name = Golfer.FIND_BY_HANDLE, query = "select glfr from Golfer glfr where glfr.profileHandle = :profileHandle"),
+		@NamedQuery(name = Golfer.FIND_BY_EMAIL, query = "select glfr from Golfer glfr where glfr.emailAddress = :emailAddress")
 // TODO golfer.isObsolete = false and ...
 })
 @Entity
-@Table(name = "t_golfer")
-public class GolferProfile extends UserProfile {
+@Table(name = Constant.DB_TABLE_GOLFER)
+public class Golfer extends UserProfile {
 
 	/**
 	 * 
@@ -73,7 +67,7 @@ public class GolferProfile extends UserProfile {
 	 * 
 	 * @see com.gffny.leaderboard.model.IGolfer#getHandicap()
 	 */
-	@Column(name = "hndcp")
+	@Column(name = "handicap")
 	public Integer getHandicap() {
 		return handicap;
 	}
@@ -90,7 +84,7 @@ public class GolferProfile extends UserProfile {
 	 * 
 	 * @see com.gffny.leaderboard.model.IGolfer#getLocation()
 	 */
-	@Column(name = "hnddnss")
+	@Transient
 	public Dominance getHandedness() {
 		return handDominance;
 	}
@@ -116,8 +110,7 @@ public class GolferProfile extends UserProfile {
 	 * 
 	 * @return
 	 */
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "t_golf_bag", joinColumns = @JoinColumn(name = "glfr_id"))
+	@Transient
 	public List<GolferClubDetail> getGolfBag() {
 		return this.golfBag;
 	}
@@ -133,10 +126,6 @@ public class GolferProfile extends UserProfile {
 	/**
 	 * @return the favouriteCourseList
 	 */
-	// @JoinTable(name = "t_favourite_course", joinColumns = @JoinColumn(name =
-	// "project_id"), inverseJoinColumns = @JoinColumn(name = "task_id"))
-	@XmlTransient
-	@JsonIgnore
 	@Transient
 	public List<Course> getFavouriteCourseList() {
 		return favouriteCourseList;

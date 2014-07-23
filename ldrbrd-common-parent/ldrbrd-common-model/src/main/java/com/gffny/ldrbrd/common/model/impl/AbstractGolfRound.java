@@ -41,7 +41,7 @@ public abstract class AbstractGolfRound extends CommonUUIDEntity {
 	/**
 	 * 
 	 * @param course
-	 * @param roundDate
+	 * @param startDate
 	 */
 	public AbstractGolfRound(Course course, DateTime roundDate) {
 		this.roundDate = roundDate;
@@ -78,7 +78,7 @@ public abstract class AbstractGolfRound extends CommonUUIDEntity {
 
 	/**
 	 * 
-	 * @param roundDate
+	 * @param startDate
 	 */
 	public void setRoundDate(Date roundDate) {
 		this.roundDate = new DateTime(roundDate);
@@ -95,7 +95,7 @@ public abstract class AbstractGolfRound extends CommonUUIDEntity {
 
 	/**
 	 * 
-	 * @param roundDate
+	 * @param startDate
 	 */
 	public void setRoundDateDT(DateTime roundDate) {
 		this.roundDate = roundDate;

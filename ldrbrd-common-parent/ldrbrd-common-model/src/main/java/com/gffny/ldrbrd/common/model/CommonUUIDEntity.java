@@ -16,22 +16,18 @@ import org.hibernate.validator.constraints.Length;
  * @author jdgaffney
  * 
  */
+@SuppressWarnings("restriction")
 @MappedSuperclass
 public abstract class CommonUUIDEntity extends CommonEntity {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	/**
-	 * 
-	 */
-	public static final String ID_FIELD = "id";
+	private static final long serialVersionUID = 6631341524076524375L;
 
 	/**
 	 * 
 	 */
-	// @Id
 	@XmlElement
 	private String id;
 
@@ -86,7 +82,7 @@ public abstract class CommonUUIDEntity extends CommonEntity {
 	 */
 	@Id
 	@Length(min = 36, max = 36)
-	@Column(name = ID_FIELD, nullable = false, length = 36)
+	@Column(name = Constant.DB_ID_FIELD, nullable = false, length = 36)
 	public String getId() {
 		return id;
 	}

@@ -17,21 +17,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gffny.ldrbrd.common.exception.DataAccessException;
+import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.model.CommonEntity;
 import com.gffny.ldrbrd.common.utils.ClassUtils;
 
 /**
  * @author jdgaffney
- * 
  */
 @Repository
 @Transactional
 public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> {
 
 	/** The Constant log. */
-	private static final Logger LOG = LoggerFactory
-			.getLogger(GenericDaoJpaImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(GenericDaoJpaImpl.class);
 
 	/** The em. */
 	@PersistenceContext(unitName = "ldrbrd_pu")
@@ -45,12 +43,11 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	@SuppressWarnings("unchecked")
 	public GenericDaoJpaImpl() {
 		// Dynamically set the type of generic class
-		this.setType((Class<T>) ClassUtils.getTypeArguments(
-				GenericDaoJpaImpl.class, getClass()).get(0));
+		this.setType((Class<T>) ClassUtils.getTypeArguments(GenericDaoJpaImpl.class, getClass())
+				.get(0));
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public Class<T> getType() {
@@ -58,7 +55,6 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	}
 
 	/**
-	 * 
 	 * @param type
 	 */
 	public void setType(Class<T> type) {
@@ -88,7 +84,7 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	 * 
 	 */
 	@SuppressWarnings("hiding")
-	public <T> T persist(T entity) throws DataAccessException {
+	public <T> T persist(T entity) throws PersistenceException {
 		this.em.persist(entity);
 		LOG.debug("success");
 		return entity;
@@ -98,7 +94,7 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	 * 
 	 */
 	@SuppressWarnings("hiding")
-	public <T> T merge(T entity) throws DataAccessException {
+	public <T> T merge(T entity) throws PersistenceException {
 		return this.em.merge(entity);
 	}
 
@@ -106,15 +102,22 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	 * 
 	 */
 	@SuppressWarnings("hiding")
-	public <T> T findById(Class<T> clazz, String id) throws DataAccessException {
+	public <T> T findById(Class<T> clazz, String id) throws PersistenceException {
 		return this.em.find(clazz, id);
+	}
+
+	/**
+	 * 
+	 */
+	@SuppressWarnings("hiding")
+	public <T> T findById(Class<T> clazz, int id) throws PersistenceException {
+		return this.em.find(clazz, Integer.valueOf(id));
 	}
 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.gffny.ldrbrd.common.dao.GenericDao#findByNamedQuery(java.lang.String,
-	 *      java.util.Map)
+	 * @see com.gffny.ldrbrd.common.dao.GenericDao#findByNamedQuery(java.lang.String, java.util.Map)
 	 */
 	public List<T> findByNamedQuery(String name, Map<String, ?> params) {
 		return this.findByNamedQuery(name, params, 1);
@@ -139,8 +142,8 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	 *            the max results
 	 * @return the list
 	 */
-	public List<T> findByNamedQuery(final String name,
-			final Map<String, ?> params, final int maxResults) {
+	public List<T> findByNamedQuery(final String name, final Map<String, ?> params,
+			final int maxResults) {
 		// create the query
 		final Query query = getEntityManager().createNamedQuery(name);
 
@@ -165,8 +168,7 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	/**
 	 * 
 	 */
-	public Object findByAggregateNamedQuerySingleResult(String namedQuery,
-			Map<String, ?> parameters) {
+	public Object findByAggregateNamedQuerySingleResult(String namedQuery, Map<String, ?> parameters) {
 		// TODO implement findByAggregateNamedQuery....
 		return null;
 	}
@@ -192,8 +194,7 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	 */
 	@SuppressWarnings("unchecked")
 	public List<T> findAll(Class<? extends CommonEntity> clazz) {
-		Query query = this.getEntityManager().createQuery(
-				"from " + clazz.getName(), clazz);
+		Query query = this.getEntityManager().createQuery("from " + clazz.getName(), clazz);
 		return query.getResultList();
 	}
 

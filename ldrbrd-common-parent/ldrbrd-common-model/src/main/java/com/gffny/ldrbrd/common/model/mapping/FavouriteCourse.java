@@ -18,7 +18,7 @@ import org.hibernate.annotations.ForeignKey;
 
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
 import com.gffny.ldrbrd.common.model.impl.Course;
-import com.gffny.ldrbrd.common.model.impl.GolferProfile;
+import com.gffny.ldrbrd.common.model.impl.Golfer;
 
 /**
  * @author jdgaffney
@@ -42,7 +42,7 @@ public class FavouriteCourse extends CommonUUIDEntity {
 	/**
 	 * 
 	 */
-	private GolferProfile golfer;
+	private Golfer golfer;
 
 	/**
 	 * 
@@ -66,7 +66,7 @@ public class FavouriteCourse extends CommonUUIDEntity {
 	 * @param golfer
 	 * @param course
 	 */
-	public FavouriteCourse(GolferProfile golfer, Course course) {
+	public FavouriteCourse(Golfer golfer, Course course) {
 		super();
 		this.golfer = golfer;
 		this.course = course;
@@ -81,7 +81,7 @@ public class FavouriteCourse extends CommonUUIDEntity {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "glfr_id", nullable = false)
 	@ForeignKey(name = "id")
-	public GolferProfile getGolfer() {
+	public Golfer getGolfer() {
 		return golfer;
 	}
 
@@ -89,7 +89,7 @@ public class FavouriteCourse extends CommonUUIDEntity {
 	 * @param golfer
 	 *            the golfer to set
 	 */
-	public void setGolfer(GolferProfile golfer) {
+	public void setGolfer(Golfer golfer) {
 		this.golfer = golfer;
 	}
 

@@ -6,14 +6,12 @@ package com.gffny.ldrbrd.common.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Transient;
-import javax.persistence.Version;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
@@ -23,41 +21,46 @@ import org.joda.time.DateTime;
 /**
  * Base entity for persisted classes
  * 
- * @author jdgaffney
+ * @author John D. Gaffney | gffny.com
  */
+@SuppressWarnings("restriction")
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @XmlAccessorType(XmlAccessType.NONE)
 public abstract class CommonEntity implements Serializable {
 
-	/**
-	 * 
-	 */
+	/** */
 	private static final long serialVersionUID = -3333711223303385379L;
 
+	/** */
 	@JsonIgnore
 	private int version;
 
+	/** */
 	@JsonIgnore
 	private String createdBy;
-	// private UserProfile createdBy;
 
+	/** */
 	@JsonIgnore
 	private String updatedBy;
-	// private UserProfile updatedBy;
 
+	/** */
 	@JsonIgnore
 	private DateTime createdDate;
 
+	/** */
 	@JsonIgnore
 	private DateTime updatedDate;
 
+	/** */
 	@JsonIgnore
 	private boolean skipCreatedDate = false;
 
+	/** */
 	@JsonIgnore
 	private int syncVersionId;
 
+	/** */
 	@JsonIgnore
 	private boolean isNew = false;
 
@@ -84,9 +87,10 @@ public abstract class CommonEntity implements Serializable {
 	 * 
 	 * @return
 	 */
-	@Version
-	@JsonIgnore
-	@Column(name = "vrsn")
+	// @Version
+	// @JsonIgnore
+	// //@Column(name = "vrsn")
+	@Transient
 	public int getVersion() {
 		return version;
 	}
@@ -99,34 +103,13 @@ public abstract class CommonEntity implements Serializable {
 		this.version = version;
 	}
 
-	// // @ManyToOne(fetch = FetchType.LAZY)
-	// // @JoinColumn(name = "crtdby", updatable = false)
-	// @Column(name = "crtdby")
-	// public UserProfile getCreatedBy() {
-	// return createdBy;
-	// }
-	//
-	// public void setCreatedBy(final UserProfile createdBy) {
-	// this.createdBy = createdBy;
-	// }
-	//
-	// // @ManyToOne(fetch = FetchType.LAZY)
-	// // @JoinColumn(name = "updtdby", updatable = false)
-	// @Column(name = "updtdby")
-	// public UserProfile getUpdatedBy() {
-	// return updatedBy;
-	// }
-	//
-	// public void setUpdatedBy(final UserProfile updatedBy) {
-	// this.updatedBy = updatedBy;
-	// }
-
 	/**
 	 * 
 	 * @return
 	 */
-	@JsonIgnore
-	@Column(name = "crtdby")
+	// @JsonIgnore
+	// //@Column(name = "crtdby")
+	@Transient
 	public String getCreatedBy() {
 		return createdBy;
 	}
@@ -144,7 +127,8 @@ public abstract class CommonEntity implements Serializable {
 	 * @return
 	 */
 	@JsonIgnore
-	@Column(name = "updtdby")
+	// @Column(name = "updtdby")
+	@Transient
 	public String getUpdatedBy() {
 		return updatedBy;
 	}
@@ -162,7 +146,8 @@ public abstract class CommonEntity implements Serializable {
 	 * @return
 	 */
 	@JsonIgnore
-	@Column(name = "crtddt")
+	// @Column(name = "crtddt")
+	@Transient
 	public Date getCreatedDate() {
 		if (getCreatedDateDT() != null) {
 			return this.getCreatedDateDT().toDate();
@@ -203,7 +188,8 @@ public abstract class CommonEntity implements Serializable {
 	 * @return
 	 */
 	@JsonIgnore
-	@Column(name = "updtddt")
+	// @Column(name = "updtddt")
+	@Transient
 	public Date getUpdatedDate() {
 		if (getUpdatedDateDT() != null) {
 			return getUpdatedDateDT().toDate();
@@ -244,7 +230,8 @@ public abstract class CommonEntity implements Serializable {
 	 * @return
 	 */
 	@JsonIgnore
-	@Column(name = "obslt", columnDefinition = "BIT", length = 1)
+	// @Column(name = "obslt", columnDefinition = "BIT", length = 1)
+	@Transient
 	public Boolean isObsolete() {
 		return isObsolete;
 	}
@@ -262,7 +249,8 @@ public abstract class CommonEntity implements Serializable {
 	 * @return
 	 */
 	@JsonIgnore
-	@Column(name = "archv", columnDefinition = "BIT", length = 1)
+	// @Column(name = "archv", columnDefinition = "BIT", length = 1)
+	@Transient
 	public Boolean isArchive() {
 		return isArchive;
 	}
@@ -280,7 +268,8 @@ public abstract class CommonEntity implements Serializable {
 	 * @return
 	 */
 	@JsonIgnore
-	@Column(name = "dlt", columnDefinition = "BIT", length = 1)
+	// @Column(name = "dlt", columnDefinition = "BIT", length = 1)
+	@Transient
 	public Boolean isDelete() {
 		return isDelete;
 	}
@@ -320,7 +309,8 @@ public abstract class CommonEntity implements Serializable {
 	 * 
 	 */
 	@JsonIgnore
-	@Column(name = "syncvrsnid")
+	// @Column(name = "syncvrsnid")
+	@Transient
 	public int getSyncVersionId() {
 		return syncVersionId;
 	}
@@ -339,7 +329,7 @@ public abstract class CommonEntity implements Serializable {
 	 */
 	@JsonIgnore
 	@Transient
-	@Column(name = "skpcrtddt", columnDefinition = "BIT", length = 1)
+	// @Column(name = "skpcrtddt", columnDefinition = "BIT", length = 1)
 	public boolean isSkipCreatedDate() {
 		return skipCreatedDate;
 	}
