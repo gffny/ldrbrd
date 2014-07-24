@@ -13,7 +13,7 @@ import com.gffny.ldrbrd.common.dao.GenericDao;
 import com.gffny.ldrbrd.common.model.impl.UserProfile;
 
 /**
- * @author jdgaffney
+ * @author John D. Gaffney | gffny.com
  * 
  */
 public class UserDaoTest {

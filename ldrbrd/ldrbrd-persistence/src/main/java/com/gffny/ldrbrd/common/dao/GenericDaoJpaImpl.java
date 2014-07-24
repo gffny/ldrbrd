@@ -22,7 +22,7 @@ import com.gffny.ldrbrd.common.model.CommonEntity;
 import com.gffny.ldrbrd.common.utils.ClassUtils;
 
 /**
- * @author jdgaffney
+ * @author John D. Gaffney | gffny.com
  */
 @Repository
 @Transactional

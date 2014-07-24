@@ -12,7 +12,7 @@ import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.model.CommonEntity;
 
 /**
- * @author jdgaffney
+ * @author John D. Gaffney | gffny.com
  */
 public interface GenericDao<T> {
 

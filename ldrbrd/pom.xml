@@ -3,15 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.gffny.ldrbrd</groupId>
-	<artifactId>ldrbrd</artifactId>
+	<artifactId>ldrbrd-parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>common parent</name>
+	<name>Leaderboard</name>
 	<packaging>pom</packaging>
 	<modules>
-		<module>ldrbrd-common-model</module>
-		<module>ldrbrd-common-service</module>
-		<module>ldrbrd-common-utils</module>
+		<module>ldrbrd-model</module>
 		<module>ldrbrd-persistence</module>
+		<module>ldrbrd-service</module>
 	</modules>
 
 	<properties>

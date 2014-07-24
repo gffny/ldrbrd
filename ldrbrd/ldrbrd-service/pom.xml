@@ -7,13 +7,19 @@
 		<artifactId>ldrbrd-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>ldrbrd-persistence</artifactId>
-	<name>Persistence</name>
+	<artifactId>ldrbrd-service</artifactId>
+	<name>Service</name>
 	<dependencies>
 		<dependency>
 			<groupId>com.gffny.ldrbrd</groupId>
 			<artifactId>ldrbrd-model</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.gffny.ldrbrd</groupId>
+			<artifactId>ldrbrd-persistence</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
+
 </project>
