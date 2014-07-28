@@ -9,8 +9,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
+import com.gffny.ldrbrd.common.exception.AuthorizationException;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
+import com.gffny.ldrbrd.common.model.impl.Golfer;
+import com.gffny.ldrbrd.common.utils.BootStrapUtils;
 
 public class AbstractService {
 
@@ -65,6 +68,16 @@ public class AbstractService {
 			}
 		}
 		return paramMap;
+	}
+
+	/**
+	 * @return
+	 * @throws AuthorizationException
+	 */
+	protected Golfer getLoggedInGolfer() throws AuthorizationException {
+		// TODO Replace with a call to the security context and the user service to get the actual
+		// logged in golfer
+		return BootStrapUtils.golfer();
 	}
 
 }

@@ -3,6 +3,8 @@ package com.gffny.ldrbrd.common.service;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import com.gffny.ldrbrd.common.exception.AuthorizationException;
+
 public interface IAuthorisationService {
 
 	/**
@@ -17,4 +19,13 @@ public interface IAuthorisationService {
 	public abstract UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException;
 
+	/**
+	 * @throws AuthorizationException
+	 */
+	public abstract void authorize() throws AuthorizationException;
+
+	/**
+	 * TODO potentially add new methods to authorize different behaviours, such as society admin
+	 * behaviours, etc.
+	 */
 }

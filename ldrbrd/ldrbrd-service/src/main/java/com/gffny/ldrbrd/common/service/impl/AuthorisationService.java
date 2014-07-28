@@ -22,9 +22,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
+import com.gffny.ldrbrd.common.exception.AuthorizationException;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
+import com.gffny.ldrbrd.common.model.auth.LeaderboardUserDetails;
 import com.gffny.ldrbrd.common.model.impl.Golfer;
-import com.gffny.ldrbrd.common.model.impl.LeaderboardUserDetails;
 import com.gffny.ldrbrd.common.service.IAuthorisationService;
 
 /**
@@ -109,4 +110,8 @@ public class AuthorisationService implements IAuthorisationService, UserDetailsS
 		return false;
 	}
 
+	public void authorize() throws AuthorizationException {
+		// TODO Auto-generated method stub
+
+	}
 }

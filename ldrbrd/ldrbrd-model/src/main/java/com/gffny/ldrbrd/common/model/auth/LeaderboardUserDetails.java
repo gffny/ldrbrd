@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.gffny.ldrbrd.common.model.impl;
+package com.gffny.ldrbrd.common.model.auth;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,9 +11,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.gffny.ldrbrd.common.model.impl.UserProfile;
+
 /**
  * @author John D. Gaffney | gffny.com
- * 
  */
 public class LeaderboardUserDetails implements UserDetails {
 

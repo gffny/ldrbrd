@@ -22,7 +22,6 @@ import com.gffny.ldrbrd.common.model.impl.Golfer;
 
 /**
  * @author John D. Gaffney | gffny.com
- * 
  */
 @NamedQueries({ @NamedQuery(name = FavouriteCourse.FAVOURITE_LIST_BY_GOLFER_ID, query = "SELECT fc from FavouriteCourse fc WHERE fc.golfer.id = :golferId") })
 @Entity
@@ -62,7 +61,6 @@ public class FavouriteCourse extends CommonUUIDEntity {
 	}
 
 	/**
-	 * 
 	 * @param golfer
 	 * @param course
 	 */
@@ -96,9 +94,6 @@ public class FavouriteCourse extends CommonUUIDEntity {
 	/**
 	 * @return the course
 	 */
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "crs_id", nullable = false)
-	@ForeignKey(name = "id")
 	public Course getCourse() {
 		return course;
 	}

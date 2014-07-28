@@ -109,6 +109,7 @@ public class Scorecard extends CommonIDEntity {
 	private Scorecard(Golfer golfer, Course course, int handicap) {
 		this.golfer = golfer;
 		this.course = course;
+		this.courseDocumentId = course.getId();
 		this.handicap = handicap;
 	}
 

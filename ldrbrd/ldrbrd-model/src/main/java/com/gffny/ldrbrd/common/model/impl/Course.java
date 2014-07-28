@@ -6,14 +6,10 @@ package com.gffny.ldrbrd.common.model.impl;
 import java.util.List;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.ForeignKey;
@@ -23,29 +19,13 @@ import com.gffny.ldrbrd.common.model.enums.TeeColour;
 
 /**
  * @author John D. Gaffney | gffny.com
- * 
  */
-@NamedQueries({
-		@NamedQuery(name = Course.FIND_BY_NAME_AND_TEE_COLOUR, query = "SELECT c FROM Course c WHERE c.courseName = :courseName and c.teeColour = :teeColour"),
-		@NamedQuery(name = Course.FIND_BY_CLUB_ID_AND_COURSE_NAME, query = "SELECT c FROM Course c WHERE c.club.id = :clubId and c.courseName = :courseName") })
-@Entity
-@Table(name = "t_course")
 public class Course extends CommonUUIDEntity {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -2501872481702879896L;
-
-	/**
-	 * 
-	 */
-	public static final String FIND_BY_NAME_AND_TEE_COLOUR = "find_by_name_and_tee_colour";
-
-	/**
-	 * 
-	 */
-	public static final String FIND_BY_CLUB_ID_AND_COURSE_NAME = "find_by_club_id_and_course_name";
 
 	/**
 	 * 
@@ -84,7 +64,6 @@ public class Course extends CommonUUIDEntity {
 	private List<CourseHole> courseHoleList;
 
 	/**
-	 * 
 	 * @param courseName
 	 * @param club
 	 * @param teeColour
@@ -93,16 +72,14 @@ public class Course extends CommonUUIDEntity {
 	 * @param courseImageReference
 	 * @return
 	 */
-	public static Course createCourse(String courseName, Club club,
-			TeeColour teeColour, Double slopeIndex, Integer par,
-			String courseImageReference) {
-		Course newCourse = new Course(courseName, club, teeColour, slopeIndex,
-				par, courseImageReference);
+	public static Course createCourse(String courseName, Club club, TeeColour teeColour,
+			Double slopeIndex, Integer par, String courseImageReference) {
+		Course newCourse = new Course(courseName, club, teeColour, slopeIndex, par,
+				courseImageReference);
 		return newCourse;
 	}
 
 	/**
-	 * 
 	 * @param courseName
 	 * @param club
 	 * @param teeColour
@@ -110,8 +87,8 @@ public class Course extends CommonUUIDEntity {
 	 * @param par
 	 * @param courseImageReference
 	 */
-	private Course(String courseName, Club club, TeeColour teeColour,
-			Double slopeIndex, Integer par, String courseImageReference) {
+	private Course(String courseName, Club club, TeeColour teeColour, Double slopeIndex,
+			Integer par, String courseImageReference) {
 		this.courseName = courseName;
 		this.club = club;
 		this.teeColour = teeColour;
@@ -226,19 +203,14 @@ public class Course extends CommonUUIDEntity {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
-	// @ElementCollection(fetch = FetchType.EAGER)
-	// @CollectionTable(name = "t_hole", joinColumns = @JoinColumn(name =
-	// "crs_id"))
 	@Transient
 	public List<CourseHole> getCourseHoleList() {
 		return this.courseHoleList;
 	}
 
 	/**
-	 * 
 	 * @param courseHoleList
 	 */
 	public void setCourseHoleList(final List<CourseHole> courseHoleList) {
@@ -246,7 +218,6 @@ public class Course extends CommonUUIDEntity {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	@Transient

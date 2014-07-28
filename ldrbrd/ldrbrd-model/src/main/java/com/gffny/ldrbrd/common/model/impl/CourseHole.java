@@ -3,38 +3,17 @@
  */
 package com.gffny.ldrbrd.common.model.impl;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.annotations.ForeignKey;
-import org.hibernate.annotations.NamedQueries;
-import org.hibernate.annotations.NamedQuery;
-
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
 
 /**
  * @author John D. Gaffney | gffny.com
- * 
  */
-@NamedQueries({
-		@NamedQuery(name = CourseHole.FIND_BY_COURSE_ID_AND_HOLE_NUMBER, query = "SELECT ch FROM CourseHole ch WHERE ch.course.id = :courseId and ch.holeNumber = :holeNumber"),
-		@NamedQuery(name = CourseHole.FIND_BY_COURSE_ID, query = "SELECT ch FROM CourseHole ch WHERE ch.course.id = :courseId ORDER BY holeNumber ASC") })
-@Entity
-@Table(name = "t_hole")
 public class CourseHole extends CommonUUIDEntity {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -2698132847477453497L;
-
-	public static final String FIND_BY_COURSE_ID_AND_HOLE_NUMBER = "findCourseHoleByCourseIdAndHoleNumber";
-
-	public static final String FIND_BY_COURSE_ID = "findCourseHoleByCourseId";
 
 	private String name;
 
@@ -48,10 +27,9 @@ public class CourseHole extends CommonUUIDEntity {
 
 	private Course course;
 
-	// TODO ADD HOLE PAR!
+	private int holePar;
 
 	/**
-	 * 
 	 * @param name
 	 * @param distance
 	 * @param description
@@ -59,8 +37,8 @@ public class CourseHole extends CommonUUIDEntity {
 	 * @param holeImageId
 	 * @return
 	 */
-	public static CourseHole createCourseHole(Course course, String name,
-			int distance, String description, int holeNumber, String holeImageId) {
+	public static CourseHole createCourseHole(Course course, String name, int par, int distance,
+			String description, int holeNumber, String holeImageId) {
 		CourseHole courseHole = new CourseHole();
 		courseHole.setCourse(course);
 		courseHole.setName(name);
@@ -68,13 +46,13 @@ public class CourseHole extends CommonUUIDEntity {
 		courseHole.setHoleDescription(description);
 		courseHole.setHoleNumber(holeNumber);
 		courseHole.setHoleImageId(holeImageId);
+		courseHole.setPar(par);
 		return courseHole;
 	}
 
 	/**
 	 * @return the name
 	 */
-	@Column(name = "hl_nm")
 	public String getName() {
 		return name;
 	}
@@ -90,7 +68,6 @@ public class CourseHole extends CommonUUIDEntity {
 	/**
 	 * @return the holeDistance
 	 */
-	@Column(name = "hl_dstnc")
 	public int getHoleDistance() {
 		return holeDistance;
 	}
@@ -106,7 +83,6 @@ public class CourseHole extends CommonUUIDEntity {
 	/**
 	 * @return the holeDescription
 	 */
-	@Column(name = "hl_dsc")
 	public String getHoleDescription() {
 		return holeDescription;
 	}
@@ -122,7 +98,6 @@ public class CourseHole extends CommonUUIDEntity {
 	/**
 	 * @return the holeNumber
 	 */
-	@Column(name = "hl_nmbr")
 	public int getHoleNumber() {
 		return holeNumber;
 	}
@@ -138,7 +113,6 @@ public class CourseHole extends CommonUUIDEntity {
 	/**
 	 * @return the holeImageId
 	 */
-	@Column(name = "hl_img_ref")
 	public String getHoleImageId() {
 		return holeImageId;
 	}
@@ -161,10 +135,6 @@ public class CourseHole extends CommonUUIDEntity {
 	/**
 	 * @return the course
 	 */
-	@ManyToOne
-	@JoinColumn(name = "crs_id", nullable = false)
-	@ForeignKey(name = "id")
-	@JsonIgnore
 	public Course getCourse() {
 		return course;
 	}
@@ -177,4 +147,17 @@ public class CourseHole extends CommonUUIDEntity {
 		this.course = course;
 	}
 
+	/**
+	 * @return
+	 */
+	public int getPar() {
+		return this.holePar;
+	}
+
+	/**
+	 * @param par
+	 */
+	public void setPar(int holePar) {
+		this.holePar = holePar;
+	}
 }
