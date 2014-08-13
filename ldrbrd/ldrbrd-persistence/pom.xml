@@ -15,5 +15,24 @@
 			<artifactId>ldrbrd-model</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<!-- MongoDB Java Driver -->
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+			<version>${mongodb.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<!-- Morphia - ODM for MongoDB -->
+		<dependency>
+			<groupId>org.mongodb.morphia</groupId>
+			<artifactId>morphia</artifactId>
+			<version>${morphia.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>bson</artifactId>
+			<version>${mongodb.version}</version>
+		</dependency>
 	</dependencies>
 </project>

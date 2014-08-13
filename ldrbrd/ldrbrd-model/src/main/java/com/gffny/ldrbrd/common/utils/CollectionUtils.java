@@ -10,23 +10,40 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
 
-public class CollectionUtils extends
-		org.apache.commons.collections.CollectionUtils {
+/**
+ * @author John D. Gaffney | gffny.com
+ */
+public class CollectionUtils extends org.apache.commons.collections.CollectionUtils {
 
+	/**
+	 * 
+	 */
 	private static final Random random = new Random(System.currentTimeMillis());
 
+	/**
+	 * 
+	 */
 	public static <O> O getFirstElement(Collection<O> c) {
 		return getElementAt(c, 0);
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> O getLastElement(Collection<O> c) {
 		return getElementAt(c, safeSize(c) - 1);
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> O getRandomElement(Collection<O> c) {
 		return getElementAt(c, random.nextInt(size(c)));
 	}
 
+	/**
+	 * 
+	 */
 	@SuppressWarnings("unchecked")
 	public static <O> O getElementAt(Collection<O> c, int index) {
 		if (isEmpty(c)) {
@@ -40,6 +57,9 @@ public class CollectionUtils extends
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> O getCircularElementAt(Collection<O> c, int index) {
 		if (index < 0) {
 			index += safeSize(c);
@@ -48,6 +68,9 @@ public class CollectionUtils extends
 		return getElementAt(c, index);
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> O getFirstElement(List<O> l) {
 		if (CollectionUtils.isEmpty(l)) {
 			return null;
@@ -55,6 +78,9 @@ public class CollectionUtils extends
 		return l.get(0);
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> O getLastElement(List<O> l) {
 		if (CollectionUtils.isEmpty(l)) {
 			return null;
@@ -64,6 +90,9 @@ public class CollectionUtils extends
 		return l.get(index);
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> O getRandomElement(List<O> l) {
 		if (CollectionUtils.isEmpty(l)) {
 			return null;
@@ -78,13 +107,18 @@ public class CollectionUtils extends
 		return l.get(index);
 	}
 
-	public static <O> List<O> sort(List<O> collection,
-			Comparator<? super O> comparator) {
+	/**
+	 * 
+	 */
+	public static <O> List<O> sort(List<O> collection, Comparator<? super O> comparator) {
 		return sort(collection, comparator, false);
 	}
 
-	public static <O> List<O> sort(List<O> collection,
-			Comparator<? super O> comparator, boolean clone) {
+	/**
+	 * 
+	 */
+	public static <O> List<O> sort(List<O> collection, Comparator<? super O> comparator,
+			boolean clone) {
 		if (collection == null)
 			return collection;
 
@@ -96,34 +130,55 @@ public class CollectionUtils extends
 		return collection;
 	}
 
-	public static <O> List<O> sort(Collection<O> collection,
-			Comparator<? super O> comparator) {
+	/**
+	 * 
+	 */
+	public static <O> List<O> sort(Collection<O> collection, Comparator<? super O> comparator) {
 		if (collection == null)
 			return null;
 
 		return sort(new ArrayList<O>(collection), comparator);
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> boolean isEmpty(O[] arr) {
 		return arr == null || arr.length == 0;
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> boolean isNotEmpty(O[] arr) {
 		return !CollectionUtils.isEmpty(arr);
 	}
 
+	/**
+	 * 
+	 */
+	@SuppressWarnings("unchecked")
 	public static <O> List<O> asList(O... a) {
 		return a == null ? new ArrayList<O>() : Arrays.asList(a);
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> boolean isSingular(Collection<O> c) {
 		return safeSize(c) == 1;
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> boolean isSingular(O[] arr) {
 		return safeSize(arr) == 1;
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> List<List<O>> split(List<O> l, int targetSize) {
 		List<List<O>> groups = new ArrayList<List<O>>();
 		for (int i = 0; i < l.size(); i += targetSize) {
@@ -152,7 +207,6 @@ public class CollectionUtils extends
 
 	/**
 	 * Used to return list1 - list2
-	 * 
 	 */
 	public static <T> List<T> subtract(List<T> list1, List<T> list2) {
 		try {
@@ -176,6 +230,11 @@ public class CollectionUtils extends
 		}
 	}
 
+	/**
+	 * @param l
+	 * @param index
+	 * @return
+	 */
 	public static <O> O safeGet(List<O> l, int index) {
 		try {
 			return l.get(index);
@@ -184,6 +243,9 @@ public class CollectionUtils extends
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> O safeRemove(List<O> l, int index) {
 		try {
 			return l.remove(index);
@@ -192,6 +254,9 @@ public class CollectionUtils extends
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> boolean safeAdd(Collection<O> c, O item) {
 		try {
 			return c.add(item);
@@ -200,6 +265,9 @@ public class CollectionUtils extends
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> boolean safeAddAll(Collection<O> c, Collection<O> items) {
 		try {
 			return c.addAll(items);
@@ -208,6 +276,9 @@ public class CollectionUtils extends
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> List<O> safeSubList(List<O> l, int size) {
 		try {
 			if (l.size() < size) {
@@ -220,14 +291,23 @@ public class CollectionUtils extends
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public static int safeSize(Collection<?> c) {
 		return c != null ? c.size() : 0;
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> int safeSize(O[] arr) {
 		return arr != null ? arr.length : 0;
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> boolean contains(O[] a, O e) {
 		if (CollectionUtils.isEmpty(a)) {
 			return false;
@@ -246,10 +326,16 @@ public class CollectionUtils extends
 		return false;
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> boolean doesNotContain(O[] a, O e) {
 		return !contains(a, e);
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> boolean contains(Collection<O> c, O e) {
 		if (CollectionUtils.isEmpty(c)) {
 			return false;
@@ -258,12 +344,17 @@ public class CollectionUtils extends
 		return c.contains(e);
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> boolean doesNotContain(Collection<O> c, O e) {
 		return !contains(c, e);
 	}
 
-	public static <O> boolean contains(Collection<O> c, O e,
-			Comparator<O> comparator) {
+	/**
+	 * 
+	 */
+	public static <O> boolean contains(Collection<O> c, O e, Comparator<O> comparator) {
 		if (CollectionUtils.isNotEmpty(c)) {
 			for (O item : c) {
 				try {
@@ -279,21 +370,31 @@ public class CollectionUtils extends
 		return false;
 	}
 
-	public static <O> boolean doesNotContain(Collection<O> c, O e,
-			Comparator<O> comparator) {
+	/**
+	 * 
+	 */
+	public static <O> boolean doesNotContain(Collection<O> c, O e, Comparator<O> comparator) {
 		return !contains(c, e, comparator);
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> List<O> clone(Collection<O> c) {
 		return c == null ? null : new ArrayList<O>(c);
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> List<O> cloneToEmpty(Collection<O> l) {
 		return l == null ? new ArrayList<O>() : clone(l);
 	}
 
-	public static <O> boolean toggleExistence(Collection<O> c, O e,
-			boolean toggle) {
+	/**
+	 * 
+	 */
+	public static <O> boolean toggleExistence(Collection<O> c, O e, boolean toggle) {
 		if (toggle) {
 			if (CollectionUtils.doesNotContain(c, e)) {
 				return c.add(e);
@@ -307,10 +408,18 @@ public class CollectionUtils extends
 		return false;
 	}
 
+	/**
+	 * 
+	 */
+	@SuppressWarnings("unchecked")
 	public static <O> List<O> concat(Collection<O>... collections) {
 		return concatInto(new ArrayList<O>(), collections);
 	}
 
+	/**
+	 * 
+	 */
+	@SuppressWarnings("unchecked")
 	public static <O, C extends Collection<O>> C concatInto(C concatInto,
 			Collection<O>... collections) {
 		if (CollectionUtils.isNotEmpty(collections)) {
@@ -322,8 +431,10 @@ public class CollectionUtils extends
 		return concatInto;
 	}
 
-	public static <O> void pruneAllThatDoNotExist(final Collection<O> source,
-			Collection<O> subset) {
+	/**
+	 * 
+	 */
+	public static <O> void pruneAllThatDoNotExist(final Collection<O> source, Collection<O> subset) {
 		if (CollectionUtils.isEmpty(subset)) {
 			return;
 		}
@@ -342,10 +453,16 @@ public class CollectionUtils extends
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> List<O> nullAsEmpty(List<O> list) {
 		return (list != null) ? list : new ArrayList<O>();
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> ListIterator<O> getReverseIterator(List<O> list) {
 		if (list != null) {
 			return list.listIterator(list.size());
@@ -354,18 +471,30 @@ public class CollectionUtils extends
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> O getFirstElement(O[] a) {
 		return getElementAt(a, 0);
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> O getLastElement(O[] a) {
 		return getElementAt(a, safeSize(a) - 1);
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> O getRandomElement(O[] a) {
 		return getElementAt(a, random.nextInt(safeSize(a)));
 	}
 
+	/**
+	 * 
+	 */
 	@SuppressWarnings("unchecked")
 	public static <O> O getElementAt(O[] a, int index) {
 		if (isEmpty(a)) {
@@ -379,10 +508,16 @@ public class CollectionUtils extends
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> boolean isNotSingular(O[] arr) {
 		return !isSingular(arr);
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> boolean isNotSingular(Collection<O> c) {
 		return !isSingular(c);
 	}
@@ -407,6 +542,12 @@ public class CollectionUtils extends
 		}
 	}
 
+	/**
+	 * @param l
+	 * @param offset
+	 * @param count
+	 * @return
+	 */
 	public static <O> List<O> safeSubList(List<O> l, int offset, int count) {
 		if (l == null) {
 			return null;
@@ -421,6 +562,9 @@ public class CollectionUtils extends
 		return l.subList(offset, Math.min(offset + count, l.size()));
 	}
 
+	/**
+	 * 
+	 */
 	public static int safeSize(Object object) {
 		try {
 			return CollectionUtils.size(object);
@@ -429,6 +573,9 @@ public class CollectionUtils extends
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> boolean containsAll(Collection<O> c, Collection<O> i) {
 		if (c == null || i == null) {
 			return false;
@@ -443,6 +590,9 @@ public class CollectionUtils extends
 		return true;
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> boolean doesNotContainAll(Collection<O> c, Collection<O> i) {
 		if (c == null || i == null) {
 			return false;
@@ -451,22 +601,37 @@ public class CollectionUtils extends
 		return !containsAll(c, i);
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> Collection<O> nullAsEmpty(Collection<O> c) {
 		return c == null ? new ArrayList<O>() : c;
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> O[] nullAsEmpty(O[] a, O[] empty) {
 		return a == null ? empty : a;
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> List<O> emptyAsNull(List<O> l) {
 		return isEmpty(l) ? null : l;
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> O[] emptyAsNull(O[] a) {
 		return isEmpty(a) ? null : a;
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> List<O> cast(Collection<O> c, Class<O> clazz) {
 		if (c == null) {
 			return null;
@@ -479,6 +644,9 @@ public class CollectionUtils extends
 		return casted;
 	}
 
+	/**
+	 * 
+	 */
 	@SuppressWarnings("unchecked")
 	public static <O> List<O> convert(List<?> list, Class<O> clazz) {
 		if (list == null) {
@@ -496,14 +664,19 @@ public class CollectionUtils extends
 		return converted;
 	}
 
+	/**
+	 * 
+	 */
 	public static <INPUT, OUTPUT> OUTPUT transform(final INPUT source,
 			Transformer<INPUT, OUTPUT> transformer) {
 		return transformer.transform(source);
 
 	}
 
-	public static <INPUT, OUTPUT> List<OUTPUT> transform(
-			final Collection<INPUT> source,
+	/**
+	 * 
+	 */
+	public static <INPUT, OUTPUT> List<OUTPUT> transform(final Collection<INPUT> source,
 			Transformer<INPUT, OUTPUT> transformer) {
 		if (source == null) {
 			return null;
@@ -521,16 +694,20 @@ public class CollectionUtils extends
 		return output;
 	}
 
-	public static <INPUT, OUTPUT> List<OUTPUT> transformAndReduce(
-			final Collection<INPUT> source,
+	/**
+	 * 
+	 */
+	public static <INPUT, OUTPUT> List<OUTPUT> transformAndReduce(final Collection<INPUT> source,
 			Transformer<INPUT, OUTPUT> transformer) {
 		List<OUTPUT> output = transform(source, transformer);
 
 		return stripNull(output);
 	}
 
-	public static <T> Collection<T> each(Collection<T> c,
-			Statement<? super T> statement) {
+	/**
+	 * 
+	 */
+	public static <T> Collection<T> each(Collection<T> c, Statement<? super T> statement) {
 		if (isEmpty(c) || statement == null) {
 			return c;
 		}
@@ -545,6 +722,9 @@ public class CollectionUtils extends
 		return c;
 	}
 
+	/**
+	 * 
+	 */
 	public static <T> Collection<T> each(Collection<T> c,
 			Collection<Statement<? super T>> statements) {
 		if (isEmpty(c) || isEmpty(statements)) {
@@ -565,23 +745,38 @@ public class CollectionUtils extends
 		return c;
 	}
 
-	public static <T> Collection<T> each(Collection<T> c,
-			Statement<? super T>... statements) {
+	/**
+	 * 
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> Collection<T> each(Collection<T> c, Statement<? super T>... statements) {
 		return each(c, Arrays.asList(statements));
 	}
 
+	/**
+	 * 
+	 */
 	public static interface Transformer<INPUT, OUTPUT> {
 		OUTPUT transform(INPUT item);
 	}
 
+	/**
+	 * 
+	 */
 	public static interface Predicate<T> {
 		boolean evaluate(T object);
 	}
 
+	/**
+	 * 
+	 */
 	public static interface Statement<T> {
 		void run(T object);
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> List<O> filter(Collection<O> c, Predicate<O> predicate) {
 		if (c == null || predicate == null) {
 			return null;
@@ -602,6 +797,9 @@ public class CollectionUtils extends
 		return clone;
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> O firstOrDefault(Collection<O> c, Predicate<O> predicate) {
 		if (c == null || predicate == null) {
 			return null;
@@ -620,6 +818,9 @@ public class CollectionUtils extends
 		return null;
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> O singleOrDefault(Collection<O> c, Predicate<O> predicate) {
 		Collection<O> filtered = filter(c, predicate);
 
@@ -629,13 +830,15 @@ public class CollectionUtils extends
 			if (CollectionUtils.isEmpty(filtered)) {
 				return null;
 			} else {
-				throw new RuntimeException(
-						"Expected one or zero results, received: "
-								+ CollectionUtils.safeSize(filtered));
+				throw new RuntimeException("Expected one or zero results, received: "
+						+ CollectionUtils.safeSize(filtered));
 			}
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public static <O> List<O> stripNull(Collection<O> c) {
 		if (c == null) {
 			return null;

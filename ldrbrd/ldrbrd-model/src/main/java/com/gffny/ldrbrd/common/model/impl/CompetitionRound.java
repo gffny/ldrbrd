@@ -21,6 +21,7 @@ import org.joda.time.DateTime;
 
 import com.gffny.ldrbrd.common.model.CommonIDEntity;
 import com.gffny.ldrbrd.common.model.Constant;
+import com.gffny.ldrbrd.common.model.impl.mongo.Course;
 
 /**
  * @author John D. Gaffney | gffny.com

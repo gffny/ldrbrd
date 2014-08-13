@@ -14,6 +14,9 @@
 	</modules>
 
 	<properties>
+
+		<java-version>1.7</java-version>
+
 		<!-- PROJECT DEPEDENDCY VERSION -->
 		<project.version>0.0.1-SNAPSHOT</project.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -45,6 +48,11 @@
 		<joda.time.hibernate>1.3</joda.time.hibernate>
 		<joda.time>2.3</joda.time>
 		<junit.version>4.11</junit.version>
+		
+		<!-- MONGO DB -->
+		<mongodb.version>2.12.3</mongodb.version>
+		<morphia.version>0.108</morphia.version>
+		
 	</properties>
 
 	<dependencies>
@@ -226,4 +234,17 @@
 			<version>${jadira.usertype}</version>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>${java-version}</source>
+					<target>${java-version}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

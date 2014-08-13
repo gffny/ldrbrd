@@ -1,13 +1,11 @@
 package com.gffny.ldrbrd.common.service;
 
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import com.gffny.ldrbrd.common.exception.AuthorizationException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
-import com.gffny.ldrbrd.common.model.impl.GolfClub;
+import com.gffny.ldrbrd.common.model.CommonIDEntity;
 import com.gffny.ldrbrd.common.model.impl.Scorecard;
 
 public interface IScorecardService {
@@ -32,7 +30,7 @@ public interface IScorecardService {
 	 * @return
 	 */
 	public Scorecard startGeneralScorecard(String golferId, String courseId,
-			HashMap<String, String> hashMap, LinkedList<GolfClub> clubList);
+			Map<String, String> hashMap, List<CommonIDEntity> clubList);
 
 	/**
 	 * Create a scorecard for a round played by one golfer, scored by another golfer, on a course,
@@ -46,7 +44,7 @@ public interface IScorecardService {
 	 * @return
 	 */
 	public Scorecard startGeneralScorecard(String golferId, String courseId, int handicap,
-			HashMap<String, String> hashMap, LinkedList<GolfClub> clubList);
+			Map<String, String> hashMap, List<CommonIDEntity> clubList);
 
 	/**
 	 * Create a scorecard for a round played by one golfer, scored by another golfer, on a course
@@ -58,7 +56,7 @@ public interface IScorecardService {
 	 * @return
 	 */
 	public Scorecard startGeneralScorecard(String golferId, String scoreKeeperId, String courseId,
-			HashMap<String, String> hashMap, LinkedList<GolfClub> clubList);
+			Map<String, String> hashMap, List<CommonIDEntity> clubList);
 
 	/**
 	 * Create a scorecard for a round played by one golfer, scored by another golfer, on a course,
@@ -71,7 +69,7 @@ public interface IScorecardService {
 	 * @return
 	 */
 	public Scorecard startGeneralScorecard(String golferId, String scoreKeeperId, String courseId,
-			int handicap, HashMap<String, String> hashMap, LinkedList<GolfClub> clubList);
+			int handicap, Map<String, String> hashMap, List<CommonIDEntity> clubList);
 
 	/**
 	 * Create a scorecard for a competition round
@@ -85,7 +83,7 @@ public interface IScorecardService {
 	 * @throws ServiceException
 	 */
 	public Scorecard startCompetitionScorecard(String golfer, String scoreKeeperId,
-			String competitionId, int roundNumber, LinkedList<GolfClub> clubList)
+			String competitionId, int roundNumber, List<CommonIDEntity> clubList)
 			throws ServiceException;
 
 	/**
@@ -135,7 +133,8 @@ public interface IScorecardService {
 	 * @param scoreKeeperId
 	 * @param competitionId
 	 */
-	public void signScorecard(String scorecardId, String scoreKeeperId, String competitionId);
+	public void signScorecard(String scorecardId, String scoreKeeperId, String competitionId)
+			throws ServiceException;
 
 	/**
 	 * @param golferId
@@ -148,7 +147,7 @@ public interface IScorecardService {
 	 * @throws ServiceException
 	 */
 	public abstract Scorecard startCompetitionScorecard(String golferId, String scoreKeeperId,
-			String competitionId, int roundNumber, LinkedList<GolfClub> clubList,
+			String competitionId, int roundNumber, List<CommonIDEntity> clubList,
 			int competitionHandicap) throws ServiceException;
 
 	/**

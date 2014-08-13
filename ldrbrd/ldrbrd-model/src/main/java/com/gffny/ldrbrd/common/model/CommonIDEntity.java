@@ -6,10 +6,12 @@ package com.gffny.ldrbrd.common.model;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  * @author John D. Gaffney | gffny.com
- * 
  */
 @MappedSuperclass
 public class CommonIDEntity extends CommonEntity {
@@ -22,8 +24,11 @@ public class CommonIDEntity extends CommonEntity {
 	/** */
 	private int id;
 
+	/** */
+	@JsonIgnore
+	private int version;
+
 	/**
-	 * 
 	 * @return
 	 */
 	@Id
@@ -33,10 +38,24 @@ public class CommonIDEntity extends CommonEntity {
 	}
 
 	/**
-	 * 
 	 * @param id
 	 */
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	/**
+	 * @return
+	 */
+	@Transient
+	public int getVersion() {
+		return version;
+	}
+
+	/**
+	 * @param version
+	 */
+	public void setVersion(final int version) {
+		this.version = version;
 	}
 }

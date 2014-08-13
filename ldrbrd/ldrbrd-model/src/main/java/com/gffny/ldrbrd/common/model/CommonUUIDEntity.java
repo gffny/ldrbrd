@@ -3,21 +3,14 @@
  */
 package com.gffny.ldrbrd.common.model;
 
-import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.xml.bind.annotation.XmlElement;
-
-import org.hibernate.validator.constraints.Length;
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Property;
+import org.mongodb.morphia.annotations.Version;
 
 /**
  * @author John D. Gaffney | gffny.com
- * 
  */
-@SuppressWarnings("restriction")
-@MappedSuperclass
 public abstract class CommonUUIDEntity extends CommonEntity {
 
 	/**
@@ -28,8 +21,51 @@ public abstract class CommonUUIDEntity extends CommonEntity {
 	/**
 	 * 
 	 */
-	@XmlElement
-	private String id;
+	@Id
+	@Property("id")
+	private ObjectId objectId;
+
+	/**
+	 * 
+	 */
+	@Version
+	@Property("version")
+	private Long version;
+
+	/**
+	 * 
+	 */
+	public CommonUUIDEntity() {
+
+	}
+
+	/**
+	 * @return
+	 */
+	public ObjectId getId() {
+		return this.objectId;
+	}
+
+	/**
+	 * @param id
+	 */
+	public void setId(final ObjectId id) {
+		this.objectId = id;
+	}
+
+	/**
+	 * @return
+	 */
+	public Long getVersion() {
+		return this.version;
+	}
+
+	/**
+	 * @param version
+	 */
+	public void setVersion(Long version) {
+		this.version = version;
+	}
 
 	/**
 	 * 
@@ -38,7 +74,7 @@ public abstract class CommonUUIDEntity extends CommonEntity {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (id == null ? 0 : id.hashCode());
+		result = prime * result + (objectId == null ? 0 : objectId.hashCode());
 		return result;
 	}
 
@@ -57,42 +93,13 @@ public abstract class CommonUUIDEntity extends CommonEntity {
 			return false;
 		}
 		CommonUUIDEntity other = (CommonUUIDEntity) obj;
-		if (id == null) {
-			if (other.id != null) {
+		if (objectId == null) {
+			if (other.objectId != null) {
 				return false;
 			}
-		} else if (!id.equals(other.id)) {
+		} else if (!objectId.equals(other.objectId)) {
 			return false;
 		}
 		return true;
 	}
-
-	/**
-	 * 
-	 */
-	public CommonUUIDEntity() {
-		if (getId() == null) {
-			id = UUID.randomUUID().toString();
-		}
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	@Id
-	@Length(min = 36, max = 36)
-	@Column(name = Constant.DB_ID_FIELD, nullable = false, length = 36)
-	public String getId() {
-		return id;
-	}
-
-	/**
-	 * 
-	 * @param id
-	 */
-	public void setId(final String id) {
-		this.id = id;
-	}
-
 }

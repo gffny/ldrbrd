@@ -3,8 +3,8 @@ package com.gffny.ldrbrd.common.service;
 import java.util.List;
 
 import com.gffny.ldrbrd.common.exception.ServiceException;
-import com.gffny.ldrbrd.common.model.impl.Club;
-import com.gffny.ldrbrd.common.model.impl.Course;
+import com.gffny.ldrbrd.common.model.impl.mongo.Club;
+import com.gffny.ldrbrd.common.model.impl.mongo.Course;
 
 public interface ICourseClubService {
 

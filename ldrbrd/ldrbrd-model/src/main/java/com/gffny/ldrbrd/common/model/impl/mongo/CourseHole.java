@@ -1,32 +1,40 @@
 /**
  * 
  */
-package com.gffny.ldrbrd.common.model.impl;
+package com.gffny.ldrbrd.common.model.impl.mongo;
+
+import org.mongodb.morphia.annotations.Entity;
 
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
 
 /**
  * @author John D. Gaffney | gffny.com
  */
+@Entity
 public class CourseHole extends CommonUUIDEntity {
 
-	/**
-	 * 
-	 */
+	/** */
 	private static final long serialVersionUID = -2698132847477453497L;
 
+	/** */
 	private String name;
 
+	/** */
 	private int holeDistance;
 
+	/** */
 	private String holeDescription;
 
+	/** */
 	private int holeNumber;
 
+	/** */
 	private String holeImageId;
 
+	/** */
 	private Course course;
 
+	/** */
 	private int holePar;
 
 	/**

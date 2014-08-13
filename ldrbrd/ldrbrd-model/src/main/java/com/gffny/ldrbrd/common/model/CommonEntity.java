@@ -23,7 +23,6 @@ import org.joda.time.DateTime;
  * 
  * @author John D. Gaffney | gffny.com
  */
-@SuppressWarnings("restriction")
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @XmlAccessorType(XmlAccessType.NONE)
@@ -31,10 +30,6 @@ public abstract class CommonEntity implements Serializable {
 
 	/** */
 	private static final long serialVersionUID = -3333711223303385379L;
-
-	/** */
-	@JsonIgnore
-	private int version;
 
 	/** */
 	@JsonIgnore
@@ -71,8 +66,7 @@ public abstract class CommonEntity implements Serializable {
 	private Boolean isObsolete = false;
 
 	/**
-	 * System action due to time expiration or other system rules. In archive,
-	 * not in Active
+	 * System action due to time expiration or other system rules. In archive, not in Active
 	 */
 	@JsonIgnore
 	private Boolean isArchive = false;
@@ -84,27 +78,6 @@ public abstract class CommonEntity implements Serializable {
 	private Boolean isDelete = false;
 
 	/**
-	 * 
-	 * @return
-	 */
-	// @Version
-	// @JsonIgnore
-	// //@Column(name = "vrsn")
-	@Transient
-	public int getVersion() {
-		return version;
-	}
-
-	/**
-	 * 
-	 * @param version
-	 */
-	public void setVersion(final int version) {
-		this.version = version;
-	}
-
-	/**
-	 * 
 	 * @return
 	 */
 	// @JsonIgnore
@@ -115,7 +88,6 @@ public abstract class CommonEntity implements Serializable {
 	}
 
 	/**
-	 * 
 	 * @param createdBy
 	 */
 	public void setCreatedBy(final String createdBy) {
@@ -123,7 +95,6 @@ public abstract class CommonEntity implements Serializable {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	@JsonIgnore
@@ -134,7 +105,6 @@ public abstract class CommonEntity implements Serializable {
 	}
 
 	/**
-	 * 
 	 * @param updatedBy
 	 */
 	public void setUpdatedBy(final String updatedBy) {
@@ -142,7 +112,6 @@ public abstract class CommonEntity implements Serializable {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	@JsonIgnore
@@ -156,7 +125,6 @@ public abstract class CommonEntity implements Serializable {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	@JsonIgnore
@@ -166,7 +134,6 @@ public abstract class CommonEntity implements Serializable {
 	}
 
 	/**
-	 * 
 	 * @param createdDate
 	 */
 	public void setCreatedDate(final Date createdDate) {
@@ -174,7 +141,6 @@ public abstract class CommonEntity implements Serializable {
 	}
 
 	/**
-	 * 
 	 * @param createdDate
 	 */
 	@JsonIgnore
@@ -184,7 +150,6 @@ public abstract class CommonEntity implements Serializable {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	@JsonIgnore
@@ -198,7 +163,6 @@ public abstract class CommonEntity implements Serializable {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	@JsonIgnore
@@ -208,7 +172,6 @@ public abstract class CommonEntity implements Serializable {
 	}
 
 	/**
-	 * 
 	 * @param updatedDate
 	 */
 	public void setUpdatedDate(final Date updatedDate) {
@@ -216,7 +179,6 @@ public abstract class CommonEntity implements Serializable {
 	}
 
 	/**
-	 * 
 	 * @param updateDatedDate
 	 */
 	@JsonIgnore
@@ -226,7 +188,6 @@ public abstract class CommonEntity implements Serializable {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	@JsonIgnore
@@ -237,7 +198,6 @@ public abstract class CommonEntity implements Serializable {
 	}
 
 	/**
-	 * 
 	 * @param isObsolete
 	 */
 	public void setObsolete(final Boolean isObsolete) {
@@ -245,7 +205,6 @@ public abstract class CommonEntity implements Serializable {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	@JsonIgnore
@@ -256,7 +215,6 @@ public abstract class CommonEntity implements Serializable {
 	}
 
 	/**
-	 * 
 	 * @param isArchive
 	 */
 	public void setArchive(final Boolean isArchive) {
@@ -264,7 +222,6 @@ public abstract class CommonEntity implements Serializable {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	@JsonIgnore
@@ -275,7 +232,6 @@ public abstract class CommonEntity implements Serializable {
 	}
 
 	/**
-	 * 
 	 * @param isDelete
 	 */
 	public void setDelete(final Boolean isDelete) {
@@ -316,7 +272,6 @@ public abstract class CommonEntity implements Serializable {
 	}
 
 	/**
-	 * 
 	 * @param syncVersionId
 	 */
 	public void setSyncVersionId(final int syncVersionId) {
@@ -324,7 +279,6 @@ public abstract class CommonEntity implements Serializable {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	@JsonIgnore
@@ -335,7 +289,6 @@ public abstract class CommonEntity implements Serializable {
 	}
 
 	/**
-	 * 
 	 * @param skipCreatedDate
 	 */
 	public void setSkipCreatedDate(final boolean skipCreatedDate) {

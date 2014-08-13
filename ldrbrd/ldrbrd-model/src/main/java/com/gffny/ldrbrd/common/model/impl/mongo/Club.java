@@ -1,24 +1,18 @@
 /**
  * 
  */
-package com.gffny.ldrbrd.common.model.impl;
+package com.gffny.ldrbrd.common.model.impl.mongo;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
-import org.hibernate.annotations.NamedQueries;
-import org.hibernate.annotations.NamedQuery;
+import org.mongodb.morphia.annotations.Entity;
 
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
 
 /**
  * @author John D. Gaffney | gffny.com
- * 
  */
-@NamedQueries({ @NamedQuery(name = Club.FIND_CLUB_BY_CLUB_NAME, query = "SELECT c FROM Club c WHERE c.clubName = :clubName") })
 @Entity
-@Table(name = "t_club")
 public class Club extends CommonUUIDEntity {
 
 	/**
@@ -26,6 +20,9 @@ public class Club extends CommonUUIDEntity {
 	 */
 	private static final long serialVersionUID = -4364295284099333222L;
 
+	/**
+	 * 
+	 */
 	public static final String FIND_CLUB_BY_CLUB_NAME = "findClubByClubName";
 
 	/**
@@ -59,7 +56,6 @@ public class Club extends CommonUUIDEntity {
 	private String proGolferName;
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static Club createClub(String clubName) {
@@ -67,7 +63,6 @@ public class Club extends CommonUUIDEntity {
 	}
 
 	/**
-	 * 
 	 * @param clubName
 	 */
 	public Club(String clubName) {
@@ -82,7 +77,6 @@ public class Club extends CommonUUIDEntity {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	@Column(name = "clb_nm")
@@ -91,7 +85,6 @@ public class Club extends CommonUUIDEntity {
 	}
 
 	/**
-	 * 
 	 * @param clubName
 	 */
 	public void setClubName(String clubName) {
@@ -99,7 +92,6 @@ public class Club extends CommonUUIDEntity {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	@Column(name = "addrss")
@@ -108,7 +100,6 @@ public class Club extends CommonUUIDEntity {
 	}
 
 	/**
-	 * 
 	 * @param address
 	 */
 	public void setAddress(String address) {
@@ -116,7 +107,6 @@ public class Club extends CommonUUIDEntity {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	@Column(name = "mngr_nm")
@@ -125,7 +115,6 @@ public class Club extends CommonUUIDEntity {
 	}
 
 	/**
-	 * 
 	 * @param managerName
 	 */
 	public void setManagerName(String managerName) {
@@ -133,7 +122,6 @@ public class Club extends CommonUUIDEntity {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	@Column(name = "drs_cd_plcy")
@@ -142,7 +130,6 @@ public class Club extends CommonUUIDEntity {
 	}
 
 	/**
-	 * 
 	 * @param dressCodePolicy
 	 */
 	public void setDressCodePolicy(String dressCodePolicy) {
@@ -150,7 +137,6 @@ public class Club extends CommonUUIDEntity {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	@Column(name = "grn_kpr_nm")
@@ -159,7 +145,6 @@ public class Club extends CommonUUIDEntity {
 	}
 
 	/**
-	 * 
 	 * @param greenKeeperName
 	 */
 	public void setGreenKeeperName(String greenKeeperName) {
@@ -167,7 +152,6 @@ public class Club extends CommonUUIDEntity {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	@Column(name = "pro_glfr_nm")
@@ -176,7 +160,6 @@ public class Club extends CommonUUIDEntity {
 	}
 
 	/**
-	 * 
 	 * @param proGolferName
 	 */
 	public void setProGolferName(String proGolferName) {

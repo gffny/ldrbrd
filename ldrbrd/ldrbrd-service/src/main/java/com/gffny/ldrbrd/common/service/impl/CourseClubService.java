@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 
 import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.enums.TeeColour;
-import com.gffny.ldrbrd.common.model.impl.Club;
-import com.gffny.ldrbrd.common.model.impl.Course;
-import com.gffny.ldrbrd.common.model.impl.CourseHole;
+import com.gffny.ldrbrd.common.model.impl.mongo.Club;
+import com.gffny.ldrbrd.common.model.impl.mongo.Course;
+import com.gffny.ldrbrd.common.model.impl.mongo.CourseHole;
 import com.gffny.ldrbrd.common.service.ICourseClubService;
 
 /**
@@ -27,7 +27,7 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 	private static final int EIGHTTEEN_HOLE = 18;
 
 	/** */
-	private static final int NINE_HOLE = 9;
+	// private static final int NINE_HOLE = 9;
 
 	/** The Constant log. */
 	private static final Logger LOG = LoggerFactory.getLogger(CourseClubService.class);
@@ -49,7 +49,7 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 		LOG.debug("getting course with id: {}", courseId);
 		Course course = new Course();
 		course.setClub(new Club());
-		course.setId("abcd-1234-efgh-5678");
+		// course.setId("abcd-1234-efgh-5678");
 		course.setPar(72);
 		course.setCourseName("test course");
 		course.setTeeColour(TeeColour.BLUE);

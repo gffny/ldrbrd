@@ -20,4 +20,11 @@ public interface Constant {
 	public static final String DB_TABLE_COMPETITION_ROUND_SCORE = DB_TABLE_PREFIX
 			+ "competition_round_score";
 
+	public static final String MONGO_DB_CLUB_COLLECTION = DB_TABLE_PREFIX + "club";
+	public static final String MONGO_DB_COURSE_COLLECTION = DB_TABLE_PREFIX + "course";
+	public static final String MONGO_DB_SCORECARD_COLLECTION = DB_TABLE_PREFIX + "scorecard";
+
+	public static final String MONGO_DB_NAME = "ldrbrd";
+	public static final String MONGO_MAP_PACKAGE = "com.gffny.ldrbrd.common.model.impl.mongo";
+
 }

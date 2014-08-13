@@ -24,6 +24,7 @@ import org.joda.time.DateTime;
 
 import com.gffny.ldrbrd.common.model.CommonIDEntity;
 import com.gffny.ldrbrd.common.model.Constant;
+import com.gffny.ldrbrd.common.model.impl.mongo.Course;
 
 /**
  * @author John Gaffney (john@gffny.com) Jul 30, 2012
@@ -109,7 +110,7 @@ public class Scorecard extends CommonIDEntity {
 	private Scorecard(Golfer golfer, Course course, int handicap) {
 		this.golfer = golfer;
 		this.course = course;
-		this.courseDocumentId = course.getId();
+		this.courseDocumentId = course.getId().toString();
 		this.handicap = handicap;
 	}
 

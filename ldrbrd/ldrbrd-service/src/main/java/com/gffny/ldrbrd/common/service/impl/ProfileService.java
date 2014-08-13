@@ -4,11 +4,8 @@
 package com.gffny.ldrbrd.common.service.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +14,12 @@ import org.springframework.stereotype.Service;
 import com.gffny.ldrbrd.common.dao.GenericDao;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
-import com.gffny.ldrbrd.common.model.impl.GolfClub;
 import com.gffny.ldrbrd.common.model.impl.Golfer;
-import com.gffny.ldrbrd.common.model.impl.GolferClubDetail;
 import com.gffny.ldrbrd.common.security.enums.AuthenticationResult;
 import com.gffny.ldrbrd.common.security.token.AuthenticationToken;
 import com.gffny.ldrbrd.common.security.token.impl.EmailPasswordToken;
-import com.gffny.ldrbrd.common.service.IGolfClubService;
 import com.gffny.ldrbrd.common.service.IUserProfileService;
+import com.gffny.ldrbrd.common.utils.QueryUtils;
 
 /**
  * @author John D. Gaffney | gffny.com
@@ -35,17 +30,9 @@ public class ProfileService extends AbstractService implements IUserProfileServi
 	/** The Constant log. */
 	private static final Logger LOG = LoggerFactory.getLogger(ProfileService.class);
 
-	/**
-	 * 
-	 */
+	/** */
 	@Autowired
 	private GenericDao<Golfer> personDao;
-
-	/**
-	 * 
-	 */
-	@Autowired
-	private IGolfClubService golfClubService;
 
 	/*
 	 * (non-Javadoc)
@@ -116,18 +103,9 @@ public class ProfileService extends AbstractService implements IUserProfileServi
 	 */
 	public void createDefaultGolfBagForGolfer(Golfer golfer) throws ServiceException {
 		if (golfer != null) {
-			try {
-				Golfer updatedGolfer = personDao.findById(Golfer.class, golfer.getId());
-				List<GolferClubDetail> defaultGolfBag = new ArrayList<GolferClubDetail>();
-				for (GolfClub gc : golfClubService.getDefaultGolfClubList()) {
-					defaultGolfBag.add(new GolferClubDetail(gc, 0, ""));
-				}
-				updatedGolfer.setGolfBag(defaultGolfBag);
-				personDao.merge(updatedGolfer);
-			} catch (PersistenceException daEx) {
-				LOG.error("error creating default golf bag for golfer id: " + golfer.getId()
-						+ ". Excpt: " + daEx.getMessage());
-			}
+			// TODO fill out the the createDefaultGolfBag method
+			LOG.error("error creating default golf bag for golfer id: {} | Excpt: {}",
+					golfer.getId(), "daEx.getMessage()");
 		}
 	}
 
@@ -138,7 +116,7 @@ public class ProfileService extends AbstractService implements IUserProfileServi
 	 */
 	public Golfer getGolferWithBagByHandle(String golferHandle) throws ServiceException {
 		Golfer Golfer = getGolferByHandle(golferHandle);
-		Hibernate.initialize(Golfer.getGolfBag());
+		// TODO populate the bag list
 		return Golfer;
 	}
 
@@ -148,9 +126,8 @@ public class ProfileService extends AbstractService implements IUserProfileServi
 	 */
 	public Golfer getGolferByHandle(String golferHandle) throws ServiceException {
 		if (golferHandle != null) {
-			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("profileHandle", golferHandle);
-			return namedQuerySingleResultOrNull(personDao, Golfer.FIND_BY_HANDLE, params);
+			return namedQuerySingleResultOrNull(personDao, Golfer.FIND_BY_HANDLE,
+					QueryUtils.paramMap("profileHandle", golferHandle));
 		}
 		LOG.error("error with parameters for method");
 		return null;
@@ -162,9 +139,8 @@ public class ProfileService extends AbstractService implements IUserProfileServi
 	 */
 	public Golfer getGolferByEmail(String golferEmail) throws ServiceException {
 		if (golferEmail != null) {
-			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("emailAddress", golferEmail);
-			return namedQuerySingleResultOrNull(personDao, Golfer.FIND_BY_EMAIL, params);
+			return namedQuerySingleResultOrNull(personDao, Golfer.FIND_BY_EMAIL,
+					QueryUtils.paramMap("emailAddress", golferEmail));
 		}
 		LOG.error("error with parameters for method");
 		return null;

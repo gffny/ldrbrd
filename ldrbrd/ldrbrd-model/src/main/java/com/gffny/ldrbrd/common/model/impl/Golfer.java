@@ -14,6 +14,7 @@ import javax.persistence.Transient;
 
 import com.gffny.ldrbrd.common.model.Constant;
 import com.gffny.ldrbrd.common.model.enums.Dominance;
+import com.gffny.ldrbrd.common.model.impl.mongo.Course;
 
 /**
  * @author
@@ -51,11 +52,6 @@ public class Golfer extends UserProfile {
 	 * 
 	 */
 	private int handicap = 0;
-
-	/**
-	 * 
-	 */
-	private List<GolferClubDetail> golfBag;
 
 	/**
 	 * 
@@ -98,21 +94,6 @@ public class Golfer extends UserProfile {
 	 */
 	public void setHandedness(Dominance handDominance) {
 		this.handDominance = handDominance;
-	}
-
-	/**
-	 * @return
-	 */
-	@Transient
-	public List<GolferClubDetail> getGolfBag() {
-		return this.golfBag;
-	}
-
-	/**
-	 * @param golfBag
-	 */
-	public void setGolfBag(List<GolferClubDetail> golfBag) {
-		this.golfBag = golfBag;
 	}
 
 	/**

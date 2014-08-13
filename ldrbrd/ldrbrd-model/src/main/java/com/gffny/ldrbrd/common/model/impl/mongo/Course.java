@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.gffny.ldrbrd.common.model.impl;
+package com.gffny.ldrbrd.common.model.impl.mongo;
 
 import java.util.List;
 
@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.ForeignKey;
+import org.mongodb.morphia.annotations.Entity;
 
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
 import com.gffny.ldrbrd.common.model.enums.TeeColour;
@@ -20,6 +21,7 @@ import com.gffny.ldrbrd.common.model.enums.TeeColour;
 /**
  * @author John D. Gaffney | gffny.com
  */
+@Entity
 public class Course extends CommonUUIDEntity {
 
 	/**

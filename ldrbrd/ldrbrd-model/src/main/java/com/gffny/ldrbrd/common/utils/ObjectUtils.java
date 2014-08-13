@@ -17,15 +17,20 @@ import org.apache.commons.collections.CollectionUtils;
 
 public class ObjectUtils extends org.apache.commons.lang.ObjectUtils {
 
+	/**
+	 * @param bean
+	 * @return
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 */
 	@SuppressWarnings("unchecked")
-	static public Map<String, Object> describe(Object bean)
-			throws IllegalAccessException, InvocationTargetException,
-			NoSuchMethodException {
+	static public Map<String, Object> describe(Object bean) throws IllegalAccessException,
+			InvocationTargetException, NoSuchMethodException {
 		if (bean == null)
 			return null;
 
-		Map<String, Object> map = (Map<String, Object>) BeanUtils
-				.describe(bean);
+		Map<String, Object> map = (Map<String, Object>) BeanUtils.describe(bean);
 
 		map = new LinkedHashMap<String, Object>(map);
 
@@ -36,11 +41,22 @@ public class ObjectUtils extends org.apache.commons.lang.ObjectUtils {
 		return Collections.unmodifiableMap(map);
 	}
 
+	/**
+	 * @param collection
+	 * @param fetcher
+	 * @return
+	 */
 	static public <T, I> Map<I, T> collectionToMap(Collection<T> collection,
 			PropertyFetcher<I, ? super T> fetcher) {
 		return collectionToMap(collection, fetcher, false);
 	}
 
+	/**
+	 * @param collection
+	 * @param fetcher
+	 * @param skipOnError
+	 * @return
+	 */
 	static public <T, I> Map<I, T> collectionToMap(Collection<T> collection,
 			PropertyFetcher<I, ? super T> fetcher, boolean skipOnError) {
 		Map<I, T> map = new HashMap<I, T>();
@@ -62,6 +78,11 @@ public class ObjectUtils extends org.apache.commons.lang.ObjectUtils {
 		return map;
 	}
 
+	/**
+	 * @param items
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
 	static public <T> T coalesce(T... items) {
 		if (items.length > 0) {
 			for (T item : items) {
@@ -73,8 +94,13 @@ public class ObjectUtils extends org.apache.commons.lang.ObjectUtils {
 		return null;
 	}
 
-	static public <T> int compare(T lhs, T rhs,
-			Collection<Comparator<T>> comparators) {
+	/**
+	 * @param lhs
+	 * @param rhs
+	 * @param comparators
+	 * @return
+	 */
+	static public <T> int compare(T lhs, T rhs, Collection<Comparator<T>> comparators) {
 		if (!CollectionUtils.isEmpty(comparators)) {
 			for (Comparator<T> comparator : comparators) {
 				int result = comparator.compare(lhs, rhs);
@@ -88,12 +114,25 @@ public class ObjectUtils extends org.apache.commons.lang.ObjectUtils {
 		return 0;
 	}
 
+	/**
+	 * @author John D. Gaffney | gffny.com
+	 * @param <I>
+	 * @param <O>
+	 */
 	static abstract public interface PropertyFetcher<I, O> {
 		I fetch(O obj);
 	}
 
+	/**
+	 * 
+	 */
 	static private URLCodec encoder = new URLCodec();
 
+	/**
+	 * @param object
+	 * @return
+	 * @throws Throwable
+	 */
 	static public String base64JsonEncode(Object object) throws Throwable {
 		try {
 			String json = JsonUtils.toJson(object, false);
@@ -105,25 +144,21 @@ public class ObjectUtils extends org.apache.commons.lang.ObjectUtils {
 		}
 	}
 
-	static public <O> O base64JsonDecode(String string, Class<O> type)
-			throws Throwable {
-		try {
-			String base64 = encoder.decode(string);
-			byte[] binaryData = Base64.decodeBase64(base64);
-			String json = new String(binaryData);
-
-			return JsonUtils.fromJson(json, type);
-		} catch (Throwable e) {
-			throw e;
-		}
-	}
-
-	public static <V> Map<String, V> convertToMap(V item,
-			PropertyFetcher<List<String>, V> fetcher) {
+	/**
+	 * @param item
+	 * @param fetcher
+	 * @return
+	 */
+	public static <V> Map<String, V> convertToMap(V item, PropertyFetcher<List<String>, V> fetcher) {
 		List<String> keys = fetcher.fetch(item);
 		return convertToMap(keys, item);
 	}
 
+	/**
+	 * @param keys
+	 * @param item
+	 * @return
+	 */
 	public static <K, V> Map<K, V> convertToMap(List<K> keys, V item) {
 		Map<K, V> map = new HashMap<K, V>();
 

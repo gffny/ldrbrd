@@ -21,8 +21,8 @@ import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.impl.Competition;
 import com.gffny.ldrbrd.common.model.impl.CompetitionEntry;
 import com.gffny.ldrbrd.common.model.impl.CompetitionRound;
-import com.gffny.ldrbrd.common.model.impl.Course;
 import com.gffny.ldrbrd.common.model.impl.Golfer;
+import com.gffny.ldrbrd.common.model.impl.mongo.Course;
 import com.gffny.ldrbrd.common.service.ICompetitionService;
 
 /**

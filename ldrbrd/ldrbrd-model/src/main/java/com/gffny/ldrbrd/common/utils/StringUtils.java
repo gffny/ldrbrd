@@ -1,6 +1,5 @@
 package com.gffny.ldrbrd.common.utils;
 
-import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,7 +13,6 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.WordUtils;
 
@@ -22,14 +20,12 @@ public class StringUtils extends org.apache.commons.lang.StringUtils {
 
 	private static final Pattern URL_PATTERN = Pattern
 			.compile("((((https?|ftp):(//)+)|(www.))+[\\w\\.\\?\\=\\&\\-\\/~:;]*)");
-	private static final Pattern STRIP_TAGS_PATTERN = Pattern
-			.compile("\\<.*?>");
+	private static final Pattern STRIP_TAGS_PATTERN = Pattern.compile("\\<.*?>");
 
 	public static final Comparator<String> STRING_TRIM_IGNORE_COMPARATOR = new Comparator<String>() {
 
 		public int compare(String lhs, String rhs) {
-			return StringUtils.trimToEmpty(lhs).compareToIgnoreCase(
-					StringUtils.trimToEmpty(rhs));
+			return StringUtils.trimToEmpty(lhs).compareToIgnoreCase(StringUtils.trimToEmpty(rhs));
 		}
 	};
 
@@ -162,8 +158,8 @@ public class StringUtils extends org.apache.commons.lang.StringUtils {
 		return sb.toString();
 	}
 
-	public static String join(Map<?, ?> map, String kvSeparator,
-			String iSeparator, String keyIfNull, String valueIfNull) {
+	public static String join(Map<?, ?> map, String kvSeparator, String iSeparator,
+			String keyIfNull, String valueIfNull) {
 		if (map == null) {
 			return null;
 		}
@@ -180,11 +176,8 @@ public class StringUtils extends org.apache.commons.lang.StringUtils {
 	}
 
 	/**
-	 * Searches through a String of text and replace URL patterns with anchor
-	 * tags.
-	 * 
-	 * http://nealvs.wordpress.com/2010/02/18/wrapreplace-url-text-with-anchor-
-	 * tag-with-java-regex/
+	 * Searches through a String of text and replace URL patterns with anchor tags.
+	 * http://nealvs.wordpress.com/2010/02/18/wrapreplace-url-text-with-anchor- tag-with-java-regex/
 	 * 
 	 * @param message
 	 * @return
@@ -210,8 +203,7 @@ public class StringUtils extends org.apache.commons.lang.StringUtils {
 				matcher.appendReplacement(
 						str,
 						Matcher.quoteReplacement("<a href=\"" + linkedUrl
-								+ "\" target=\"_blank\" rel=\"nofollow\">"
-								+ url + "</a>"));
+								+ "\" target=\"_blank\" rel=\"nofollow\">" + url + "</a>"));
 			}
 			matcher.appendTail(str);
 			message = str.toString();
@@ -224,42 +216,6 @@ public class StringUtils extends org.apache.commons.lang.StringUtils {
 			return url;
 
 		return url.replaceFirst("^http", "https");
-	}
-
-	public static String encodeDataNullable(String json) {
-		try {
-			return Base64.encodeBase64String(
-					json.getBytes(Charset.forName("UTF-8"))).replaceAll(
-					"[\\s]*", "");
-		} catch (Throwable e) {
-			return Base64.encodeBase64String(JsonUtils.EMPTY_OBJECT.getBytes());
-		}
-	}
-
-	public static String encodeChartData(String json) {
-		try {
-			return Base64.encodeBase64String(
-					json.getBytes(Charset.forName("UTF-8"))).replaceAll(
-					"[\\s]", "");
-		} catch (Throwable e) {
-			return Base64.encodeBase64String(JsonUtils.EMPTY_ARRAY.getBytes());
-		}
-	}
-
-	public static String encodeChartData(Map<?, ?> data) {
-		try {
-			String json = JsonUtils.toJson(data, false);
-			// return json;
-			return Base64.encodeBase64String(
-					json.getBytes(Charset.forName("UTF-8"))).replaceAll(
-					"[\\s]", "");
-		} catch (Throwable e) {
-			return Base64.encodeBase64String(JsonUtils.EMPTY_OBJECT.getBytes());
-		}
-	}
-
-	public static String encodeChartJson(String json) {
-		return encodeChartData(json);
 	}
 
 	public static String escapeHtml(String html) {
@@ -320,14 +276,11 @@ public class StringUtils extends org.apache.commons.lang.StringUtils {
 	public static String valueOf(Object object, String valueIfNull) {
 		if (object != null) {
 			if (object instanceof Collection<?>) {
-				return "[" + StringUtils.join((Collection<?>) object, ',')
-						+ "]";
+				return "[" + StringUtils.join((Collection<?>) object, ',') + "]";
 			} else if (object instanceof Object[]) {
 				return "[" + StringUtils.join((Object[]) object, ',') + "]";
 			} else if (object instanceof Map<?, ?>) {
-				return "["
-						+ StringUtils.join((Map<?, ?>) object, "=>", ",",
-								"null", "null") + "]";
+				return "[" + StringUtils.join((Map<?, ?>) object, "=>", ",", "null", "null") + "]";
 			} else {
 				return String.valueOf(object);
 			}
@@ -364,11 +317,9 @@ public class StringUtils extends org.apache.commons.lang.StringUtils {
 	}
 
 	/**
-	 * Prepares an input string containing a hyphenated value for display by
-	 * replacing all hyphens with whitespace and capitalizing the first letter
-	 * of the first word.
-	 * 
-	 * ex: 'tomato-basil-soup' becomes Tomato basil soup.
+	 * Prepares an input string containing a hyphenated value for display by replacing all hyphens
+	 * with whitespace and capitalizing the first letter of the first word. ex: 'tomato-basil-soup'
+	 * becomes Tomato basil soup.
 	 * 
 	 * @param hypenatedString
 	 * @return
