@@ -27,4 +27,5 @@ public interface Constant {
 	public static final String MONGO_DB_NAME = "ldrbrd";
 	public static final String MONGO_MAP_PACKAGE = "com.gffny.ldrbrd.common.model.impl.mongo";
 
+	public static final int EIGHTEEN_HOLE = 18;
 }

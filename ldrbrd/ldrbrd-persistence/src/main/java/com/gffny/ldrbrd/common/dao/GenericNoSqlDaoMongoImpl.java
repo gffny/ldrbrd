@@ -4,12 +4,15 @@
 package com.gffny.ldrbrd.common.dao;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Key;
 import org.mongodb.morphia.Morphia;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
@@ -19,7 +22,8 @@ import com.mongodb.MongoClient;
 /**
  * @author John D. Gaffney | gffny.com
  */
-public class GenericDaoMongoImpl<T extends CommonUUIDEntity> implements GenericNoSqlDao<T> {
+@Repository
+public class GenericNoSqlDaoMongoImpl<T extends CommonUUIDEntity> implements GenericNoSqlDao<T> {
 
 	/** */
 	private MongoClient mongoClient;
@@ -31,10 +35,10 @@ public class GenericDaoMongoImpl<T extends CommonUUIDEntity> implements GenericN
 	private Datastore datastore;
 
 	/** */
-	private Logger LOG = LoggerFactory.getLogger(GenericDaoMongoImpl.class);
+	private Logger LOG = LoggerFactory.getLogger(GenericNoSqlDaoMongoImpl.class);
 
 	/** */
-	public GenericDaoMongoImpl() {
+	public GenericNoSqlDaoMongoImpl() {
 		try {
 			// TODO make the mongo connection configurable (almost beanish)
 			mongoClient = new MongoClient("localhost", 27017);
@@ -57,4 +61,36 @@ public class GenericDaoMongoImpl<T extends CommonUUIDEntity> implements GenericN
 		return String.valueOf(key.getId());
 	}
 
+	/**
+	 * @param name
+	 * @return
+	 * @throws PersistenceException
+	 */
+	@SuppressWarnings("hiding")
+	public <T extends CommonUUIDEntity> T findById(Class<T> clazz, String id)
+			throws PersistenceException {
+
+		return datastore.get(clazz, new ObjectId(id));
+	}
+
+	/**
+	 * @param clazz
+	 * @param name
+	 * @return
+	 */
+	@SuppressWarnings("hiding")
+	public <T extends CommonUUIDEntity> T findByName(Class<T> clazz, String name) {
+
+		return datastore.find(clazz).field("name").equal(name).get();
+
+	}
+
+	/**
+	 * 
+	 */
+	@SuppressWarnings("hiding")
+	public <T extends CommonUUIDEntity> List<T> find(Class<T> clazz) throws PersistenceException {
+
+		return datastore.find(clazz).asList();
+	}
 }

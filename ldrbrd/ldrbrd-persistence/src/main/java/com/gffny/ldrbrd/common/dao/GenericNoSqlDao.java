@@ -3,6 +3,8 @@
  */
 package com.gffny.ldrbrd.common.dao;
 
+import java.util.List;
+
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
 
@@ -33,9 +35,17 @@ public interface GenericNoSqlDao<T extends CommonUUIDEntity> {
 	 * @return
 	 * @throws PersistenceException
 	 */
-	// @SuppressWarnings("hiding")
-	// public <T extends CommonUUIDEntity> T findById(Class<T> clazz, String id)
-	// throws PersistenceException;
+	@SuppressWarnings("hiding")
+	public <T extends CommonUUIDEntity> T findById(Class<T> clazz, String id)
+			throws PersistenceException;
+
+	/**
+	 * @param clazz
+	 * @return
+	 * @throws PersistenceException
+	 */
+	@SuppressWarnings("hiding")
+	public <T extends CommonUUIDEntity> List<T> find(Class<T> clazz) throws PersistenceException;
 
 	/**
 	 * @param clazz
@@ -47,7 +57,7 @@ public interface GenericNoSqlDao<T extends CommonUUIDEntity> {
 	// <T extends CommonUUIDEntity> T findById(Class<T> clazz, int id) throws PersistenceException;
 
 	/**
-	 * 1 Find by using a query
+	 * Find by using a query
 	 * 
 	 * @param query
 	 *            query string
@@ -67,4 +77,12 @@ public interface GenericNoSqlDao<T extends CommonUUIDEntity> {
 	// public <T extends CommonUUIDEntity> List<T> findAll(Class<T> clazz) throws
 	// PersistenceException;
 
+	/**
+	 * @param clazz
+	 * @param name
+	 * @return
+	 */
+	@SuppressWarnings("hiding")
+	public <T extends CommonUUIDEntity> T findByName(Class<T> clazz, String name)
+			throws PersistenceException;
 }

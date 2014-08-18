@@ -145,4 +145,21 @@ public class ProfileService extends AbstractService implements IUserProfileServi
 		LOG.error("error with parameters for method");
 		return null;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.gffny.ldrbrd.common.service.IUserProfileService#getGolferById(int)
+	 */
+	public Golfer getGolferById(int id) throws ServiceException {
+		// check param validity
+		if (id > 0) {
+			try {
+				return personDao.findById(Golfer.class, id);
+			} catch (PersistenceException e) {
+				LOG.error(e.getMessage());
+				throw new ServiceException(e);
+			}
+		}
+		throw new ServiceException("invalid parameters for findGolferById. Golfer Id: " + id);
+	}
 }

@@ -3,7 +3,6 @@
  */
 package com.gffny.ldrbrd.common.utils;
 
-import com.gffny.ldrbrd.common.model.enums.Dominance;
 import com.gffny.ldrbrd.common.model.impl.Golfer;
 
 /**
@@ -19,11 +18,8 @@ public class BootStrapUtils extends Object {
 	 */
 	public static Golfer golfer() {
 		Golfer golfer = new Golfer();
-		golfer.setId(0);
-		golfer.setFirstName("John");
-		golfer.setLastName("Gaffney");
+		golfer.setId(1);
 		golfer.setHandicap(23);
-		golfer.setHandedness(Dominance.RIGHT);
 		return golfer;
 	}
 

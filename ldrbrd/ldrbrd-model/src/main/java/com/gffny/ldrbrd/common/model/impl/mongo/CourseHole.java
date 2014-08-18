@@ -17,9 +17,6 @@ public class CourseHole extends CommonUUIDEntity {
 	private static final long serialVersionUID = -2698132847477453497L;
 
 	/** */
-	private String name;
-
-	/** */
 	private int holeDistance;
 
 	/** */
@@ -56,21 +53,6 @@ public class CourseHole extends CommonUUIDEntity {
 		courseHole.setHoleImageId(holeImageId);
 		courseHole.setPar(par);
 		return courseHole;
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(final String name) {
-		this.name = name;
 	}
 
 	/**

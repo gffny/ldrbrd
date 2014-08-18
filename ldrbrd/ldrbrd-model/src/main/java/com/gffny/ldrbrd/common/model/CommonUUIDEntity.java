@@ -35,6 +35,11 @@ public abstract class CommonUUIDEntity extends CommonEntity {
 	/**
 	 * 
 	 */
+	private String name;
+
+	/**
+	 * 
+	 */
 	public CommonUUIDEntity() {
 
 	}
@@ -65,6 +70,20 @@ public abstract class CommonUUIDEntity extends CommonEntity {
 	 */
 	public void setVersion(Long version) {
 		this.version = version;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getName() {
+		return this.name;
+	}
+
+	/**
+	 * @param name
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**

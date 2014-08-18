@@ -3,7 +3,7 @@
  */
 package com.gffny.ldrbrd.common.model.impl.mongo;
 
-import javax.persistence.Column;
+import java.util.List;
 
 import org.mongodb.morphia.annotations.Entity;
 
@@ -24,11 +24,6 @@ public class Club extends CommonUUIDEntity {
 	 * 
 	 */
 	public static final String FIND_CLUB_BY_CLUB_NAME = "findClubByClubName";
-
-	/**
-	 * 
-	 */
-	private String clubName;
 
 	/**
 	 * 
@@ -56,6 +51,11 @@ public class Club extends CommonUUIDEntity {
 	private String proGolferName;
 
 	/**
+	 * 
+	 */
+	private List<Course> courseList;
+
+	/**
 	 * @return
 	 */
 	public static Club createClub(String clubName) {
@@ -66,7 +66,7 @@ public class Club extends CommonUUIDEntity {
 	 * @param clubName
 	 */
 	public Club(String clubName) {
-		this.clubName = clubName;
+		this.setName(clubName);
 	}
 
 	/**
@@ -79,22 +79,20 @@ public class Club extends CommonUUIDEntity {
 	/**
 	 * @return
 	 */
-	@Column(name = "clb_nm")
 	public String getClubName() {
-		return this.clubName;
+		return this.getName();
 	}
 
 	/**
 	 * @param clubName
 	 */
 	public void setClubName(String clubName) {
-		this.clubName = clubName;
+		this.setName(clubName);
 	}
 
 	/**
 	 * @return
 	 */
-	@Column(name = "addrss")
 	public String getAddress() {
 		return this.address;
 	}
@@ -109,7 +107,6 @@ public class Club extends CommonUUIDEntity {
 	/**
 	 * @return
 	 */
-	@Column(name = "mngr_nm")
 	public String getManagerName() {
 		return this.managerName;
 	}
@@ -124,7 +121,6 @@ public class Club extends CommonUUIDEntity {
 	/**
 	 * @return
 	 */
-	@Column(name = "drs_cd_plcy")
 	public String getDressCodePolicy() {
 		return this.dressCodePolicy;
 	}
@@ -139,7 +135,6 @@ public class Club extends CommonUUIDEntity {
 	/**
 	 * @return
 	 */
-	@Column(name = "grn_kpr_nm")
 	public String getGreenKeeperName() {
 		return this.greenKeeperName;
 	}
@@ -154,7 +149,6 @@ public class Club extends CommonUUIDEntity {
 	/**
 	 * @return
 	 */
-	@Column(name = "pro_glfr_nm")
 	public String getProGolferName() {
 		return this.proGolferName;
 	}
@@ -164,5 +158,19 @@ public class Club extends CommonUUIDEntity {
 	 */
 	public void setProGolferName(String proGolferName) {
 		this.proGolferName = proGolferName;
+	}
+
+	/**
+	 * @return
+	 */
+	public List<Course> getCourseList() {
+		return this.courseList;
+	}
+
+	/**
+	 * @param courseList
+	 */
+	public void setCourseList(List<Course> courseList) {
+		this.courseList = courseList;
 	}
 }

@@ -43,11 +43,17 @@ public interface IUserProfileService {
 	 * @param golferHandle
 	 * @return
 	 */
-	public abstract Golfer getGolferWithBagByHandle(String golferHandle) throws ServiceException;
+	public Golfer getGolferWithBagByHandle(String golferHandle) throws ServiceException;
 
 	/**
 	 * @param string
 	 * @return
 	 */
 	public Golfer getGolferByEmail(String string) throws ServiceException;
+
+	/**
+	 * @param id
+	 * @return
+	 */
+	public Golfer getGolferById(int id) throws ServiceException;
 }

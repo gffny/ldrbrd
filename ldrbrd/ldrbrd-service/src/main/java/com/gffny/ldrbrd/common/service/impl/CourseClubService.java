@@ -3,18 +3,18 @@
  */
 package com.gffny.ldrbrd.common.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.gffny.ldrbrd.common.dao.GenericNoSqlDao;
+import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
-import com.gffny.ldrbrd.common.model.enums.TeeColour;
 import com.gffny.ldrbrd.common.model.impl.mongo.Club;
 import com.gffny.ldrbrd.common.model.impl.mongo.Course;
-import com.gffny.ldrbrd.common.model.impl.mongo.CourseHole;
 import com.gffny.ldrbrd.common.service.ICourseClubService;
 
 /**
@@ -23,21 +23,28 @@ import com.gffny.ldrbrd.common.service.ICourseClubService;
 @Service
 public class CourseClubService extends AbstractService implements ICourseClubService {
 
-	/** */
-	private static final int EIGHTTEEN_HOLE = 18;
-
-	/** */
-	// private static final int NINE_HOLE = 9;
-
 	/** The Constant log. */
 	private static final Logger LOG = LoggerFactory.getLogger(CourseClubService.class);
+
+	/** */
+	@Autowired
+	private GenericNoSqlDao<Club> clubDao;
+
+	/** */
+	@Autowired
+	private GenericNoSqlDao<Course> courseDao;
 
 	/*
 	 * (non-Javadoc)
 	 * @see com.gffny.ldrbrd.common.service.impl.ICourseClubService#getClubList()
 	 */
 	public List<Club> getClubList() throws ServiceException {
-		throw new ServiceException();
+		try {
+			return clubDao.find(Club.class);
+		} catch (PersistenceException e) {
+			LOG.error("error retrieving club list from the datastore");
+			return null;
+		}
 	}
 
 	/*
@@ -47,24 +54,18 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 	public Course getCourseById(final String courseId) throws ServiceException {
 
 		LOG.debug("getting course with id: {}", courseId);
-		Course course = new Course();
-		course.setClub(new Club());
-		// course.setId("abcd-1234-efgh-5678");
-		course.setPar(72);
-		course.setCourseName("test course");
-		course.setTeeColour(TeeColour.BLUE);
-		course.setSlopeIndex(123.2);
-		List<CourseHole> courseHoleList = new ArrayList<CourseHole>();
-		for (int i = 1; i <= EIGHTTEEN_HOLE; i++) {
-			CourseHole courseHole = new CourseHole();
-			courseHole.setHoleNumber(i);
-			courseHole.setHoleDistance(300 + (i * 10));
-			courseHole.setHoleDescription("Hole number: " + i);
-			courseHole.setName("Hole number: " + i);
-			courseHoleList.add(courseHole);
+		if (courseId != null) {
+			try {
+				return courseDao.findById(Course.class, courseId);
+			} catch (PersistenceException e) {
+				LOG.error("error retrieving course with id {} from datastore. Exception {}",
+						courseId, e.getMessage());
+				return null;
+			}
+		} else {
+			LOG.error("course id was null");
+			return null;
 		}
-		course.setCourseHoleList(courseHoleList);
-		return course;
 	}
 
 	/*

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
@@ -19,6 +20,10 @@ public class AbstractService {
 
 	/** The Constant log. */
 	static final Logger LOG = LoggerFactory.getLogger(AbstractService.class);
+
+	/** */
+	@Autowired
+	private GenericDao<Golfer> personDao;
 
 	/**
 	 * Utility method to get the non-collection result of a named query (if there is intended to be
@@ -73,11 +78,17 @@ public class AbstractService {
 	/**
 	 * @return
 	 * @throws AuthorizationException
+	 * @throws ServiceException
 	 */
-	protected Golfer getLoggedInGolfer() throws AuthorizationException {
-		// TODO Replace with a call to the security context and the user service to get the actual
-		// logged in golfer
-		return BootStrapUtils.golfer();
+	protected Golfer getLoggedInGolfer() throws AuthorizationException, ServiceException {
+		// TODO replace with real authenticated golfer lookup
+		try {
+			return personDao.findById(Golfer.class, BootStrapUtils.golfer().getId());
+		} catch (PersistenceException e) {
+			LOG.error(e.getMessage());
+			throw new ServiceException(e.getMessage());
+		}
+
 	}
 
 }

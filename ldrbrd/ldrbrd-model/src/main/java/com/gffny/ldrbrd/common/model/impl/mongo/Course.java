@@ -5,14 +5,9 @@ package com.gffny.ldrbrd.common.model.impl.mongo;
 
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
 
-import org.hibernate.annotations.ForeignKey;
 import org.mongodb.morphia.annotations.Entity;
 
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
@@ -28,11 +23,6 @@ public class Course extends CommonUUIDEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = -2501872481702879896L;
-
-	/**
-	 * 
-	 */
-	private String courseName;
 
 	/**
 	 * 
@@ -91,7 +81,7 @@ public class Course extends CommonUUIDEntity {
 	 */
 	private Course(String courseName, Club club, TeeColour teeColour, Double slopeIndex,
 			Integer par, String courseImageReference) {
-		this.courseName = courseName;
+		this.setName(courseName);
 		this.club = club;
 		this.teeColour = teeColour;
 		this.slopeIndex = slopeIndex;
@@ -109,9 +99,8 @@ public class Course extends CommonUUIDEntity {
 	/**
 	 * @return the courseName
 	 */
-	@Column(name = "crs_nm")
 	public String getCourseName() {
-		return courseName;
+		return this.getName();
 	}
 
 	/**
@@ -119,15 +108,12 @@ public class Course extends CommonUUIDEntity {
 	 *            the courseName to set
 	 */
 	public void setCourseName(String courseName) {
-		this.courseName = courseName;
+		this.setName(courseName);
 	}
 
 	/**
 	 * @return the club
 	 */
-	@ManyToOne
-	@JoinColumn(name = "clb_id", nullable = false)
-	@ForeignKey(name = "id")
 	public Club getClub() {
 		return club;
 	}
@@ -143,7 +129,6 @@ public class Course extends CommonUUIDEntity {
 	/**
 	 * @return the teeColour
 	 */
-	@Column(name = "tee_clr")
 	public TeeColour getTeeColour() {
 		return teeColour;
 	}
@@ -159,7 +144,6 @@ public class Course extends CommonUUIDEntity {
 	/**
 	 * @return the slopeIndex
 	 */
-	@Column(name = "slp_indx")
 	public Double getSlopeIndex() {
 		return slopeIndex;
 	}
@@ -175,7 +159,6 @@ public class Course extends CommonUUIDEntity {
 	/**
 	 * @return the par
 	 */
-	@Column(name = "par")
 	public Integer getPar() {
 		return par;
 	}
@@ -191,7 +174,6 @@ public class Course extends CommonUUIDEntity {
 	/**
 	 * @return the courseImageRef
 	 */
-	@Column(name = "crs_img_ref")
 	public String getCourseImageRef() {
 		return courseImageReference;
 	}
@@ -207,7 +189,6 @@ public class Course extends CommonUUIDEntity {
 	/**
 	 * @return
 	 */
-	@Transient
 	public List<CourseHole> getCourseHoleList() {
 		return this.courseHoleList;
 	}
@@ -222,7 +203,6 @@ public class Course extends CommonUUIDEntity {
 	/**
 	 * @return
 	 */
-	@Transient
 	public boolean isNineHole() {
 		return par < 40;
 	}
