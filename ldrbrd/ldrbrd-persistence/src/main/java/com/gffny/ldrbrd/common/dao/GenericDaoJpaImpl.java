@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.model.CommonEntity;
+import com.gffny.ldrbrd.common.model.CommonIDEntity;
 import com.gffny.ldrbrd.common.utils.ClassUtils;
 
 /**
@@ -85,9 +86,16 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	 */
 	@SuppressWarnings("hiding")
 	public <T> T persist(T entity) throws PersistenceException {
-		this.em.persist(entity);
-		LOG.debug("success");
-		return entity;
+		// check params
+		if (entity != null) {
+			LOG.debug("persisting entity sync version");
+			this.em.persist(entity);
+			this.em.flush();
+			LOG.debug("sucessfully persisted entity");
+			return entity;
+		}
+		LOG.error("failed entity merge; entity is null");
+		throw new PersistenceException("failed entity merge; entity is null");
 	}
 
 	/**
@@ -95,7 +103,20 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	 */
 	@SuppressWarnings("hiding")
 	public <T> T merge(T entity) throws PersistenceException {
-		return this.em.merge(entity);
+		// check params
+		if (entity != null) {
+			if (entity instanceof CommonIDEntity) {
+				CommonIDEntity cie = (CommonIDEntity) entity;
+				LOG.debug("mergining entity id: {}. sync version {} ", cie.getId(),
+						cie.getSyncVersionId());
+			}
+			this.em.merge(entity);
+			this.em.flush();
+			LOG.debug("sucessfully merged entity");
+			return entity;
+		}
+		LOG.error("failed entity merge; entity is null");
+		throw new PersistenceException("failed entity merge; entity is null");
 	}
 
 	/**

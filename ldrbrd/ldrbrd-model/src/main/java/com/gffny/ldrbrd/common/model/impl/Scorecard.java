@@ -41,19 +41,13 @@ import com.gffny.ldrbrd.common.model.impl.mongo.Course;
 @Table(name = Constant.DB_TABLE_SCORECARD)
 public class Scorecard extends CommonIDEntity {
 
-	/**
-	 * 
-	 */
+	/** */
 	private static final long serialVersionUID = 641411664200798837L;
 
-	/**
-	 * 
-	 */
+	/** */
 	public static final String FIND_SCORECARD_BY_COMPETITION_ROUND_AND_GOLFER = "findScorecardByCompetitionRoundAndGolfer";
 
-	/**
-	 * 
-	 */
+	/** */
 	public static final String FIND_SCORECARDS_BY_GOLFER_ID = "findScorecardsByGolferId";
 
 	/** */
@@ -273,10 +267,10 @@ public class Scorecard extends CommonIDEntity {
 	@Transient
 	@Override
 	public String toString() {
-		return "Scorecard [golfer=" + golfer + ", courseDocumentId=" + courseDocumentId
-				+ ", course=" + course + ", roundDate=" + roundDate + ", handicap=" + handicap
-				+ ", conditions=" + conditions + ", scorecardNotes=" + scorecardNotes
-				+ ", holeScoreArray=" + holeScoreArray + "]";
+		return "Scorecard [id=" + getId() + ", golfer=" + golfer + ", courseDocumentId="
+				+ courseDocumentId + ", course=" + course + ", roundDate=" + roundDate
+				+ ", handicap=" + handicap + ", conditions=" + conditions + ", scorecardNotes="
+				+ scorecardNotes + ", holeScoreArray=" + holeScoreArray + "]";
 	}
 
 	/** TODO move to a scorecard utils class */

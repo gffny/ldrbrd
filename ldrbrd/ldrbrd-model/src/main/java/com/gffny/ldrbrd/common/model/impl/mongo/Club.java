@@ -33,6 +33,11 @@ public class Club extends CommonUUIDEntity {
 	/**
 	 * 
 	 */
+	private String city;
+
+	/**
+	 * 
+	 */
 	private String managerName;
 
 	/**
@@ -102,6 +107,20 @@ public class Club extends CommonUUIDEntity {
 	 */
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getCity() {
+		return this.city;
+	}
+
+	/**
+	 * @param city
+	 */
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	/**

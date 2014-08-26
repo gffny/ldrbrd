@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gffny.ldrbrd.common.dao.GenericNoSqlDao;
+import com.gffny.ldrbrd.common.dao.mongo.ClubMongoDaoImpl;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.impl.mongo.Club;
@@ -28,7 +29,7 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 
 	/** */
 	@Autowired
-	private GenericNoSqlDao<Club> clubDao;
+	private ClubMongoDaoImpl clubDao;
 
 	/** */
 	@Autowired
@@ -70,11 +71,57 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 
 	/*
 	 * (non-Javadoc)
+	 * @see com.gffny.ldrbrd.common.service.ICourseClubService#listCourseByClub(java.lang.String)
+	 */
+	public List<Course> listCourseByClub(String clubId) throws ServiceException {
+		LOG.debug("listCourseByClub id {}", clubId);
+		try {
+			return clubDao.listCourseByClub(clubId);
+		} catch (PersistenceException e) {
+			LOG.error(e.getMessage());
+			throw new ServiceException(e);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.gffny.ldrbrd.common.service.ICourseClubService#listCourseByCity(java.lang.String)
+	 */
+	public List<Course> listCourseByCity(String city) throws ServiceException {
+		LOG.debug("listCourseByCity id {}", city);
+		try {
+			return clubDao.listCourseByCity(city);
+		} catch (PersistenceException e) {
+			LOG.error(e.getMessage());
+			throw new ServiceException(e);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.gffny.ldrbrd.common.service.ICourseClubService#listCourseByLocation(java.lang.String,
+	 * java.lang.String)
+	 */
+	public List<Course> listCourseByLocation(String lat, String lon) throws ServiceException {
+		LOG.debug("listCourseByLocation: latitude {}, longtitude {}", lat, lon);
+		try {
+			return clubDao.listCourseByLocation(lat, lon);
+		} catch (PersistenceException e) {
+			LOG.error(e.getMessage());
+			throw new ServiceException(e);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * @see com.gffny.ldrbrd.common.service.ICourseClubService#getFavouriteCourseList
 	 * (java.lang.String)
 	 */
-	public List<Course> getFavouriteCourseList(String golferId) throws ServiceException {
-		throw new ServiceException();
+	public List<Course> listCourseByGolferFavourite(String golferId) throws ServiceException {
+		LOG.debug("listCourseByGolferFavourite golferId {}", golferId);
+
+		throw new ServiceException("listCourseByGolferFavourite is not yet implemented");
 	}
 
 	/*
@@ -82,8 +129,10 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 	 * @see com.gffny.ldrbrd.common.service.ICourseClubService#getFavouriteCourseList
 	 * (java.lang.String, int)
 	 */
-	public List<Course> getFavouriteCourseList(String golferId, int favouriteLimit)
+	public List<Course> listCourseByGolferFavourite(String golferId, int favouriteLimit)
 			throws ServiceException {
-		throw new ServiceException();
+		LOG.debug("listCourseByGolferFavourite golferId {}, favouriteLimit", golferId,
+				favouriteLimit);
+		throw new ServiceException("listCourseByGolferFavourite is not yet implemented");
 	}
 }

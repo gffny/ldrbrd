@@ -16,15 +16,39 @@ public interface ICourseClubService {
 
 	/**
 	 * @param id
+	 * @return
+	 * @throws ServiceException
 	 */
 	public abstract Course getCourseById(String id) throws ServiceException;
+
+	/**
+	 * @param clubId
+	 * @return
+	 * @throws ServiceException
+	 */
+	public abstract List<Course> listCourseByClub(String clubId) throws ServiceException;
+
+	/**
+	 * @param city
+	 * @return
+	 * @throws ServiceException
+	 */
+	public abstract List<Course> listCourseByCity(String city) throws ServiceException;
+
+	/**
+	 * @param lat
+	 * @param lon
+	 * @return
+	 */
+	public abstract List<Course> listCourseByLocation(String lat, String lon)
+			throws ServiceException;
 
 	/**
 	 * @param golferId
 	 * @return
 	 * @throws ServiceException
 	 */
-	public abstract List<Course> getFavouriteCourseList(String golferId) throws ServiceException;
+	public abstract List<Course> listCourseByGolferFavourite(String golferId) throws ServiceException;
 
 	/**
 	 * @param golferId
@@ -32,7 +56,7 @@ public interface ICourseClubService {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public abstract List<Course> getFavouriteCourseList(String golferId, int favouriteLimit)
+	public abstract List<Course> listCourseByGolferFavourite(String golferId, int favouriteLimit)
 			throws ServiceException;
 
 }

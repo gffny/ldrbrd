@@ -4,6 +4,8 @@
 package com.gffny.ldrbrd.common.model;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
@@ -32,6 +34,7 @@ public class CommonIDEntity extends CommonEntity {
 	 * @return
 	 */
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = Constant.DB_ID_FIELD)
 	public int getId() {
 		return id;

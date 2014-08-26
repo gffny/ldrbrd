@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -16,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,15 +37,18 @@ import com.gffny.ldrbrd.common.service.IAuthorisationService;
 public class AuthorisationService implements IAuthorisationService, UserDetailsService,
 		AuthenticationProvider {
 
-	private static Logger log = Logger.getLogger(AuthorisationService.class);
+	/** */
+	private static Logger LOG = Logger.getLogger(AuthorisationService.class);
 
+	/** */
 	@Autowired
 	private GenericDao<Golfer> golferDao;
 
-	/*
+	/**
 	 * (non-Javadoc)
+	 * 
 	 * @see com.gffny.ldrbrd.common.service.impl.IAuthorisationService#isPermitted
-	 * (java.lang.String, java.lang.String)
+	 *      (java.lang.String, java.lang.String)
 	 */
 	public boolean isPermitted(String userId, String enterScorecard) {
 		// TODO handle authorisation
@@ -62,22 +67,27 @@ public class AuthorisationService implements IAuthorisationService, UserDetailsS
 			if (golferList != null && golferList.size() == 1) {
 				return new LeaderboardUserDetails(golferList.get(0));
 			} else if (golferList != null && golferList.size() > 1) {
-				log.error("No unique user has been found for user (" + username + ")");
+				LOG.error("No unique user has been found for user (" + username + ")");
 				throw new UsernameNotFoundException("No unique user has been found for user ("
 						+ username + ")");
 			} else if (golferList != null && golferList.size() < 1) {
-				log.error("User (" + username + ") has not been found");
+				LOG.error("User (" + username + ") has not been found");
 				throw new UsernameNotFoundException("User (" + username + ") has not been found");
 			} else {
-				log.error("other issues here");
+				LOG.error("other issues here");
 				throw new UsernameNotFoundException("Other issues!");
 			}
 		} catch (PersistenceException dae) {
-			log.error("User (" + username + ") has not been found");
+			LOG.error("User (" + username + ") has not been found");
 			throw new UsernameNotFoundException("User (" + username + ") has not been found");
 		}
 	}
 
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see org.springframework.security.authentication.AuthenticationProvider#authenticate(org.springframework.security.core.Authentication)
+	 */
 	public Authentication authenticate(Authentication authentication)
 			throws AuthenticationException {
 
@@ -97,21 +107,40 @@ public class AuthorisationService implements IAuthorisationService, UserDetailsS
 				return auth;
 			}
 		} catch (PersistenceException dae) {
-			log.error("User (" + authentication.getName() + ") has not been found");
+			LOG.error("User (" + authentication.getName() + ") has not been found");
 			throw new UsernameNotFoundException("User (" + authentication.getName()
 					+ ") has not been found");
 		}
 		return null;
 	}
 
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see org.springframework.security.authentication.AuthenticationProvider#supports(java.lang.Class)
+	 */
 	public boolean supports(Class<?> authentication) {
 		// TODO add the tokens that are supported
 
 		return false;
 	}
 
-	public void authorize() throws AuthorizationException {
-		// TODO Auto-generated method stub
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gffny.ldrbrd.common.service.IAuthorisationService#authorise(java.lang.String)
+	 */
+	public String authorise(String profileId) throws AuthorizationException {
+		// check params
+		if (StringUtils.isEmpty(profileId)) {
+			// if the profile id is null or empty return the users own profile id
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			auth.getName();
+			auth.getCredentials();
+		} else {
+			// check if the logged in user is authorise to see this profile
 
+		}
+		return null;
 	}
 }

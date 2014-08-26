@@ -22,10 +22,8 @@ public interface IAuthorisationService {
 	/**
 	 * @throws AuthorizationException
 	 */
-	public abstract void authorize() throws AuthorizationException;
+	public abstract String authorise(String profileId) throws AuthorizationException;
 
-	/**
-	 * TODO potentially add new methods to authorize different behaviours, such as society admin
-	 * behaviours, etc.
-	 */
+	// TODO potentially add new methods to authorize different behaviours, such as society admin
+	// behaviours, etc.
 }

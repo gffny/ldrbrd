@@ -229,16 +229,18 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 				Query insert = em.createNativeQuery("insert into " + Constant.DB_TABLE_HOLE_SCORE
 						+ " values (" + scorecardId + ", " + holeNumber + ", " + holeScore + ")");
 				int res = insert.executeUpdate();
-				System.out.println(res);
+				LOG.debug(
+						"inserted the hole score for scorecard {}, hole {}, with score {} : result {}",
+						scorecardId, holeNumber, holeScore, res);
 			case 1:
 				// update
 				Query update = em.createNativeQuery("update " + Constant.DB_TABLE_HOLE_SCORE
 						+ " set score=" + holeScore + " where scorecard_id=" + scorecardId
 						+ " and hole_number=" + holeNumber);
-
 				int updateResult = update.executeUpdate();
-
-				System.out.println(updateResult);
+				LOG.debug(
+						"updated the hole score for scorecard {}, hole {}, with score {} : result {}",
+						scorecardId, holeNumber, holeScore, updateResult);
 			default:
 				// error!
 				// TODO delete all entries and create a new entry?

@@ -32,7 +32,7 @@ public class GenericNoSqlDaoMongoImpl<T extends CommonUUIDEntity> implements Gen
 	private Morphia morphia;
 
 	/** */
-	private Datastore datastore;
+	protected Datastore datastore;
 
 	/** */
 	private Logger LOG = LoggerFactory.getLogger(GenericNoSqlDaoMongoImpl.class);
