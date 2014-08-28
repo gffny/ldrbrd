@@ -28,4 +28,17 @@ public interface Constant {
 	public static final String MONGO_MAP_PACKAGE = "com.gffny.ldrbrd.common.model.impl.mongo";
 
 	public static final int EIGHTEEN_HOLE = 18;
+
+	public static final int PROFILE = 1;
+	public static final int EMAIL = 2;
+	public static final int ADMIN = 3;
+
+	public static final CharSequence EMAIL_AT_SYMBOL = "@";
+
+	public static final String QUERY_PARAM_EMAIL_ADDRESS = "emailAddress";
+	public static final String QUERY_PARAM_PROFILE_HANDLE = "profileHandle";
+
+	/* USER ROLES */
+	public static final String ROLE_GOLFER = "ROLE_GOLFER";
+	public static final String ROLE_USER = "ROLE_USER";
 }

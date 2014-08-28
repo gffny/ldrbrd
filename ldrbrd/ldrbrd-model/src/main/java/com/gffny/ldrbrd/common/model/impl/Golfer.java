@@ -46,7 +46,7 @@ public class Golfer extends UserProfile {
 	/**
 	 * 
 	 */
-	private Dominance handDominance;
+	private Dominance handDominance = Dominance.RIGHT;
 
 	/**
 	 * 

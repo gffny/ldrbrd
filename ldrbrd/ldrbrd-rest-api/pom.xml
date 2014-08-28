@@ -66,6 +66,7 @@
 			<artifactId>spring-aop</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+
 	</dependencies>
 	<build>
 		<finalName>ldrbrd-rest-api</finalName>

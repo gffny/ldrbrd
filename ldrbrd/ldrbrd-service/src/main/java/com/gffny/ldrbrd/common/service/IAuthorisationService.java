@@ -1,9 +1,7 @@
 package com.gffny.ldrbrd.common.service;
 
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
 import com.gffny.ldrbrd.common.exception.AuthorizationException;
+import com.gffny.ldrbrd.common.exception.ServiceException;
 
 public interface IAuthorisationService {
 
@@ -14,15 +12,17 @@ public interface IAuthorisationService {
 	public abstract boolean isPermitted(String userId, String enterScorecard);
 
 	/**
-	 * @see org.springframework.security.core.userdetails.UserDetailsService#loadUserByUsername(java.lang.String)
-	 */
-	public abstract UserDetails loadUserByUsername(String username)
-			throws UsernameNotFoundException;
-
-	/**
+	 * @param profileId
+	 *            - profile on which the currently logged in user is operating or null for their own
+	 *            profile
+	 * @return - the profile id to show/operate
 	 * @throws AuthorizationException
+	 *             - if user isn't authorized
+	 * @throws ServiceException
+	 *             - if there is a service error
 	 */
-	public abstract String authorise(String profileId) throws AuthorizationException;
+	public abstract String authorise(String profileId) throws AuthorizationException,
+			ServiceException;
 
 	// TODO potentially add new methods to authorize different behaviours, such as society admin
 	// behaviours, etc.
