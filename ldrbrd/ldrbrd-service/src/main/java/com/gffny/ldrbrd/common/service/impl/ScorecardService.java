@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
 import com.gffny.ldrbrd.common.dao.GenericNoSqlDao;
-import com.gffny.ldrbrd.common.exception.AuthorizationException;
+import com.gffny.ldrbrd.common.exception.AuthorisationException;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.CommonIDEntity;
@@ -55,6 +55,10 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 
 	/** */
 	@Autowired
+	private ProfileService profileService;
+
+	/** */
+	@Autowired
 	private GenericDao<Scorecard> scorecardDao;
 
 	/** */
@@ -64,33 +68,37 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @throws AuthorizationException
+	 * @throws AuthorisationException
 	 * @throws ServiceException
 	 * @see com.gffny.ldrbrd.common.service.IScorecardService#startGeneralScorecard(int,
 	 *      java.lang.String)
 	 */
 	@Transactional
-	public Scorecard startGeneralScorecard(String courseId) throws AuthorizationException,
+	public Scorecard startGeneralScorecard(String courseId) throws AuthorisationException,
 			ServiceException {
 		// check param
-		if (courseId != null) {
+		if (StringUtils.isNotEmpty(courseId)) {
 			try {
 				// get the course
-				Course courseToPlay = courseClubService.getCourseById(courseId);
+				Course courseToPlay = courseClubService.courseById(courseId);
 				if (courseToPlay != null) {
 					// get the logged in golfer for whom to create the scorecard
-					Golfer golfer = getLoggedInGolfer();
-					if (golfer != null) {
+					if (authorisationService.getLoggedInUser() instanceof Golfer) {
+						Golfer golfer = (Golfer) authorisationService.getLoggedInUser();
 						// persist the new scorecard
 						return scorecardDao.persist(Scorecard.createNewScorecard(golfer,
 								courseToPlay, golfer.getHandicap().intValue()));
 					} else {
-						LOG.error("no golfer is logged in");
+						Golfer golfer = profileService.getGolferByHandle(authorisationService
+								.getLoggedInUser().getProfileHandle());
+						// persist the new scorecard
+						return scorecardDao.persist(Scorecard.createNewScorecard(golfer,
+								courseToPlay, golfer.getHandicap().intValue()));
 					}
 				} else {
 					LOG.error("no course returned for id {}", courseId);
 				}
-			} catch (PersistenceException | AuthorizationException excp) {
+			} catch (PersistenceException | AuthorisationException excp) {
 				LOG.error(excp.getMessage());
 				throw new ServiceException(excp);
 			}

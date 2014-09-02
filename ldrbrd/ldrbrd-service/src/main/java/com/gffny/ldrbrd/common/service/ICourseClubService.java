@@ -2,6 +2,7 @@ package com.gffny.ldrbrd.common.service;
 
 import java.util.List;
 
+import com.gffny.ldrbrd.common.exception.AuthorisationException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.impl.mongo.Club;
 import com.gffny.ldrbrd.common.model.impl.mongo.Course;
@@ -12,14 +13,21 @@ public interface ICourseClubService {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public abstract List<Club> getClubList() throws ServiceException;
+	public abstract List<Club> listClub() throws ServiceException;
+
+	/**
+	 * @param clubId
+	 * @return
+	 * @throws ServiceException
+	 */
+	public Club clubById(String clubId) throws ServiceException;
 
 	/**
 	 * @param id
 	 * @return
 	 * @throws ServiceException
 	 */
-	public abstract Course getCourseById(String id) throws ServiceException;
+	public abstract Course courseById(String id) throws ServiceException;
 
 	/**
 	 * @param clubId
@@ -47,16 +55,26 @@ public interface ICourseClubService {
 	 * @param golferId
 	 * @return
 	 * @throws ServiceException
+	 * @throws AuthorisationException
 	 */
-	public abstract List<Course> listCourseByGolferFavourite(String golferId) throws ServiceException;
+	public abstract List<Course> listCourseByGolferFavourite(String golferId)
+			throws ServiceException, AuthorisationException;
 
 	/**
 	 * @param golferId
 	 * @param favouriteLimit
 	 * @return
 	 * @throws ServiceException
+	 * @throws AuthorisationException
 	 */
 	public abstract List<Course> listCourseByGolferFavourite(String golferId, int favouriteLimit)
-			throws ServiceException;
+			throws ServiceException, AuthorisationException;
+
+	/**
+	 * @return
+	 * @throws ServiceException
+	 * @throws AuthorisationException
+	 */
+	public List<Course> testList() throws ServiceException, AuthorisationException;
 
 }

@@ -18,22 +18,18 @@
 	</bean>
 
 	<security:http authentication-manager-ref="ldbrdAM"
-		access-decision-manager-ref="accessDecisionManager">
+		access-decision-manager-ref="accessDecisionManager" entry-point-ref="ldrbrdRestAuthenticationEntryPoint">
 
 		<security:intercept-url pattern="/rest/health"
 			access="permitAll,IS_AUTHENTICATED_ANONYMOUSLY, ROLE_ANONYMOUS, ROLE_USER, ROLE_ADMIN" />
+
 		<security:intercept-url pattern="/rest/**"
-			access="ROLE_ADMIN" />
+			access="ROLE_GOLFER" />
 
-		<security:form-login login-page="/login.jsp"
-			authentication-failure-url="/denied" username-parameter="username"
-			password-parameter="password" />
+		<security:form-login authentication-success-handler-ref="ldrbrdRestAuthSuccessHandler"
+				authentication-failure-handler-ref="ldrbrdRestAuthFailureHandler" />
 
-		<security:logout invalidate-session="true"
-			logout-success-url="/login.jsp" logout-url="/j_spring_security_logout" />
-
-		<security:access-denied-handler
-			error-page="/denied" />
+		<security:logout />
 
 		<security:session-management
 			invalid-session-url="/login.jsp">
@@ -42,20 +38,15 @@
 		</security:session-management>
 	</security:http>
 
-<!-- 	<security:authentication-manager id="in-memory-auth">
-		<security:authentication-provider>
-			<security:user-service>
-				<security:user name="gffny" password="gffny"
-					authorities="ROLE_GOLFER, ROLE_ADMIN" />
-				<security:user name="mink" password="mink"
-					authorities="ROLE_GOLFER" />
-			</security:user-service>
-		</security:authentication-provider>
-	</security:authentication-manager> -->
-	
+	<bean id="ldrbrdRestAuthSuccessHandler" class="com.gffny.ldrbrd.security.handler.LdrbrdRestAuthenticationSuccessHandler" />
+	<bean id="ldrbrdRestAuthFailureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler" />
+	<bean id="ldrbrdRestAuthenticationEntryPoint" class="com.gffny.ldrbrd.security.entrypoint.LdrbrdRestAuthenticationEntryPoint" />
+
 	<security:authentication-manager id="ldbrdAM">
-		<security:authentication-provider ref="ldrbrdAP"/>
+		<security:authentication-provider
+			ref="ldrbrdAP" />
 	</security:authentication-manager>
-	
-	<bean id="ldrbrdAP" class="com.gffny.ldrbrd.security.provider.LdrbrdAuthenticationProvider" />
+
+	<bean id="ldrbrdAP"
+		class="com.gffny.ldrbrd.security.provider.LdrbrdAuthenticationProvider" />
 </beans>

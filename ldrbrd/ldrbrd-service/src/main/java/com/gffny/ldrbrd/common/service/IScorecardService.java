@@ -3,7 +3,7 @@ package com.gffny.ldrbrd.common.service;
 import java.util.List;
 import java.util.Map;
 
-import com.gffny.ldrbrd.common.exception.AuthorizationException;
+import com.gffny.ldrbrd.common.exception.AuthorisationException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.CommonIDEntity;
 import com.gffny.ldrbrd.common.model.impl.Scorecard;
@@ -14,10 +14,10 @@ public interface IScorecardService {
 	 * @param golferId
 	 * @param courseId
 	 * @return
-	 * @throws AuthorizationException
+	 * @throws AuthorisationException
 	 * @throws ServiceException
 	 */
-	public Scorecard startGeneralScorecard(String courseId) throws AuthorizationException,
+	public Scorecard startGeneralScorecard(String courseId) throws AuthorisationException,
 			ServiceException;
 
 	/**

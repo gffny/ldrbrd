@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
-import com.gffny.ldrbrd.common.exception.AuthorizationException;
+import com.gffny.ldrbrd.common.exception.AuthorisationException;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.impl.CompetitionEntry;
@@ -41,8 +41,11 @@ public class ProfileService extends AbstractService implements IUserProfileServi
 	 * 
 	 * @see com.gffny.ldrbrd.common.service.IUserProfileService#getGolferByHandle (java.lang.String)
 	 */
-	public Golfer getGolferByHandle(String golferHandle) throws ServiceException {
+	public Golfer getGolferByHandle(String golferHandle) throws ServiceException,
+			AuthorisationException {
+
 		if (golferHandle != null) {
+			authorisationService.authorise(golferHandle);
 			return namedQuerySingleResultOrNull(personDao, Golfer.FIND_BY_HANDLE,
 					QueryUtils.paramMap("profileHandle", golferHandle));
 		}
@@ -55,8 +58,11 @@ public class ProfileService extends AbstractService implements IUserProfileServi
 	 * 
 	 * @see com.gffny.ldrbrd.common.service.IUserProfileService#getGolferByEmail(java.lang.String)
 	 */
-	public Golfer getGolferByEmail(String golferEmail) throws ServiceException {
+	public Golfer getGolferByEmail(String golferEmail) throws ServiceException,
+			AuthorisationException {
+
 		if (golferEmail != null) {
+			authorisationService.authorise(golferEmail);
 			return namedQuerySingleResultOrNull(personDao, Golfer.FIND_BY_EMAIL,
 					QueryUtils.paramMap("emailAddress", golferEmail));
 		}
@@ -67,19 +73,20 @@ public class ProfileService extends AbstractService implements IUserProfileServi
 	/**
 	 * (non-Javadoc)
 	 * 
+	 * @throws AuthorisationException
 	 * @see com.gffny.ldrbrd.common.service.IUserProfileService#getGolferById(int)
 	 */
-	public Golfer getGolferById(String id) throws ServiceException {
-		// check param validity
-		if (id != null) {
-			try {
-				return personDao.findById(Golfer.class, Integer.parseInt(id));
-			} catch (PersistenceException | NumberFormatException e) {
-				LOG.error(e.getMessage());
-				throw new ServiceException(e);
-			}
+	public Golfer getGolferById(String id) throws ServiceException, AuthorisationException {
+
+		try {
+			// authorize the user
+			id = authorisationService.authorise(id);
+			return personDao.findById(Golfer.class, Integer.parseInt(id));
+		} catch (PersistenceException | NumberFormatException e) {
+			LOG.error(e.getMessage());
+			throw new ServiceException(e);
 		}
-		throw new ServiceException("invalid parameters for findGolferById. Golfer Id: " + id);
+
 	}
 
 	/**
@@ -87,18 +94,14 @@ public class ProfileService extends AbstractService implements IUserProfileServi
 	 * 
 	 * @see com.gffny.ldrbrd.common.service.IUserProfileService#getDigestById(int)
 	 */
-	public GolferDigestResponse getDigestById(String id) throws AuthorizationException,
+	public GolferDigestResponse getDigestById(String id) throws AuthorisationException,
 			ServiceException {
 
-		// check param validity
-		if (id != null) {
-			GolferDigestResponse digest = new GolferDigestResponse(getGolferById(id));
-			digest.setFavouriteCourseList(new ArrayList<Course>());
-			digest.setLastXScorecardList(new ArrayList<Scorecard>());
-			digest.setUpcomingCompetitionEntryList(new ArrayList<CompetitionEntry>());
-			digest.setUpcomingNonCompetitionRoundList(new ArrayList<CompetitionRound>());
-			return digest;
-		}
-		throw new ServiceException("parameters were invalid");
+		GolferDigestResponse digest = new GolferDigestResponse(getGolferById(id));
+		digest.setFavouriteCourseList(new ArrayList<Course>());
+		digest.setLastXScorecardList(new ArrayList<Scorecard>());
+		digest.setUpcomingCompetitionEntryList(new ArrayList<CompetitionEntry>());
+		digest.setUpcomingNonCompetitionRoundList(new ArrayList<CompetitionRound>());
+		return digest;
 	}
 }

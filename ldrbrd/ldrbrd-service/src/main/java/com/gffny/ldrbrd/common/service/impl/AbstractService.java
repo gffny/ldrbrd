@@ -10,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
-import com.gffny.ldrbrd.common.exception.AuthorizationException;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
-import com.gffny.ldrbrd.common.model.impl.Golfer;
-import com.gffny.ldrbrd.common.utils.BootStrapUtils;
+import com.gffny.ldrbrd.common.service.IAuthorisationService;
 
 public class AbstractService {
 
@@ -23,7 +21,7 @@ public class AbstractService {
 
 	/** */
 	@Autowired
-	private GenericDao<Golfer> personDao;
+	protected IAuthorisationService authorisationService;
 
 	/**
 	 * Utility method to get the non-collection result of a named query (if there is intended to be
@@ -73,22 +71,6 @@ public class AbstractService {
 			}
 		}
 		return paramMap;
-	}
-
-	/**
-	 * @return
-	 * @throws AuthorizationException
-	 * @throws ServiceException
-	 */
-	protected Golfer getLoggedInGolfer() throws AuthorizationException, ServiceException {
-		// TODO replace with real authenticated golfer lookup
-		try {
-			return personDao.findById(Golfer.class, BootStrapUtils.golfer().getId());
-		} catch (PersistenceException e) {
-			LOG.error(e.getMessage());
-			throw new ServiceException(e.getMessage());
-		}
-
 	}
 
 }

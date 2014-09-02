@@ -3,6 +3,9 @@
  */
 package com.gffny.ldrbrd.common.service.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
-import com.gffny.ldrbrd.common.exception.AuthorizationException;
+import com.gffny.ldrbrd.common.exception.AuthorisationException;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.Constant;
@@ -23,10 +26,12 @@ import com.gffny.ldrbrd.common.service.IAuthorisationService;
 import com.gffny.ldrbrd.security.token.LdrbrdAuthenticationToken;
 
 /**
+ * does not extend AbstractService because it is autowired in the AbstractService
+ * 
  * @author John Gaffney (john@gffny.com) Dec 23, 2012
  */
 @Service
-public class AuthorisationService extends AbstractService implements IAuthorisationService {
+public class AuthorisationService implements IAuthorisationService {
 
 	/** */
 	private static Logger LOG = LoggerFactory.getLogger(AuthorisationService.class);
@@ -52,9 +57,10 @@ public class AuthorisationService extends AbstractService implements IAuthorisat
 	 * @throws ServiceException
 	 * @see com.gffny.ldrbrd.common.service.IAuthorisationService#authorise(java.lang.String)
 	 */
-	public String authorise(String profileId) throws AuthorizationException, ServiceException {
+	public String authorise(String profileCharacteristic) throws AuthorisationException,
+			ServiceException {
 		// check params
-		if (StringUtils.isEmpty(profileId)) {
+		if (StringUtils.isEmpty(profileCharacteristic)) {
 			// if the profile id is null or empty return the users own profile id
 			UserProfile user = getLoggedInUser();
 			if (user != null && hasLoggedInUserPrivilege(Constant.ROLE_GOLFER)) {
@@ -66,43 +72,50 @@ public class AuthorisationService extends AbstractService implements IAuthorisat
 			// check if the logged in user is authorise to see this profile
 			if (hasLoggedInUserPrivilege("ROLE_ADMIN")) {
 				LOG.debug("user has admin privilidges");
-				return profileId;
-			} else if (profileId.equalsIgnoreCase(String.valueOf(getLoggedInUser().getId()))) {
+				return profileCharacteristic;
+			} else if (profileCharacteristic.equalsIgnoreCase(String.valueOf(getLoggedInUser()
+					.getId()))
+					|| profileCharacteristic.equalsIgnoreCase(getLoggedInUser().getProfileHandle())
+					|| profileCharacteristic.equalsIgnoreCase(getLoggedInUser().getEmailAddress())) {
 				LOG.debug("user is operating on their own account");
-				return profileId;
+				return profileCharacteristic;
 			}
 			LOG.error("logged in user is not an admin or is not operating on their own account");
-			throw new AuthorizationException(
+			throw new AuthorisationException(
 					"logged in user is not an admin or is not operating on their own account");
 		}
 	}
 
 	/**
-	 * @return
-	 * @throws ServiceException
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gffny.ldrbrd.common.service.IAuthorisationService#getLoggedInUser()
 	 */
 	public UserProfile getLoggedInUser() throws ServiceException {
 		// if the auth token is a LdrbrdToken then return the stored principal otherwise it's
 		// presumed to be a UNamePword token
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (auth instanceof LdrbrdAuthenticationToken) {
+		if (auth != null && auth instanceof LdrbrdAuthenticationToken) {
 			// cast as LdrbrdAuthenticationToken and return the principal
 			return ((LdrbrdAuthenticationToken) auth).getPrincipal();
-		} else {
+		} else if (auth != null) {
 			try {
-				return golferDao.findByNamedQuery(Golfer.FIND_BY_HANDLE,
-						populateParamMap(Constant.QUERY_PARAM_PROFILE_HANDLE, auth.getName()), 1)
-						.get(0);
+				Map<String, String> paramMap = new HashMap<String, String>();
+				paramMap.put(Constant.QUERY_PARAM_PROFILE_HANDLE, auth.getName());
+				return golferDao.findByNamedQuery(Golfer.FIND_BY_HANDLE, paramMap, 1).get(0);
 			} catch (PersistenceException e) {
 				LOG.error("problem retriving golfer from the database with profileHandle: {}",
 						auth.getName());
 				throw new ServiceException(e);
 			}
 		}
+		throw new ServiceException("no user is logged in");
 	}
 
 	/**
-	 * @return
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gffny.ldrbrd.common.service.IAuthorisationService#hasLoggedInUserPrivilege(java.lang.String)
 	 */
 	public boolean hasLoggedInUserPrivilege(String priviledge) {
 		// get the authentication token for the logged in user
