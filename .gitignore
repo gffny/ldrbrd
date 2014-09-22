@@ -31,3 +31,9 @@ deploy/artifact
 
 #Class Files#
 *.class
+
+#Config foler
+ldrbrd-config
+
+#log files
+*.log
