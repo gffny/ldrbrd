@@ -17,6 +17,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
@@ -30,6 +32,7 @@ import com.gffny.ldrbrd.security.token.LdrbrdAuthenticationToken;
 /**
  * @author John D. Gaffney | gffny.com
  */
+@Transactional(readOnly = true, propagation = Propagation.NEVER)
 public class LdrbrdAuthenticationProvider extends AbstractService implements AuthenticationProvider {
 
 	/** */
@@ -45,6 +48,7 @@ public class LdrbrdAuthenticationProvider extends AbstractService implements Aut
 	 * springframework.security.core.Authentication)
 	 */
 	@Override
+	@Transactional(readOnly = true, propagation = Propagation.NEVER)
 	public Authentication authenticate(Authentication authentication)
 			throws AuthenticationException {
 

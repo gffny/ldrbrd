@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
@@ -57,6 +58,7 @@ public class CompetitionService extends AbstractService implements ICompetitionS
 	 * @see com.gffny.ldrbrd.common.service.impl.ICompetitionService#createCompetition
 	 * (java.lang.String)
 	 */
+	@Transactional(value = "lrdbrd_txnMgr", propagation = Propagation.REQUIRED)
 	public Competition createCompetition(String competitionName) throws ServiceException {
 		try {
 
@@ -81,11 +83,46 @@ public class CompetitionService extends AbstractService implements ICompetitionS
 	 * createCompetitionRound(com.gffny.ldrbrd.common.model.impl.Competition,
 	 * org.joda.time.DateTime, java.lang.Integer, com.gffny.ldrbrd.common.model.impl.Course)
 	 */
+	@Transactional(value = "lrdbrd_txnMgr", propagation = Propagation.REQUIRED)
 	public CompetitionRound createCompetitionRound(Competition competition, DateTime roundDate,
 			Integer roundNumber, Course course) throws ServiceException {
 
 		// TODO fix the competition service to createCompetitionRound
 		return new CompetitionRound();
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gffny.ldrbrd.common.service.ICompetitionService#registerGolferForCompetitionWithHandicap(com.gffny.ldrbrd.common.model.impl.Golfer,
+	 *      com.gffny.ldrbrd.common.model.impl.Competition, int)
+	 */
+	@Transactional(value = "lrdbrd_txnMgr", propagation = Propagation.REQUIRED)
+	public CompetitionEntry registerGolferForCompetitionWithHandicap(Golfer golfer,
+			Competition competition, int handicap) throws ServiceException {
+
+		// check if the values are valid
+		if (golfer != null && competition != null && handicap > 0) {
+
+			// TODO fix the competition service to register
+			return new CompetitionEntry();
+
+		}
+		throw new ServiceException("invalid parameter: golfer " + golfer.toString()
+				+ ", competition " + competition.toString() + ", handicap " + handicap);
+	}
+
+	/**
+	 * Uses the golfers handicap to register the golfer in the competition (non-Javadoc)
+	 * 
+	 * @see com.gffny.ldrbrd.common.service.ICompetitionService# registerGolferForCompetition
+	 *      (com.gffny.ldrbrd.common.model.impl.Golfer,
+	 *      com.gffny.ldrbrd.common.model.impl.Competition)
+	 */
+	@Transactional(value = "lrdbrd_txnMgr", propagation = Propagation.REQUIRED)
+	public CompetitionEntry registerGolferForCompetition(Golfer golfer, Competition competition)
+			throws ServiceException {
+		return registerGolferForCompetitionWithHandicap(golfer, competition, golfer.getHandicap());
 	}
 
 	/*
@@ -192,35 +229,4 @@ public class CompetitionService extends AbstractService implements ICompetitionS
 		}
 	}
 
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.gffny.ldrbrd.common.service.ICompetitionService#registerGolferForCompetitionWithHandicap(com.gffny.ldrbrd.common.model.impl.Golfer,
-	 *      com.gffny.ldrbrd.common.model.impl.Competition, int)
-	 */
-	public CompetitionEntry registerGolferForCompetitionWithHandicap(Golfer golfer,
-			Competition competition, int handicap) throws ServiceException {
-
-		// check if the values are valid
-		if (golfer != null && competition != null && handicap > 0) {
-
-			// TODO fix the competition service to register
-			return new CompetitionEntry();
-
-		}
-		throw new ServiceException("invalid parameter: golfer " + golfer.toString()
-				+ ", competition " + competition.toString() + ", handicap " + handicap);
-	}
-
-	/**
-	 * Uses the golfers handicap to register the golfer in the competition (non-Javadoc)
-	 * 
-	 * @see com.gffny.ldrbrd.common.service.ICompetitionService# registerGolferForCompetition
-	 *      (com.gffny.ldrbrd.common.model.impl.Golfer,
-	 *      com.gffny.ldrbrd.common.model.impl.Competition)
-	 */
-	public CompetitionEntry registerGolferForCompetition(Golfer golfer, Competition competition)
-			throws ServiceException {
-		return registerGolferForCompetitionWithHandicap(golfer, competition, golfer.getHandicap());
-	}
 }

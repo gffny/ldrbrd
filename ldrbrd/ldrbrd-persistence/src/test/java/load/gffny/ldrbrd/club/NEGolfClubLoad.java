@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gffny.ldrbrd.common.dao.GenericNoSqlDao;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
+import com.gffny.ldrbrd.common.model.enums.TeeColour;
 import com.gffny.ldrbrd.common.model.impl.mongo.Club;
 import com.gffny.ldrbrd.common.model.impl.mongo.Course;
 import com.gffny.ldrbrd.common.model.impl.mongo.CourseHole;
@@ -55,8 +56,9 @@ public class NEGolfClubLoad {
 
 		Course black = new Course();
 		black.setPar(72);
-		black.setCourseName("Butter Brook GC");
+		black.setCourseName("Butter Brook GC Black");
 		black.setSlopeIndex(128.0);
+		black.setTeeColour(TeeColour.BLACK);
 		List<CourseHole> blackcourseHoleList = new ArrayList<CourseHole>();
 
 		blackcourseHoleList.add(CourseHole.createCourseHole("bbgc black1", 5, 517, 8,
@@ -99,8 +101,9 @@ public class NEGolfClubLoad {
 
 		Course blue = new Course();
 		blue.setPar(72);
-		blue.setCourseName("Butter Brook GC");
+		blue.setCourseName("Butter Brook GC Blue");
 		blue.setSlopeIndex(128.0);
+		blue.setTeeColour(TeeColour.BLUE);
 		List<CourseHole> bluecourseHoleList = new ArrayList<CourseHole>();
 
 		bluecourseHoleList.add(CourseHole.createCourseHole("bbgc blue 1", 5, 507, 8,
@@ -143,8 +146,9 @@ public class NEGolfClubLoad {
 
 		Course white = new Course();
 		white.setPar(72);
-		white.setCourseName("Butter Brook GC");
+		white.setCourseName("Butter Brook GC White");
 		white.setSlopeIndex(128.0);
+		white.setTeeColour(TeeColour.WHITE);
 		List<CourseHole> whitecourseHoleList = new ArrayList<CourseHole>();
 
 		whitecourseHoleList.add(CourseHole.createCourseHole("bbgc white 1", 5, 477, 8,
@@ -187,8 +191,9 @@ public class NEGolfClubLoad {
 
 		Course red = new Course();
 		red.setPar(72);
-		red.setCourseName("Butter Brook GC");
+		red.setCourseName("Butter Brook GC Red");
 		red.setSlopeIndex(128.0);
+		red.setTeeColour(TeeColour.RED);
 		List<CourseHole> redcourseHoleList = new ArrayList<CourseHole>();
 
 		redcourseHoleList.add(CourseHole.createCourseHole("bbgc red1", 5, 408, 8,
@@ -227,8 +232,6 @@ public class NEGolfClubLoad {
 				"Butter Brook GC 17", 17, " "));
 		redcourseHoleList.add(CourseHole.createCourseHole("bbgc red18", 4, 279, 5,
 				"Butter Brook GC 18", 18, " "));
-		red.setCourseHoleList(redcourseHoleList);
-
 		loadClub.setCourseList(Arrays.asList(black, blue, white, red));
 
 		String id = clubDao.persist(loadClub);

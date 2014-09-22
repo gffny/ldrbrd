@@ -17,13 +17,15 @@ import com.gffny.ldrbrd.common.utils.StringUtils;
  * @author John D. Gaffney | gffny.com
  */
 @Repository
-public class CourseMongoDaoImpl extends GenericNoSqlDaoMongoImpl<Course> {
+public class CourseMongoDaoImpl extends GenericNoSqlDaoMongoImpl<Course> implements
+		GenericNoSqlDaoCourse {
 
-	/**
-	 * @param clubId
-	 * @return
-	 * @throws PersistenceException
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.gffny.ldrbrd.common.dao.mongo.GenericNoSqlDaoCourse#listCourseByClub(java.lang.String)
 	 */
+	@Override
 	public List<Course> listCourseByClub(String clubId) throws PersistenceException {
 		// check params
 		if (StringUtils.isNotEmpty(clubId)) {
@@ -33,10 +35,12 @@ public class CourseMongoDaoImpl extends GenericNoSqlDaoMongoImpl<Course> {
 		throw new PersistenceException("clubId cannot be null or empty");
 	}
 
-	/**
-	 * @param string
-	 * @return
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.gffny.ldrbrd.common.dao.mongo.GenericNoSqlDaoCourse#listCourseByCity(java.lang.String)
 	 */
+	@Override
 	public List<Course> listCourseByCity(String city) throws PersistenceException {
 		// check params
 		if (StringUtils.isNotEmpty(city)) {
@@ -46,12 +50,13 @@ public class CourseMongoDaoImpl extends GenericNoSqlDaoMongoImpl<Course> {
 		throw new PersistenceException("city cannot be null or empty");
 	}
 
-	/**
-	 * @param lat
-	 * @param lon
-	 * @return
-	 * @throws PersistenceException
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.gffny.ldrbrd.common.dao.mongo.GenericNoSqlDaoCourse#listCourseByLocation(java.lang.String
+	 * , java.lang.String)
 	 */
+	@Override
 	public List<Course> listCourseByLocation(String lat, String lon) throws PersistenceException {
 		// check params
 		if (StringUtils.isNotEmpty(lat) && StringUtils.isNotEmpty(lon)) {
@@ -61,13 +66,14 @@ public class CourseMongoDaoImpl extends GenericNoSqlDaoMongoImpl<Course> {
 		throw new PersistenceException("city cannot be null or empty");
 	}
 
-	/**
-	 * @return
-	 * @throws PersistenceException
+	/*
+	 * (non-Javadoc)
+	 * @see com.gffny.ldrbrd.common.dao.mongo.GenericNoSqlDaoCourse#testList()
 	 */
+	@Override
 	public List<Course> testList() throws PersistenceException {
-		return this.datastore.createQuery(Course.class).field("name").containsIgnoreCase("test")
-				.asList();
+		return this.datastore.createQuery(Course.class).field("name")
+				.containsIgnoreCase("butter brook").asList();
 	}
 
 }

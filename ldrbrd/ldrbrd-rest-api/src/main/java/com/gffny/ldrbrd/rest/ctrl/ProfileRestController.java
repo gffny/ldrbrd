@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.gffny.ldrbrd.common.exception.AuthorisationException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.web.GolferDigestResponse;
-import com.gffny.ldrbrd.common.model.web.StatusResponse;
 import com.gffny.ldrbrd.common.service.IUserProfileService;
 
 /**
@@ -27,22 +26,14 @@ public class ProfileRestController extends BaseRestController {
 	@Autowired
 	private IUserProfileService profileService;
 
+	/** TODO MOVE THE HEALTH METHOD TO ANOTHER CONTROLLER */
+
 	/**
 	 * default zero-argument constructor
 	 */
 	public ProfileRestController() {
 		// Initializing logging in super class;
 		super(ProfileRestController.class);
-	}
-
-	/**
-	 * @return
-	 */
-	@RequestMapping(value = "/health", produces = { MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE })
-	public ResponseEntity<StatusResponse> healthCheck() {
-		return new ResponseEntity<StatusResponse>(new StatusResponse("200", "alive and kickin'"),
-				HttpStatus.OK);
 	}
 
 	/**
@@ -58,7 +49,7 @@ public class ProfileRestController extends BaseRestController {
 	/**
 	 * @return
 	 */
-	@RequestMapping(value = "/digest", produces = { MediaType.APPLICATION_JSON_VALUE,
+	@RequestMapping(value = "/profile/digest", produces = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<GolferDigestResponse> loadDigest(
 			@RequestParam(value = "id", required = false) String profileId) {

@@ -26,12 +26,13 @@
 		<!-- SPRING DEPEDENDCY VERSION -->
 		<spring.version>4.0.6.RELEASE</spring.version>
 		<spring.security.core.version>3.2.5.RELEASE</spring.security.core.version>
+		<spring.data.version>1.7.0.RELEASE</spring.data.version>
 
 		<!-- LOGGING DEPEDENDCY VERSION -->
 		<slf4j.version>1.7.5</slf4j.version>
 		<logback.version>1.0.13</logback.version>
 		<log4j.version>1.2.17</log4j.version>
-		<log4j.level>DEBUG</log4j.level>
+		<log4j.level>TRACE</log4j.level>
 
 		<commons.codec.version>1.8</commons.codec.version>
 		<commons.beanutils.version>1.8.3</commons.beanutils.version>
@@ -39,14 +40,10 @@
 		<commons.io.version>2.4</commons.io.version>
 
 		<!-- HIBERNATE DEPEDENDCY VERSION -->
-		<hibernate.version>4.2.6.Final</hibernate.version>
-		<hibernate.annotations.version>3.5.6-Final</hibernate.annotations.version>
-		<hibernate.validator.version>5.0.2.Final</hibernate.validator.version>
-		<mysql.connector.version>5.1.26</mysql.connector.version>
-
+		<hibernate.version>4.3.5.Final</hibernate.version>
+		<mysql.connector.version>5.1.30</mysql.connector.version>
 		<jackson.mapper.version>1.9.13</jackson.mapper.version>
 		<jadira.usertype>3.1.0.CR8</jadira.usertype>
-
 		<joda.time.hibernate>1.3</joda.time.hibernate>
 		<joda.time>2.3</joda.time>
 		<junit.version>4.11</junit.version>
@@ -54,54 +51,12 @@
 		<!-- MONGO DB -->
 		<mongodb.version>2.12.3</mongodb.version>
 		<morphia.version>0.108</morphia.version>
-
 		<servlet.api.version>3.1.0</servlet.api.version>
-		
 		<google.code.gson.version>2.2.4</google.code.gson.version>
 
 	</properties>
 
 	<dependencies>
-		<!-- HIBERNATE REQUIRED LIBRARIES -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency>
-
-		<!-- JPA REQUIRED LIBRARY -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>${hibernate.validator.version}</version>
-		</dependency>
-
-		<!-- HIBERNATE C3PO REQUIRED LIBRARY for connection pooling -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-c3p0</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency>
-
-		<!-- HIBERNATE EHCACHE LIBRARY -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-ehcache</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency>
-
-		<!-- MYSQL REQUIRED LIBRARIES -->
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql.connector.version}</version>
-			<scope>runtime</scope>
-		</dependency>
 
 		<!-- LOGGING REQUIRED LIBRARIES -->
 		<dependency>
@@ -138,6 +93,22 @@
 		</dependency>
 
 		<!-- SPRING REQUIRED LIBRARIES -->
+		<!-- for JPA, use hibernate-entitymanager instead of hibernate-core -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
@@ -152,8 +123,8 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
+		</dependency> 
+ 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${spring.version}</version>
@@ -173,10 +144,21 @@
 			<artifactId>spring-tx</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+<!-- 		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>${spring.data.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.hibernate.javax.persistence</groupId>
+					<artifactId>hibernate-jpa-2.0-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency> -->
 		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-			<version>${spring.security.core.version}</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>${spring.version}</version>
 		</dependency>
 
 		<!-- JUNIT TESTING REQUIRED LIBRARIES -->

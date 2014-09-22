@@ -5,12 +5,15 @@ package com.gffny.ldrbrd.common.dao;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
 
 /**
  * @author John D. Gaffney | gffny.com
  */
+@Repository
 public interface GenericNoSqlDao<T extends CommonUUIDEntity> {
 
 	/**
@@ -18,7 +21,6 @@ public interface GenericNoSqlDao<T extends CommonUUIDEntity> {
 	 * @return new object key
 	 * @throws PersistenceException
 	 */
-	@SuppressWarnings("hiding")
 	public <T extends CommonUUIDEntity> String persist(T entity) throws PersistenceException;
 
 	/**

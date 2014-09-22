@@ -33,6 +33,24 @@ public interface GenericDao<T> {
 	public <T> T merge(T entity) throws PersistenceException;
 
 	/**
+	 * Update by using Named query
+	 * 
+	 * @param query
+	 * @param parameters
+	 * @return returns update count - total number of rows updated
+	 */
+	int updateByNamedQuery(String query, Map<String, ?> parameters) throws PersistenceException;
+
+	/**
+	 * Update using query and parameters
+	 * 
+	 * @param query
+	 * @param parameters
+	 * @return returns update count
+	 */
+	int updateByQuery(String query, Map<String, ?> parameters) throws PersistenceException;
+
+	/**
 	 * @param clazz
 	 * @param id
 	 * @return
@@ -101,24 +119,6 @@ public interface GenericDao<T> {
 	 * @return
 	 */
 	List<T> findAll(Class<? extends CommonEntity> clazz) throws PersistenceException;
-
-	/**
-	 * Update by using Named query
-	 * 
-	 * @param query
-	 * @param parameters
-	 * @return returns update count - total number of rows updated
-	 */
-	int updateByNamedQuery(String query, Map<String, ?> parameters) throws PersistenceException;
-
-	/**
-	 * Update using query and parameters
-	 * 
-	 * @param query
-	 * @param parameters
-	 * @return returns update count
-	 */
-	int updateByQuery(String query, Map<String, ?> parameters) throws PersistenceException;
 
 	/**
 	 * @return

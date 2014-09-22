@@ -18,9 +18,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 @MappedSuperclass
 public class CommonIDEntity extends CommonEntity {
 
-	/**
-	 * 
-	 */
+	/** */
 	private static final long serialVersionUID = 9038508401519929600L;
 
 	/** */
@@ -38,6 +36,14 @@ public class CommonIDEntity extends CommonEntity {
 	@Column(name = Constant.DB_ID_FIELD)
 	public int getId() {
 		return id;
+	}
+
+	/**
+	 * @return
+	 */
+	@Transient
+	public String getIdString() {
+		return String.valueOf(id);
 	}
 
 	/**

@@ -80,6 +80,12 @@ public abstract class CommonEntity implements Serializable {
 	/**
 	 * @return
 	 */
+	@Transient
+	public abstract String getIdString();
+
+	/**
+	 * @return
+	 */
 	// @JsonIgnore
 	// //@Column(name = "crtdby")
 	@Transient

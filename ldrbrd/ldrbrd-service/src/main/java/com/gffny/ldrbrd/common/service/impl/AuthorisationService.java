@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
 import com.gffny.ldrbrd.common.exception.AuthorisationException;
@@ -57,6 +58,7 @@ public class AuthorisationService implements IAuthorisationService {
 	 * @throws ServiceException
 	 * @see com.gffny.ldrbrd.common.service.IAuthorisationService#authorise(java.lang.String)
 	 */
+	@Transactional(readOnly = true)
 	public String authorise(String profileCharacteristic) throws AuthorisationException,
 			ServiceException {
 		// check params
@@ -91,6 +93,7 @@ public class AuthorisationService implements IAuthorisationService {
 	 * 
 	 * @see com.gffny.ldrbrd.common.service.IAuthorisationService#getLoggedInUser()
 	 */
+	@Transactional(readOnly = true)
 	public UserProfile getLoggedInUser() throws ServiceException {
 		// if the auth token is a LdrbrdToken then return the stored principal otherwise it's
 		// presumed to be a UNamePword token

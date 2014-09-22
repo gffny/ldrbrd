@@ -29,10 +29,10 @@ public class CourseHole extends CommonUUIDEntity {
 	private String holeImageId;
 
 	/** */
-	private Course course;
+	private int holePar;
 
 	/** */
-	private int holePar;
+	private int holeIndex;
 
 	/**
 	 * @param name
@@ -42,16 +42,16 @@ public class CourseHole extends CommonUUIDEntity {
 	 * @param holeImageId
 	 * @return
 	 */
-	public static CourseHole createCourseHole(Course course, String name, int par, int distance,
+	public static CourseHole createCourseHole(String name, int par, int distance, int index,
 			String description, int holeNumber, String holeImageId) {
 		CourseHole courseHole = new CourseHole();
-		courseHole.setCourse(course);
 		courseHole.setName(name);
 		courseHole.setHoleDistance(distance);
 		courseHole.setHoleDescription(description);
 		courseHole.setHoleNumber(holeNumber);
 		courseHole.setHoleImageId(holeImageId);
 		courseHole.setPar(par);
+		courseHole.setIndex(index);
 		return courseHole;
 	}
 
@@ -123,21 +123,6 @@ public class CourseHole extends CommonUUIDEntity {
 	}
 
 	/**
-	 * @return the course
-	 */
-	public Course getCourse() {
-		return course;
-	}
-
-	/**
-	 * @param course
-	 *            the course to set
-	 */
-	public void setCourse(Course course) {
-		this.course = course;
-	}
-
-	/**
 	 * @return
 	 */
 	public int getPar() {
@@ -149,5 +134,19 @@ public class CourseHole extends CommonUUIDEntity {
 	 */
 	public void setPar(int holePar) {
 		this.holePar = holePar;
+	}
+
+	/**
+	 * @return
+	 */
+	public int getIndex() {
+		return this.holeIndex;
+	}
+
+	/**
+	 * @param par
+	 */
+	public void setIndex(int index) {
+		this.holeIndex = index;
 	}
 }

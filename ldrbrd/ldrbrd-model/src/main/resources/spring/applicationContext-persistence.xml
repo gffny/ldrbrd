@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
-    xmlns:security="http://www.springframework.org/schema/security"
-    xsi:schemaLocation="
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:security="http://www.springframework.org/schema/security" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
         http://www.springframework.org/schema/beans     
         http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
         http://www.springframework.org/schema/context
@@ -14,17 +14,34 @@
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd 
         http://www.springframework.org/schema/tx 
-        http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+        http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd"
+        >
 
-	<context:component-scan base-package="com.gffny.ldrbrd.common.dao" />
+	<context:component-scan base-package="com.gffny.ldrbrd.common.dao,com.gffny.ldrbrd.common.dao.mongo,com.gffny.ldrbrd.common.service.impl" />
+	<context:annotation-config />
+<!-- 
+	<tx:annotation-driven mode="aspectj" transaction-manager="ldrbrd_txnMgr"
+		proxy-target-class="true" />
+	<aop:aspectj-autoproxy proxy-target-class="true"/> -->
+		
+	<bean class="org.springframework.transaction.aspectj.AnnotationTransactionAspect" factory-method="aspectOf">
+	    <property name="transactionManager" ref="ldrbrd_txnMgr"/>
+	</bean>
 
-	<bean id="entityManagerFactory"
+	<bean id="ldrbrd_txnMgr" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="ldrbrd_emf" />
+		<property name="jpaDialect" ref="ldrbrd_jpaDialect" />
+	</bean>
+
+	<bean id="ldrbrd_emf"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		<property name="persistenceXmlLocation" value="classpath*:META-INF/persistence.xml" />
+ 		<property name="persistenceXmlLocation" value="classpath*:META-INF/persistence.xml" />
 		<property name="persistenceUnitName" value="ldrbrd_pu" />
 		<property name="jpaVendorAdapter" ref="ldrbrd_jpaVendorAdapter" />
 		<property name="jpaDialect" ref="ldrbrd_jpaDialect" />
-		<property name="dataSource" ref="ldrbrd_dataSource" />
+ 		<property name="dataSource" ref="ldrbrd_dataSource" />
 	</bean>
 
 	<bean id="ldrbrd_jpaVendorAdapter"
@@ -33,6 +50,12 @@
 		<property name="databasePlatform" value="org.hibernate.dialect.MySQL5Dialect" />
 		<property name="showSql" value="true" />
 	</bean>
+
+	<bean
+		class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+
+	<bean
+		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
 
 	<bean id="ldrbrd_jpaDialect" class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
 
@@ -44,9 +67,4 @@
 		<property name="password" value="password" />
 	</bean>
 
-	<bean id="lrdbrd_txnMgr" class="org.springframework.orm.jpa.JpaTransactionManager">
-		<property name="entityManagerFactory" ref="entityManagerFactory" />
-	</bean>
-
-	<!-- tx:annotation_driven txn_manager=lrdbrd_txnMgr is declared in applicationContext_service.xml -->
 </beans>

@@ -5,12 +5,11 @@ package com.gffny.ldrbrd.common.model.enums;
 
 /**
  * @author John D. Gaffney | gffny.com
- * 
  */
 public enum TeeColour {
 
-	RED("tee.colour.red"), BLUE("tee.colour.blue"), GREEN("tee.colour.green"), WHITE(
-			"tee.colour.white");
+	RED("tee.colour.red"), BLACK("tee.colour.black"), BLUE("tee.colour.blue"), GREEN(
+			"tee.colour.green"), WHITE("tee.colour.white");
 
 	/**
 	 * 
@@ -18,7 +17,6 @@ public enum TeeColour {
 	private String label;
 
 	/**
-	 * 
 	 * @param label
 	 */
 	TeeColour(final String label) {
@@ -26,7 +24,6 @@ public enum TeeColour {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public String getLabel() {

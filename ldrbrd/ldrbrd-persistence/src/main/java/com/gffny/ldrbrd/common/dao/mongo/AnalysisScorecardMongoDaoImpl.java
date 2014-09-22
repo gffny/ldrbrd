@@ -14,9 +14,9 @@ import com.gffny.ldrbrd.common.model.impl.mongo.Club;
  */
 @Transactional
 @Repository
-public class ClubMongoDaoImpl extends GenericNoSqlDaoMongoImpl<Club> {
+public class AnalysisScorecardMongoDaoImpl extends GenericNoSqlDaoMongoImpl<Club> {
 
-	public ClubMongoDaoImpl() {
+	public AnalysisScorecardMongoDaoImpl() {
 		super();
 	}
 

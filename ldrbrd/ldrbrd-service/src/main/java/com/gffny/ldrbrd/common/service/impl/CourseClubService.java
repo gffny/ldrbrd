@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gffny.ldrbrd.common.dao.mongo.ClubMongoDaoImpl;
-import com.gffny.ldrbrd.common.dao.mongo.CourseMongoDaoImpl;
+import com.gffny.ldrbrd.common.dao.GenericNoSqlDao;
+import com.gffny.ldrbrd.common.dao.mongo.GenericNoSqlDaoCourse;
 import com.gffny.ldrbrd.common.exception.AuthorisationException;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
@@ -30,11 +30,11 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 
 	/** */
 	@Autowired
-	private ClubMongoDaoImpl clubDao;
+	private GenericNoSqlDao<Club> clubMongoDaoImpl;
 
 	/** */
 	@Autowired
-	private CourseMongoDaoImpl courseDao;
+	private GenericNoSqlDaoCourse courseMongoDaoImpl;
 
 	/*
 	 * (non-Javadoc)
@@ -42,7 +42,7 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 	 */
 	public Club clubById(String clubId) throws ServiceException {
 		try {
-			return clubDao.findById(Club.class, clubId);
+			return clubMongoDaoImpl.findById(Club.class, clubId);
 		} catch (PersistenceException e) {
 			LOG.error("error retrieving club list from the datastore");
 			return null;
@@ -55,7 +55,7 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 	 */
 	public List<Club> listClub() throws ServiceException {
 		try {
-			return clubDao.find(Club.class);
+			return clubMongoDaoImpl.find(Club.class);
 		} catch (PersistenceException e) {
 			LOG.error("error retrieving club list from the datastore");
 			return null;
@@ -71,7 +71,7 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 		LOG.debug("getting course with id: {}", courseId);
 		if (courseId != null) {
 			try {
-				return courseDao.findById(Course.class, courseId);
+				return courseMongoDaoImpl.findById(Course.class, courseId);
 			} catch (PersistenceException e) {
 				LOG.error("error retrieving course with id {} from datastore. Exception {}",
 						courseId, e.getMessage());
@@ -90,7 +90,7 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 	public List<Course> listCourseByClub(String clubId) throws ServiceException {
 		LOG.debug("listCourseByClub id {}", clubId);
 		try {
-			return courseDao.listCourseByClub(clubId);
+			return courseMongoDaoImpl.listCourseByClub(clubId);
 		} catch (PersistenceException e) {
 			LOG.error(e.getMessage());
 			throw new ServiceException(e);
@@ -104,7 +104,7 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 	public List<Course> listCourseByCity(String city) throws ServiceException {
 		LOG.debug("listCourseByCity id {}", city);
 		try {
-			return courseDao.listCourseByCity(city);
+			return courseMongoDaoImpl.listCourseByCity(city);
 		} catch (PersistenceException e) {
 			LOG.error(e.getMessage());
 			throw new ServiceException(e);
@@ -120,7 +120,7 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 	public List<Course> listCourseByLocation(String lat, String lon) throws ServiceException {
 		LOG.debug("listCourseByLocation: latitude {}, longtitude {}", lat, lon);
 		try {
-			return courseDao.listCourseByLocation(lat, lon);
+			return courseMongoDaoImpl.listCourseByLocation(lat, lon);
 		} catch (PersistenceException e) {
 			LOG.error(e.getMessage());
 			throw new ServiceException(e);
@@ -160,7 +160,7 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 	public List<Course> testList() throws ServiceException, AuthorisationException {
 		LOG.debug("retrieving test course list");
 		try {
-			return courseDao.testList();
+			return courseMongoDaoImpl.testList();
 		} catch (PersistenceException e) {
 			LOG.error(e.getMessage());
 			throw new ServiceException(e);

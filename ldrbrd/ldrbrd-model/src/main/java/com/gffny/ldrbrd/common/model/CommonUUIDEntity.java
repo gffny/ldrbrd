@@ -3,6 +3,8 @@
  */
 package com.gffny.ldrbrd.common.model;
 
+import javax.persistence.Transient;
+
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Property;
@@ -49,6 +51,17 @@ public abstract class CommonUUIDEntity extends CommonEntity {
 	 */
 	public ObjectId getId() {
 		return this.objectId;
+	}
+
+	/**
+	 * @return
+	 */
+	@Transient
+	public String getIdString() {
+		if (this.objectId != null) {
+			return this.objectId.toString();
+		}
+		return null;
 	}
 
 	/**

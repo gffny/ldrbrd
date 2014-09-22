@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.gffny.ldrbrd.common.dao.mongo.CourseMongoDaoImpl;
+import com.gffny.ldrbrd.common.dao.mongo.GenericNoSqlDaoCourse;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.model.impl.mongo.Course;
 
@@ -26,7 +26,7 @@ import com.gffny.ldrbrd.common.model.impl.mongo.Course;
 public class CourseMongoDaoImplTest {
 
 	@Autowired
-	private CourseMongoDaoImpl courseMongoDao;
+	private GenericNoSqlDaoCourse courseMongoDao;
 
 	/**
 	 * @throws java.lang.Exception

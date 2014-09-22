@@ -10,12 +10,15 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
@@ -31,12 +34,15 @@ import com.gffny.ldrbrd.common.model.impl.mongo.AnalysisScorecard;
 import com.gffny.ldrbrd.common.model.impl.mongo.Course;
 import com.gffny.ldrbrd.common.service.ICourseClubService;
 import com.gffny.ldrbrd.common.service.IScorecardService;
+import com.gffny.ldrbrd.common.service.IUserProfileService;
 import com.gffny.ldrbrd.common.utils.AnalysisUtils;
+import com.gffny.ldrbrd.common.utils.DebugUtils;
 import com.gffny.ldrbrd.common.utils.StringUtils;
 
 /**
  * @author John D. Gaffney | gffny.com
  */
+@Transactional(value = "ldrbrd_txnMgr", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = true)
 @Service
 public class ScorecardService extends AbstractService implements IScorecardService {
 
@@ -55,7 +61,7 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 
 	/** */
 	@Autowired
-	private ProfileService profileService;
+	private IUserProfileService profileService;
 
 	/** */
 	@Autowired
@@ -63,7 +69,11 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 
 	/** */
 	@Autowired
-	private GenericNoSqlDao<AnalysisScorecard> analysisScorecardDao;
+	private GenericNoSqlDao<AnalysisScorecard> analysisScorecardMongoDaoImpl;
+
+	/** The em. */
+	@PersistenceContext(unitName = "ldrbrd_pu")
+	private EntityManager em;
 
 	/**
 	 * (non-Javadoc)
@@ -73,12 +83,14 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 * @see com.gffny.ldrbrd.common.service.IScorecardService#startGeneralScorecard(int,
 	 *      java.lang.String)
 	 */
-	@Transactional
+	@Transactional(value = "ldrbrd_txnMgr", propagation = Propagation.REQUIRED)
 	public Scorecard startGeneralScorecard(String courseId) throws AuthorisationException,
 			ServiceException {
 		// check param
 		if (StringUtils.isNotEmpty(courseId)) {
 			try {
+				DebugUtils.transactionRequired("ScorecardService.startGeneralScorecard");
+
 				// get the course
 				Course courseToPlay = courseClubService.courseById(courseId);
 				if (courseToPlay != null) {
@@ -86,8 +98,12 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 					if (authorisationService.getLoggedInUser() instanceof Golfer) {
 						Golfer golfer = (Golfer) authorisationService.getLoggedInUser();
 						// persist the new scorecard
-						return scorecardDao.persist(Scorecard.createNewScorecard(golfer,
-								courseToPlay, golfer.getHandicap().intValue()));
+						Scorecard result = Scorecard.createNewScorecard(golfer, courseToPlay,
+								golfer.getHandicap().intValue());
+						this.em.persist(result);
+						return result;
+						// return scorecardDao.persist(Scorecard.createNewScorecard(golfer,
+						// courseToPlay, golfer.getHandicap().intValue()));
 					} else {
 						Golfer golfer = profileService.getGolferByHandle(authorisationService
 								.getLoggedInUser().getProfileHandle());
@@ -112,7 +128,6 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 * @see com.gffny.ldrbrd.common.service.IScorecardService#startGeneralScorecard
 	 *      (java.lang.String, java.lang.String, java.util.HashMap, java.util.LinkedList)
 	 */
-	@Transactional
 	public Scorecard startGeneralScorecard(String golferId, String courseId,
 			Map<String, String> hashMap, List<CommonIDEntity> clubList) {
 
@@ -126,7 +141,6 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 * @see com.gffny.ldrbrd.common.service.IScorecardService#startGeneralScorecard
 	 *      (java.lang.String, java.lang.String, int, java.util.HashMap, java.util.LinkedList)
 	 */
-	@Transactional
 	public Scorecard startGeneralScorecard(String golferId, String courseId, int handicap,
 			Map<String, String> hashMap, List<CommonIDEntity> clubList) {
 
@@ -141,7 +155,6 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 *      (java.lang.String, java.lang.String, java.lang.String, java.util.HashMap,
 	 *      java.util.LinkedList)
 	 */
-	@Transactional
 	public Scorecard startGeneralScorecard(String golferId, String scoreKeeperId, String courseId,
 			Map<String, String> hashMap, List<CommonIDEntity> clubList) {
 
@@ -156,7 +169,6 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 *      (java.lang.String, java.lang.String, java.lang.String, int, java.util.HashMap,
 	 *      java.util.LinkedList)
 	 */
-	@Transactional
 	public Scorecard startGeneralScorecard(String golferId, String scoreKeeperId, String courseId,
 			int handicap, Map<String, String> hashMap, List<CommonIDEntity> clubList) {
 		return null;
@@ -168,7 +180,6 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 * @see com.gffny.ldrbrd.common.service.IScorecardService#startCompetitionScorecard
 	 *      (java.lang.String, java.lang.String, java.lang.String, int, java.util.LinkedList)
 	 */
-	@Transactional
 	public Scorecard startCompetitionScorecard(String golferId, String scoreKeeperId,
 			String competitionId, int roundNumber, List<CommonIDEntity> clubList)
 			throws ServiceException {
@@ -185,7 +196,6 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 *      startCompetitionScorecard(java.lang.String, java.lang.String, java.lang.String,
 	 *      java.lang.Integer, java.util.LinkedList)
 	 */
-	@Transactional
 	public Scorecard startCompetitionScorecard(String golferId, String scoreKeeperId,
 			String competitionId, int roundNumber, List<CommonIDEntity> clubList,
 			int competitionHandicap) throws ServiceException {
@@ -198,7 +208,6 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 * @see com.gffny.ldrbrd.common.service.IScorecardService#scoreHoleScoreMap(java .lang.String,
 	 *      java.util.Map)
 	 */
-	@Transactional
 	public void scoreHoleScoreMap(int scorecardId, Map<Integer, Integer> holeScoreMap)
 			throws ServiceException {
 
@@ -222,7 +231,6 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 * @see com.gffny.ldrbrd.common.service.IScorecardService#scoreHole(com.gffny
 	 *      .ldrbrd.common.model.impl.HoleScore)
 	 */
-	@Transactional
 	public void scoreHole(int scorecardId, int holeNumber, int holeScore) throws ServiceException {
 		// check hole validity
 		if (holeNumber > 0 && holeScore > 0) {
@@ -265,7 +273,6 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 * @see com.gffny.ldrbrd.common.service.IScorecardService#checkScorecardScoreKeeper
 	 *      (java.lang.String, java.lang.String)
 	 */
-	@Transactional
 	public boolean checkScorecardScoreKeeper(String scorecardId, String scoreKeeperId) {
 
 		// check the parameters
@@ -301,7 +308,6 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 * @see com.gffny.ldrbrd.common.service.IScorecardService#signScorecard(java. lang.String,
 	 *      java.lang.String, java.lang.String)
 	 */
-	@Transactional
 	public void signScorecard(String scorecardId, String scoreKeeperId, String competitionId)
 			throws ServiceException {
 
@@ -311,7 +317,7 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 				// create an analysis scorecard and persist it
 				AnalysisScorecard analysisScorecard = AnalysisUtils.analyseScorecard(scorecardDao
 						.findById(Scorecard.class, scorecardId));
-				analysisScorecardDao.persist(analysisScorecard);
+				analysisScorecardMongoDaoImpl.persist(analysisScorecard);
 			} catch (PersistenceException pex) {
 				LOG.error("error retrieving scorecard for id {}", scorecardId);
 				throw new ServiceException(pex);

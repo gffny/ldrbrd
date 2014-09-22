@@ -35,7 +35,7 @@ public class GenericNoSqlDaoMongoImpl<T extends CommonUUIDEntity> implements Gen
 	protected Datastore datastore;
 
 	/** */
-	private Logger LOG = LoggerFactory.getLogger(GenericNoSqlDaoMongoImpl.class);
+	protected Logger LOG = LoggerFactory.getLogger(GenericNoSqlDaoMongoImpl.class);
 
 	/** */
 	public GenericNoSqlDaoMongoImpl() {

@@ -2,11 +2,16 @@ package com.gffny.ldrbrd.common.service;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.gffny.ldrbrd.common.exception.AuthorisationException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.impl.mongo.Club;
 import com.gffny.ldrbrd.common.model.impl.mongo.Course;
 
+@Transactional(value = "ldrbrd_txnMgr", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = true)
 public interface ICourseClubService {
 
 	/**
