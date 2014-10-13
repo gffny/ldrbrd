@@ -7,10 +7,16 @@ import com.gffny.ldrbrd.common.model.impl.UserProfile;
 public interface IAuthorisationService {
 
 	/**
-	 * @see com.gffny.ldrbrd.common.service.leaderboard.service.IAuthorisationService#isPermitted(java.lang.String,
-	 *      java.lang.String)
+	 * Check that the user (with userId) has privileges to update the scorecard (with scorecardId).
+	 * Rules: non-competition scorecard: user is the player. competition scorecard: user is the
+	 * scorer, the competition organiser, or organising society admin. society scorecard: user is
+	 * the player, or organising society admin
+	 * 
+	 * @param userId
+	 * @param enterScorecard
+	 * @return
 	 */
-	public abstract boolean isPermitted(String userId, String enterScorecard);
+	public abstract boolean isPermitted(String userId, String scorecardId);
 
 	/**
 	 * @param profileId

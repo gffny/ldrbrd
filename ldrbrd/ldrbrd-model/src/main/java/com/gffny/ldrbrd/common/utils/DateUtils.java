@@ -47,8 +47,12 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 	public static final FastDateFormat CHART_DATE_FORMAT = FastDateFormat.getInstance("MM/dd/yyyy");
 
 	public static final FastDateFormat MYSQL_DATE_FORMAT = FastDateFormat.getInstance("yyyy-MM-dd");
-	
-	public static final FastDateFormat LOG_DATE_FORMAT = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
+
+	public static final FastDateFormat LOG_DATE_FORMAT = FastDateFormat
+			.getInstance("yyyy-MM-dd HH:mm:ss");
+
+	public static final FastDateFormat SIGNATURE_DATE_FORMAT = FastDateFormat
+			.getInstance("yyyy-MM-dd_HH:mm:ss");
 
 	public static final int DAYS_PER_WEEK = 7;
 
@@ -57,7 +61,7 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 	private static String YEAR = "year";
 
 	public static final Comparator<Date> SAME_DAY_COMPARATOR = new Comparator<Date>() {
-		
+
 		public int compare(Date lhs, Date rhs) {
 			if (DateUtils.isSameDay(lhs, rhs)) {
 				return 0;
@@ -82,10 +86,9 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 	 * <p>
 	 * Checks if two date objects are in the same year ignoring time.
 	 * </p>
-	 * 
 	 * <p>
-	 * 28 Mar 2002 13:45 and 12 Mar 2002 06:01 would return true. 28 Mar 2002
-	 * 13:45 and 12 Mar 2005 02:45 would return false.
+	 * 28 Mar 2002 13:45 and 12 Mar 2002 06:01 would return true. 28 Mar 2002 13:45 and 12 Mar 2005
+	 * 02:45 would return false.
 	 * </p>
 	 * 
 	 * @param date1
@@ -112,10 +115,9 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 	 * <p>
 	 * Checks if two calendar objects are in the same year ignoring time.
 	 * </p>
-	 * 
 	 * <p>
-	 * 28 Mar 2002 13:45 and 12 Mar 2002 06:01 would return true. 28 Mar 2002
-	 * 13:45 and 12 Mar 2005 02:45 would return false.
+	 * 28 Mar 2002 13:45 and 12 Mar 2002 06:01 would return true. 28 Mar 2002 13:45 and 12 Mar 2005
+	 * 02:45 would return false.
 	 * </p>
 	 * 
 	 * @param cal1
@@ -131,8 +133,8 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 		if (cal1 == null || cal2 == null) {
 			throw new IllegalArgumentException("The calendar must not be null");
 		}
-		return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) && cal1
-				.get(Calendar.YEAR) == cal2.get(Calendar.YEAR));
+		return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) && cal1.get(Calendar.YEAR) == cal2
+				.get(Calendar.YEAR));
 	}
 
 	public static boolean safeIsSameDay(Date date1, Date date2) {
@@ -152,8 +154,8 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 	}
 
 	/**
-	 * Useful for determining if a date is between the start and end date (or
-	 * effective and expiration date).
+	 * Useful for determining if a date is between the start and end date (or effective and
+	 * expiration date).
 	 * 
 	 * @param startDate
 	 * @param endDate
@@ -168,8 +170,7 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 				DateUtils.addDays(endDate, 1));
 	}
 
-	public static boolean isDateNotInRange(Date date, Date startDate,
-			Date endDate) {
+	public static boolean isDateNotInRange(Date date, Date startDate, Date endDate) {
 		return !isDateInRange(date, startDate, endDate);
 	}
 
@@ -191,8 +192,7 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 		return true;
 	}
 
-	public static boolean isDateInRangeOrNull(Date date, Date startDate,
-			Date endDate) {
+	public static boolean isDateInRangeOrNull(Date date, Date startDate, Date endDate) {
 		if (date == null) {
 			return false;
 		}
@@ -217,8 +217,7 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 			return false;
 		}
 
-		Date today = DateUtils.truncate(Calendar.getInstance(), Calendar.DATE)
-				.getTime();
+		Date today = DateUtils.truncate(Calendar.getInstance(), Calendar.DATE).getTime();
 		if (date.after(today)) {
 			return true;
 		}
@@ -235,8 +234,7 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 			return false;
 		}
 
-		Date today = DateUtils.truncate(Calendar.getInstance(), Calendar.DATE)
-				.getTime();
+		Date today = DateUtils.truncate(Calendar.getInstance(), Calendar.DATE).getTime();
 		if (date.before(today)) {
 			return true;
 		}
@@ -281,8 +279,7 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 	}
 
 	public static boolean isAfterToday(Date date) {
-		return DateUtils.isAfter(new Date(), date)
-				&& DateUtils.isNotToday(date);
+		return DateUtils.isAfter(new Date(), date) && DateUtils.isNotToday(date);
 	}
 
 	public static boolean isYesterday(Date date) {
@@ -313,8 +310,7 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 		DateTime dt = new DateTime(date);
 		DateTime current = new DateTime();
 
-		return dt.getYear() == current.getYear()
-				&& dt.getMonthOfYear() == current.getMonthOfYear();
+		return dt.getYear() == current.getYear() && dt.getMonthOfYear() == current.getMonthOfYear();
 	}
 
 	public static boolean isThisYear(Date date) {
@@ -346,23 +342,12 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 	}
 
 	/*
-	 * public static Date maxNotNull(Date... dates) { Date max = null;
-	 * 
-	 * if (CollectionUtils.isNotEmpty(dates)) { for (Date date : dates) { if
-	 * (date == null) continue;
-	 * 
-	 * if (max == null || date.after(max)) { max = date; } } }
-	 * 
-	 * return clone(max); }
-	 * 
-	 * public static Date minNotNull(Date... dates) { Date min = null;
-	 * 
-	 * if (CollectionUtils.isNotEmpty(dates)) { for (Date date : dates) { if
-	 * (date == null) { continue; }
-	 * 
-	 * if (min == null || date.before(min)) { min = date; } } }
-	 * 
-	 * return clone(min); }
+	 * public static Date maxNotNull(Date... dates) { Date max = null; if
+	 * (CollectionUtils.isNotEmpty(dates)) { for (Date date : dates) { if (date == null) continue;
+	 * if (max == null || date.after(max)) { max = date; } } } return clone(max); } public static
+	 * Date minNotNull(Date... dates) { Date min = null; if (CollectionUtils.isNotEmpty(dates)) {
+	 * for (Date date : dates) { if (date == null) { continue; } if (min == null ||
+	 * date.before(min)) { min = date; } } } return clone(min); }
 	 */
 
 	public static Date clone(Date date) {
@@ -483,6 +468,22 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 		return CHART_DATE_FORMAT.format(calendar);
 	}
 
+	/**
+	 * @param date
+	 * @return
+	 */
+	public static String formatSignatureDate(Date date) {
+		return SIGNATURE_DATE_FORMAT.format(date);
+	}
+
+	/**
+	 * @param calendar
+	 * @return
+	 */
+	public static String formatSignatureDate(Calendar calendar) {
+		return SIGNATURE_DATE_FORMAT.format(calendar);
+	}
+
 	private static String format(Date activityDate, DateFormat defaultFormat) {
 		try {
 			Calendar calendar = Calendar.getInstance();
@@ -492,24 +493,20 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 			today.setTime(new Date());
 
 			if (isToday(activityDate)) {
-				long diff = today.getTimeInMillis()
-						- calendar.getTimeInMillis();
+				long diff = today.getTimeInMillis() - calendar.getTimeInMillis();
 				long minDiff = diff / (1000 * 60);
 				if (minDiff < 60) {
 					if (minDiff <= 1)
-						return new StringBuilder().append("Moments Ago")
-								.toString();
+						return new StringBuilder().append("Moments Ago").toString();
 					else
-						return new StringBuilder().append(minDiff)
-								.append(" Minutes Ago").toString();
+						return new StringBuilder().append(minDiff).append(" Minutes Ago")
+								.toString();
 				} else {
 					long hourDiff = minDiff / 60;
 					if (hourDiff <= 1)
-						return new StringBuilder().append("1 Hour Ago")
-								.toString();
+						return new StringBuilder().append("1 Hour Ago").toString();
 					else
-						return new StringBuilder().append(hourDiff)
-								.append(" Hours Ago").toString();
+						return new StringBuilder().append(hourDiff).append(" Hours Ago").toString();
 				}
 			}
 
@@ -532,8 +529,7 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 			return 0;
 		}
 
-		Calendar today = DateUtils.truncate(Calendar.getInstance(),
-				Calendar.DATE);
+		Calendar today = DateUtils.truncate(Calendar.getInstance(), Calendar.DATE);
 		if (date.before(today.getTime())) {
 			return 0;
 		}
@@ -580,8 +576,7 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 		Calendar end = Calendar.getInstance();
 		end.setTime(endDate);
 
-		int year = randomBetween(start.get(Calendar.YEAR),
-				end.get(Calendar.YEAR));
+		int year = randomBetween(start.get(Calendar.YEAR), end.get(Calendar.YEAR));
 		int dayOfYear = randomBetween(start.get(Calendar.DAY_OF_YEAR),
 				end.get(Calendar.DAY_OF_YEAR));
 		System.out.println("Year:" + year);
@@ -690,8 +685,7 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 	}
 
 	public static boolean isInBetween(Date date1, Date date2, Date input) {
-		return DateUtils.isOnOrAfter(date1, input)
-				&& DateUtils.isOnOrBefore(date2, input);
+		return DateUtils.isOnOrAfter(date1, input) && DateUtils.isOnOrBefore(date2, input);
 	}
 
 	public static boolean isNotInBetween(Date date1, Date date2, Date input) {
@@ -822,8 +816,7 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 		calendar.setTime(date);
 		int month = calendar.get(Calendar.MONTH);
 		calendar.set(Calendar.MONTH, month + (2 - (month % 3)));
-		calendar.set(Calendar.DAY_OF_MONTH,
-				calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
 		return calendar.getTime();
 	}
 
@@ -831,8 +824,7 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 		Date date = getEndOfDay(new Date());
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
-		calendar.set(Calendar.WEEK_OF_YEAR,
-				calendar.get(Calendar.WEEK_OF_YEAR) + 1);
+		calendar.set(Calendar.WEEK_OF_YEAR, calendar.get(Calendar.WEEK_OF_YEAR) + 1);
 		calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 		return calendar.getTime();
 	}

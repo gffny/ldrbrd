@@ -3,6 +3,8 @@
  */
 package com.gffny.ldrbrd.rest.ctrl;
 
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,7 @@ import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.impl.Scorecard;
 import com.gffny.ldrbrd.common.model.web.ScorecardSubmission;
 import com.gffny.ldrbrd.common.model.web.StatusResponse;
+import com.gffny.ldrbrd.common.service.IAuthorisationService;
 import com.gffny.ldrbrd.common.service.IScorecardService;
 import com.gffny.ldrbrd.common.utils.CollectionUtils;
 
@@ -35,6 +38,9 @@ public class ScorecardRestController extends BaseRestController {
 	/** */
 	@Autowired
 	private IScorecardService scorecardService;
+
+	@Autowired
+	private IAuthorisationService authorisationService;
 
 	/**
 	 * @param clas
@@ -76,13 +82,40 @@ public class ScorecardRestController extends BaseRestController {
 				&& StringUtils.isNotBlank(scorecardSubmission.getScorecardId())) {
 			LOG.debug("Array Size: "
 					+ CollectionUtils.safeSize(scorecardSubmission.getScorecardArray()));
-			int totalScore = 0;
-			for (int i = 0; i < scorecardSubmission.getScorecardArray().length; i++) {
-				totalScore += scorecardSubmission.getScorecardArray()[i];
+			try {
+				scorecardService.scoreHoleArray(scorecardSubmission.getScorecardId(),
+						scorecardSubmission.getScorecardArray());
+				// TODO create a return class for scoreHoleArray that will have the scores for a
+				// competition or general (to par, stapleford, etc)
+				return new ResponseEntity<StatusResponse>(new StatusResponse("good",
+						String.valueOf(0)), HttpStatus.OK);
+			} catch (ServiceException e) {
+				LOG.error(e.getMessage());
+				return new ResponseEntity<StatusResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			return new ResponseEntity<StatusResponse>(new StatusResponse("gppd",
-					String.valueOf(totalScore)), HttpStatus.OK);
 		}
 		return new ResponseEntity<StatusResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	/**
+	 * @param scorecard
+	 * @param scorecardId
+	 */
+	@RequestMapping(value = "/scorecard/sign", method = RequestMethod.POST, produces = {
+			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+	public ResponseEntity<StatusResponse> signScorecard(
+			@RequestBody final Map<String, String> scorecardIdMap) {
+		// check param validity
+		LOG.debug("signing scorecard");
+		if (scorecardIdMap != null && scorecardIdMap.get("scorecardId") != null) {
+			try {
+				scorecardService.signScorecard(scorecardIdMap.get("scorecardId"));
+			} catch (ServiceException e) {
+				LOG.error(e.getMessage());
+				// check what the error is (might be a 500 or a 400)
+				return new ResponseEntity<StatusResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
+		return new ResponseEntity<StatusResponse>(HttpStatus.OK);
 	}
 }

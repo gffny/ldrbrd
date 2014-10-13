@@ -20,6 +20,7 @@ import javax.persistence.Transient;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
 import org.joda.time.DateTime;
 
 import com.gffny.ldrbrd.common.model.CommonIDEntity;
@@ -30,19 +31,16 @@ import com.gffny.ldrbrd.common.model.impl.mongo.Course;
  * @author John Gaffney (john@gffny.com) Jul 30, 2012
  */
 
-@NamedQueries({
-// @NamedQuery(name = Scorecard.FIND_SCORECARD_BY_COMPETITION_ROUND_AND_GOLFER, query =
-// "SELECT s FROM Scorecard s WHERE s.competitionRound.id = :competitionRoundId AND s.golfer.id  = :golferId"),
-// TODO Check that the scorecards are returned by in the right order
-// @NamedQuery(name = Scorecard.FIND_SCORECARDS_BY_GOLFER_ID, query =
-// "SELECT s FROM Scorecard s WHERE s.golfer.id  = :golferId ORDER BY s.scorecardDate") })
-})
+@NamedQueries({ @NamedQuery(name = Scorecard.FIND_ACTIVE_SCORECARD, query = "SELECT s FROM Scorecard s WHERE s.active = true and s.golfer.id = :golferId") })
 @Entity
 @Table(name = Constant.DB_TABLE_SCORECARD)
 public class Scorecard extends CommonIDEntity {
 
 	/** */
 	private static final long serialVersionUID = 641411664200798837L;
+
+	/** */
+	public static final String FIND_ACTIVE_SCORECARD = "SCORECARD.FIND_ACTIVE_SCORECARD";
 
 	/** */
 	public static final String FIND_SCORECARD_BY_COMPETITION_ROUND_AND_GOLFER = "findScorecardByCompetitionRoundAndGolfer";
@@ -70,6 +68,9 @@ public class Scorecard extends CommonIDEntity {
 
 	/** */
 	private String scorecardNotes;
+
+	/** TODO MOVE TO COMMON_ID_ENTITY */
+	private boolean isActive;
 
 	/** */
 	private List<Integer> holeScoreArray = new ArrayList<Integer>();
@@ -106,6 +107,7 @@ public class Scorecard extends CommonIDEntity {
 		this.course = course;
 		this.courseDocumentId = course.getId().toString();
 		this.handicap = handicap;
+		this.isActive = true;
 	}
 
 	/**
@@ -237,6 +239,21 @@ public class Scorecard extends CommonIDEntity {
 	/**
 	 * @return
 	 */
+	@Column(name = "is_active", columnDefinition = "BIT", length = 1)
+	public boolean isActive() {
+		return this.isActive;
+	}
+
+	/**
+	 * @param isActive
+	 */
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	/**
+	 * @return
+	 */
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = Constant.DB_TABLE_HOLE_SCORE, joinColumns = @JoinColumn(name = "scorecard_id"))
 	@Column(name = "score")
@@ -273,77 +290,4 @@ public class Scorecard extends CommonIDEntity {
 				+ scorecardNotes + ", holeScoreArray=" + holeScoreArray + "]";
 	}
 
-	/** TODO move to a scorecard utils class */
-
-	// /**
-	// * @return
-	// */
-	// @Transient
-	// public int grossScore() {
-	// // create return value
-	// int totalScore = 0;
-	// // iterate the score array and total score
-	// for (int holeScore : scoreArray) {
-	// totalScore += holeScore;
-	// }
-	// return totalScore;
-	// }
-	//
-	// /**
-	// * @return
-	// */
-	// @Transient
-	// public String encodingSignature() {
-	// String signature = new String();
-	// signature += ((golfer != null ? golfer.getId() : ""));
-	// signature += (String.valueOf(grossScore()));
-	// signature += (ArrayUtils.toString(scoreArray));
-	// signature += ((scoringGolfer != null ? scoringGolfer.getId() : ""));
-	// signature += ((scoringGolfer != null ? scoringGolfer.getProfileHandle() : ""));
-	// return signature;
-	// }
-	//
-	// /**
-	// * @return the golferName
-	// */
-	// @Transient
-	// public String getGolferName() {
-	// return golferName;
-	// }
-	//
-	// /**
-	// * @return the scoringGolferName
-	// */
-	// @Transient
-	// public String getScoringGolferName() {
-	// return scoringGolferName;
-	// }
-	//
-	// /**
-	// * @return the courseName
-	// */
-	// @Transient
-	// public String getCourseName() {
-	// return courseName;
-	// }
-	//
-	// /**
-	// *
-	// */
-	// public void signScorecard(String signature) {
-	// // TODO research what I could do to "sign" a scorecard
-	// // (look at adding a "isSubmitted" bool to the entity)
-	// // (signing time stamp)
-	// this.scorecardNotes = signature;
-	// }
-	//
-	// /**
-	// *
-	// */
-	// public void submitScorecard(String submission) {
-	// // TODO research what I should do to submit a scorecard
-	// // (look at adding a "isSubmitted" bool to the entity)
-	// // (signing time stamp)
-	// this.scorecardNotes = submission;
-	// }
 }

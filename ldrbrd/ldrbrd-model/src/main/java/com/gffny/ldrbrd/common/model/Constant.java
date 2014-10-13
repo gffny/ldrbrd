@@ -8,6 +8,7 @@ package com.gffny.ldrbrd.common.model;
  */
 public interface Constant {
 
+	public static final String DB_ASTERISK = "*";
 	public static final String DB_ID_FIELD = "id";
 
 	public static final String DB_TABLE_PREFIX = "ldrbrd_";
@@ -41,4 +42,14 @@ public interface Constant {
 	/* USER ROLES */
 	public static final String ROLE_GOLFER = "ROLE_GOLFER";
 	public static final String ROLE_USER = "ROLE_USER";
+
+	/* TABLE SCORECARD FIELDS */
+	public static final String DB_SCORECARD_ACTIVE_FIELD = "is_active";
+	public static final String DB_SCORECARD_ACTIVE_VALUE = "1";
+	public static final String DB_SCORECARD_INACTIVE_VALUE = "0";
+	public static final String DB_SCORECARD_SCORECARD_ID = "scorecard_id";
+	public static final String DB_SCORECARD_HOLE_NUMBER = "hole_number";
+	public static final String DB_SCORECARD_GOLFER_ID = "golfer_id";
+	public static final String DB_SCORECARD_SIGNATURE_FIELD = "scorecard_signature";
+
 }

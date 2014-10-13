@@ -27,7 +27,7 @@ import com.gffny.ldrbrd.common.utils.ClassUtils;
 /**
  * @author John D. Gaffney | gffny.com
  */
-@Repository
+@Repository(value = "genericDaoJpaImpl")
 public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> {
 
 	/** The Constant log. */
@@ -35,8 +35,9 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 
 	/** The em. */
 	@PersistenceContext(unitName = "ldrbrd_pu")
-	private EntityManager em;
+	protected EntityManager em;
 
+	/** */
 	private Class<T> type;
 
 	/**

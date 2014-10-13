@@ -105,7 +105,14 @@ public interface IScorecardService {
 	 * @param holeScore
 	 * @throws ServiceException
 	 */
-	public void scoreHole(int scorecardId, int holeNumber, int holeScore) throws ServiceException;
+	public void scoreHole(int scorecardId, int holeNumber, int holeScore, String holeId)
+			throws ServiceException;
+
+	/**
+	 * @param scorecardId
+	 * @param scorecardArray
+	 */
+	public void scoreHoleArray(String scorecardId, int[] scorecardArray) throws ServiceException;
 
 	/**
 	 * @param scorecardId
@@ -131,16 +138,18 @@ public interface IScorecardService {
 	 * @param scorecardId
 	 * @param scoreKeeperId
 	 * @param competitionId
+	 * @throws ServiceException
 	 */
-	public void submitScorecard(String scorecardId, String scoreKeeperId, String competitionId);
+	public boolean submitScorecard(String scorecardId, String scoreKeeperId, String competitionId)
+			throws ServiceException;
 
 	/**
 	 * @param scorecardId
 	 * @param scoreKeeperId
 	 * @param competitionId
+	 * @return
 	 */
-	public void signScorecard(String scorecardId, String scoreKeeperId, String competitionId)
-			throws ServiceException;
+	public boolean signScorecard(String scorecardId) throws ServiceException;
 
 	/**
 	 * @param golferId

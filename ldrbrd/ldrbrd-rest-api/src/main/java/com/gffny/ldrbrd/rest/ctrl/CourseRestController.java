@@ -3,6 +3,7 @@
  */
 package com.gffny.ldrbrd.rest.ctrl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,7 +129,14 @@ public class CourseRestController extends BaseRestController {
 	public ResponseEntity<List<Course>> testlist() {
 
 		try {
-			return new ResponseEntity<List<Course>>(courseClubService.testList(), HttpStatus.OK);
+			List<Course> courseList = courseClubService.testList();
+			List<Course> returnList = new ArrayList<Course>();
+			for (Course course : courseList) {
+				course.setCourseHoleList(course.getCourseHoleList().subList(0, 2));
+				returnList.add(course);
+			}
+
+			return new ResponseEntity<List<Course>>(returnList, HttpStatus.OK);
 		} catch (AuthorisationException e) {
 			LOG.error(e.getMessage());
 			return new ResponseEntity<List<Course>>(HttpStatus.UNAUTHORIZED);

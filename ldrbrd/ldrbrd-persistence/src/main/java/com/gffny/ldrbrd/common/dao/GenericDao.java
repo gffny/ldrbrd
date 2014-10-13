@@ -56,6 +56,7 @@ public interface GenericDao<T> {
 	 * @return
 	 * @throws PersistenceException
 	 */
+	@Deprecated
 	@SuppressWarnings("hiding")
 	public <T> T findById(Class<T> clazz, String id) throws PersistenceException;
 

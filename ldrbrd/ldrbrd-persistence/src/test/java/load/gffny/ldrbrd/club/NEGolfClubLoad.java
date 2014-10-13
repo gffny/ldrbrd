@@ -32,13 +32,13 @@ public class NEGolfClubLoad {
 	 * 
 	 */
 	@Autowired
-	private GenericNoSqlDao<Club> clubDao;
+	private GenericNoSqlDao<Club> clubMongoDaoImpl;
 
 	/**
 	 * 
 	 */
 	@Autowired
-	private GenericNoSqlDao<Course> courseDao;
+	private GenericNoSqlDao<Course> courseMongoDaoImpl;
 
 	/**
 	 * @throws PersistenceException
@@ -232,19 +232,20 @@ public class NEGolfClubLoad {
 				"Butter Brook GC 17", 17, " "));
 		redcourseHoleList.add(CourseHole.createCourseHole("bbgc red18", 4, 279, 5,
 				"Butter Brook GC 18", 18, " "));
+		red.setCourseHoleList(redcourseHoleList);
 		loadClub.setCourseList(Arrays.asList(black, blue, white, red));
 
-		String id = clubDao.persist(loadClub);
+		String id = clubMongoDaoImpl.persist(loadClub);
 		List<Course> courseList = loadClub.getCourseList();
 		loadClub.setCourseList(new ArrayList<Course>());
 		// TODO CREATE A METHOD TO CLONE CLUB WITHOUT COURSE LIST / OTHER COLLECTIONS OTHERWISE
 		// THERE IS A LOOP OF PERSISTENCE CLUB -> COURSE -> CLUB -> COURSE ....
 		for (Course loadCourse : courseList) {
 			loadCourse.setClub(loadClub);
-			System.out.println(courseDao.persist(loadCourse));
+			System.out.println(courseMongoDaoImpl.persist(loadCourse));
 		}
 
-		Club clubReturned = clubDao.findById(Club.class, id);
+		Club clubReturned = clubMongoDaoImpl.findById(Club.class, id);
 		System.out.println(clubReturned.getClubName());
 	}
 }

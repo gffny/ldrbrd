@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,6 +40,7 @@ public class AuthorisationService implements IAuthorisationService {
 
 	/** */
 	@Autowired
+	@Qualifier(value = "genericDaoJpaImpl")
 	private GenericDao<Golfer> golferDao;
 
 	/**
@@ -47,8 +49,16 @@ public class AuthorisationService implements IAuthorisationService {
 	 * @see com.gffny.ldrbrd.common.service.impl.IAuthorisationService#isPermitted
 	 *      (java.lang.String, java.lang.String)
 	 */
-	public boolean isPermitted(String userId, String enterScorecard) {
+	public boolean isPermitted(String userId, String scorecardId) {
 		// TODO handle authorisation
+
+		// get the scorecard for id and check the following
+		// non-competition scorecard
+		// is the player
+		// competition scorecard
+		// is the scorer, the competition organiser, or organising society admin
+		// society scorecard
+		// is the player, or organising society admin
 		return true;
 	}
 
