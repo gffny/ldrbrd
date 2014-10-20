@@ -72,8 +72,8 @@ public class CourseMongoDaoImpl extends GenericNoSqlDaoMongoImpl<Course> impleme
 	 */
 	@Override
 	public List<Course> testList() throws PersistenceException {
-		return this.datastore.createQuery(Course.class).field("name")
-				.containsIgnoreCase("butter brook").asList();
+		return this.datastore.createQuery(Course.class).field("name").containsIgnoreCase("test")
+				.asList();
 	}
 
 }

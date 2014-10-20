@@ -21,6 +21,7 @@ public class GolferDigestResponse {
 	private List<CompetitionEntry> competitionListForGolfer;
 	private List<CompetitionRound> nonCompetitionRoundList;
 	private List<Scorecard> lastXScorecardList;
+	private Scorecard activeScorecard;
 
 	/**
 	 * @param profile
@@ -102,6 +103,23 @@ public class GolferDigestResponse {
 	 */
 	public void setLastXScorecardList(List<Scorecard> lastXScorecardList) {
 		this.lastXScorecardList = lastXScorecardList;
+	}
+
+	/**
+	 * /**
+	 * 
+	 * @return
+	 */
+	public Scorecard getActiveScorecard() {
+		return this.activeScorecard;
+	}
+
+	/**
+	 * @param activeScorecard
+	 */
+	public void setActiveScorecard(Scorecard scorecard) {
+		this.activeScorecard = scorecard;
+
 	}
 
 }

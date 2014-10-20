@@ -179,4 +179,19 @@ public interface IScorecardService {
 	 */
 	public abstract List<Scorecard> getLastXScorecards(String golferId) throws ServiceException;
 
+	/**
+	 * returns if the golfer (with golferId) has a scorecard that is currently active
+	 * 
+	 * @param golferId
+	 * @return
+	 */
+	public boolean hasActiveScorecard(String golferId);
+
+	/**
+	 * @param golferId
+	 * @return
+	 * @throws ServiceException
+	 */
+	public Scorecard getActiveScorecard(String golferId) throws ServiceException;
+
 }

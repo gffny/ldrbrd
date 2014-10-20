@@ -27,6 +27,7 @@ import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.exception.ValidationException;
 import com.gffny.ldrbrd.common.model.CommonIDEntity;
+import com.gffny.ldrbrd.common.model.Constant;
 import com.gffny.ldrbrd.common.model.impl.Golfer;
 import com.gffny.ldrbrd.common.model.impl.Scorecard;
 import com.gffny.ldrbrd.common.model.impl.UserProfile;
@@ -36,6 +37,7 @@ import com.gffny.ldrbrd.common.service.ICourseClubService;
 import com.gffny.ldrbrd.common.service.IScorecardService;
 import com.gffny.ldrbrd.common.service.IUserProfileService;
 import com.gffny.ldrbrd.common.utils.AnalysisUtils;
+import com.gffny.ldrbrd.common.utils.CollectionUtils;
 import com.gffny.ldrbrd.common.utils.DateUtils;
 import com.gffny.ldrbrd.common.utils.DebugUtils;
 import com.gffny.ldrbrd.common.utils.Security;
@@ -73,9 +75,68 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	@Qualifier(value = "genericDaoJpaImpl")
 	private GenericDao<Scorecard> scorecardDao;
 
+	@Autowired
+	private ICourseClubService clubService;
+
 	/** */
 	@Autowired
 	private GenericNoSqlDao<AnalysisScorecard> analysisScorecardMongoDaoImpl;
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gffny.ldrbrd.common.service.IScorecardService#hasActiveScorecard(java.lang.String)
+	 */
+	public boolean hasActiveScorecard(String golferId) {
+		try {
+			// if the golferId is null, then return the logged in users scorecard active status
+			if (golferId == null) {
+				UserProfile loggedInUser = authorisationService.getLoggedInUser();
+				return scorecardDaoJpaImpl.hasActiveScoreacard(loggedInUser.getId());
+			} else {
+				return scorecardDaoJpaImpl.hasActiveScoreacard(Integer.parseInt(golferId));
+			}
+		} catch (ServiceException | NumberFormatException e) {
+			LOG.error(e.getMessage());
+			// if error return true
+			return true;
+		}
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @throws ServiceException
+	 * @see com.gffny.ldrbrd.common.service.IScorecardService#getActiveScorecard(java.lang.String)
+	 */
+	public Scorecard getActiveScorecard(String golferId) throws ServiceException {
+
+		// if the there is no golferId passed, use the loggedIn Golfer's id
+		if (golferId == null) {
+			golferId = String.valueOf(authorisationService.getLoggedInUser().getId());
+			LOG.debug("golfer id was null, setting it to the logged in user's id {}", golferId);
+		}
+		try {
+			// get the list of active scorecards
+			List<Scorecard> activeScorecardList = scorecardDao.findByNamedQuery(
+					Scorecard.FIND_ACTIVE_SCORECARD,
+					populateParamMap(Constant.QUERY_PARAM_GOLFER_ID, Integer.valueOf(golferId)));
+			if (CollectionUtils.safeSize(activeScorecardList) == 1) {
+				// get the course of the scorecard
+				Scorecard scorecard = activeScorecardList.get(0);
+				if (scorecard != null) {
+					scorecard.setCourse(clubService.courseById(scorecard.getCourseDocumentId()));
+				}
+				return scorecard;
+			} else {
+				LOG.debug("no active scorecards found for golfer id {}", golferId);
+			}
+		} catch (PersistenceException e) {
+			LOG.error(e.getMessage());
+			throw new ServiceException(e);
+		}
+		return null;
+	};
 
 	/**
 	 * (non-Javadoc)

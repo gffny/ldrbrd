@@ -248,4 +248,75 @@ public class NEGolfClubLoad {
 		Club clubReturned = clubMongoDaoImpl.findById(Club.class, id);
 		System.out.println(clubReturned.getClubName());
 	}
+
+	/**
+	 * @throws PersistenceException
+	 */
+	@Test
+	public void loadTestClub() throws PersistenceException {
+
+		// create club
+		Club loadClub = new Club("Test Golf Club");
+		loadClub.setAddress("Test address");
+		loadClub.setManagerName("Test manager");
+		loadClub.setDressCodePolicy("Test dcp");
+		loadClub.setGreenKeeperName("Test green keeper");
+		loadClub.setProGolferName("Test pro");
+
+		List<CourseHole> holeList = new ArrayList<CourseHole>();
+		holeList.add(CourseHole.createCourseHole("test 1", 5, 517, 8, "Test GC 1", 1, " "));
+		holeList.add(CourseHole.createCourseHole("test 2", 4, 316, 14, "Test GC 2", 2, " "));
+		holeList.add(CourseHole.createCourseHole("test 3", 3, 136, 16, "Test GC 3", 3, " "));
+		// holeList.add(CourseHole.createCourseHole("test 4", 4, 403, 6, "Test GC 4", 4, " "));
+		// holeList.add(CourseHole.createCourseHole("test 5", 3, 136, 18, "Test GC 5", 5, " "));
+		// holeList.add(CourseHole.createCourseHole("test 6", 4, 436, 4, "Test GC 6", 6, " "));
+		// holeList.add(CourseHole.createCourseHole("test 7", 5, 554, 10, "Test GC 7", 7, " "));
+		// holeList.add(CourseHole.createCourseHole("test 8", 3, 171, 12, "Test GC 8", 8, " "));
+		// holeList.add(CourseHole.createCourseHole("test 9", 5, 618, 2, "Test GC 9", 9, " "));
+		// holeList.add(CourseHole.createCourseHole("test 10", 4, 383, 13, "Test GC 10", 10, " "));
+		// holeList.add(CourseHole.createCourseHole("test 11", 3, 249, 9, "Test GC 11", 11, " "));
+		// holeList.add(CourseHole.createCourseHole("test 12", 5, 521, 7, "Test GC 12", 12, " "));
+		// holeList.add(CourseHole.createCourseHole("test 13", 4, 321, 15, "Test GC 23", 13, " "));
+		// holeList.add(CourseHole.createCourseHole("test 14", 3, 199, 17, "Test GC 14", 14, " "));
+		// holeList.add(CourseHole.createCourseHole("test 15", 4, 447, 3, "Test GC 15", 15, " "));
+		// holeList.add(CourseHole.createCourseHole("test 16", 5, 524, 11, "Test GC 16", 16, " "));
+		// holeList.add(CourseHole.createCourseHole("test 17", 4, 416, 1, "Test GC 17", 17, " "));
+		// holeList.add(CourseHole.createCourseHole("test 18", 4, 355, 5, "Test GC 18", 18, " "));
+
+		Course black = new Course();
+		black.setPar(72);
+		black.setCourseName("Test GC Black");
+		black.setSlopeIndex(128.0);
+		black.setTeeColour(TeeColour.BLACK);
+		black.setCourseHoleList(holeList);
+
+		Course blue = new Course();
+		blue.setPar(72);
+		blue.setCourseName("Test GC Blue");
+		blue.setSlopeIndex(128.0);
+		blue.setTeeColour(TeeColour.BLUE);
+		blue.setCourseHoleList(holeList);
+
+		Course white = new Course();
+		white.setPar(72);
+		white.setCourseName("Test GC White");
+		white.setSlopeIndex(128.0);
+		white.setTeeColour(TeeColour.WHITE);
+		white.setCourseHoleList(holeList);
+
+		loadClub.setCourseList(Arrays.asList(black, blue, white));
+
+		String id = clubMongoDaoImpl.persist(loadClub);
+		List<Course> courseList = loadClub.getCourseList();
+		loadClub.setCourseList(new ArrayList<Course>());
+		// TODO CREATE A METHOD TO CLONE CLUB WITHOUT COURSE LIST / OTHER COLLECTIONS OTHERWISE
+		// THERE IS A LOOP OF PERSISTENCE CLUB -> COURSE -> CLUB -> COURSE ....
+		for (Course loadCourse : courseList) {
+			loadCourse.setClub(loadClub);
+			System.out.println(courseMongoDaoImpl.persist(loadCourse));
+		}
+
+		Club clubReturned = clubMongoDaoImpl.findById(Club.class, id);
+		System.out.println(clubReturned.getClubName());
+	}
 }

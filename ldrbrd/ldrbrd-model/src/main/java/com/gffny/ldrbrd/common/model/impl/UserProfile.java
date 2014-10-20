@@ -9,13 +9,13 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
 
 import com.gffny.ldrbrd.common.model.CommonIDEntity;
 
 /**
  * @author John D. Gaffney | gffny.com
- * 
  */
 @MappedSuperclass
 public abstract class UserProfile extends CommonIDEntity {
@@ -54,7 +54,6 @@ public abstract class UserProfile extends CommonIDEntity {
 
 	/* ACCESSOR/MUTATOR METHODS */
 	/**
-	 * 
 	 * @see com.gffny.leaderboard.model.IGolfer#getFirstName()
 	 */
 	@Column(name = "first_name")
@@ -63,7 +62,6 @@ public abstract class UserProfile extends CommonIDEntity {
 	}
 
 	/**
-	 * 
 	 * @see com.gffny.leaderboard.model.IGolfer#setFirstName(java.lang.String)
 	 */
 	public void setFirstName(String firstName) {
@@ -71,7 +69,6 @@ public abstract class UserProfile extends CommonIDEntity {
 	}
 
 	/**
-	 * 
 	 * @see com.gffny.leaderboard.model.IGolfer#getLastName()
 	 */
 	@Column(name = "last_name")
@@ -80,7 +77,6 @@ public abstract class UserProfile extends CommonIDEntity {
 	}
 
 	/**
-	 * 
 	 * @see com.gffny.leaderboard.model.IGolfer#setLastName(java.lang.String)
 	 */
 	public void setLastName(String lastName) {
@@ -88,7 +84,6 @@ public abstract class UserProfile extends CommonIDEntity {
 	}
 
 	/**
-	 * 
 	 * @see com.gffny.leaderboard.model.IGolfer#getProfileHandle()
 	 */
 	@Column(name = "profile_handle")
@@ -97,7 +92,6 @@ public abstract class UserProfile extends CommonIDEntity {
 	}
 
 	/**
-	 * 
 	 * @see com.gffny.leaderboard.model.IGolfer#setProfileHandle(java.lang.String)
 	 */
 	public void setProfileHandle(String profileHandle) {
@@ -105,7 +99,6 @@ public abstract class UserProfile extends CommonIDEntity {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	@Column(name = "email_address")
@@ -114,7 +107,6 @@ public abstract class UserProfile extends CommonIDEntity {
 	}
 
 	/**
-	 * 
 	 * @param emailAddress
 	 */
 	public void setEmailAddress(String emailAddress) {
@@ -137,7 +129,6 @@ public abstract class UserProfile extends CommonIDEntity {
 	}
 
 	/**
-	 * 
 	 * @see com.gffny.leaderboard.model.IGolfer#getLocation()
 	 */
 	@Transient
@@ -146,7 +137,6 @@ public abstract class UserProfile extends CommonIDEntity {
 	}
 
 	/**
-	 * 
 	 * @see com.gffny.leaderboard.model.IGolfer#setLocation(java.lang.String)
 	 */
 	public void setProfileImageRef(String profileImageRef) {
@@ -165,7 +155,6 @@ public abstract class UserProfile extends CommonIDEntity {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	@Transient
@@ -181,7 +170,6 @@ public abstract class UserProfile extends CommonIDEntity {
 	}
 
 	/**
-	 * 
 	 * @param lastLogin
 	 */
 	@Transient
@@ -190,16 +178,15 @@ public abstract class UserProfile extends CommonIDEntity {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
+	@JsonIgnore
 	@Transient
 	public boolean isEnabled() {
 		return this.isEnabled;
 	}
 
 	/**
-	 * 
 	 * @param isEnabled
 	 */
 	public void setEnabled(Boolean isEnabled) {
@@ -215,11 +202,9 @@ public abstract class UserProfile extends CommonIDEntity {
 	}
 
 	/**
-	 * 
 	 * @param failedLoginAttemptsCount
 	 */
 	public void setFailedLoginAttemptsCount(Integer failedLoginAttemptsCount) {
-		this.failedLoginAttemptsCount = getDefaultNotNullValue(
-				failedLoginAttemptsCount, 5);
+		this.failedLoginAttemptsCount = getDefaultNotNullValue(failedLoginAttemptsCount, 5);
 	}
 }

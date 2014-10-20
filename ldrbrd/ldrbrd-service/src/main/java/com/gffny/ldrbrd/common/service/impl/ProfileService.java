@@ -19,8 +19,8 @@ import com.gffny.ldrbrd.common.model.impl.CompetitionEntry;
 import com.gffny.ldrbrd.common.model.impl.CompetitionRound;
 import com.gffny.ldrbrd.common.model.impl.Golfer;
 import com.gffny.ldrbrd.common.model.impl.Scorecard;
-import com.gffny.ldrbrd.common.model.impl.mongo.Course;
 import com.gffny.ldrbrd.common.model.web.GolferDigestResponse;
+import com.gffny.ldrbrd.common.service.IScorecardService;
 import com.gffny.ldrbrd.common.service.IUserProfileService;
 import com.gffny.ldrbrd.common.utils.QueryUtils;
 
@@ -37,6 +37,13 @@ public class ProfileService extends AbstractService implements IUserProfileServi
 	@Autowired
 	@Qualifier(value = "genericDaoJpaImpl")
 	private GenericDao<Golfer> personDao;
+
+	@Autowired
+	private IScorecardService scorecardService;
+
+	/** */
+	@Autowired
+	private CourseClubService courseClubService;
 
 	/**
 	 * (non-Javadoc)
@@ -100,10 +107,14 @@ public class ProfileService extends AbstractService implements IUserProfileServi
 			ServiceException {
 
 		GolferDigestResponse digest = new GolferDigestResponse(getGolferById(id));
-		digest.setFavouriteCourseList(new ArrayList<Course>());
+		digest.setFavouriteCourseList(courseClubService.testList());
 		digest.setLastXScorecardList(new ArrayList<Scorecard>());
 		digest.setUpcomingCompetitionEntryList(new ArrayList<CompetitionEntry>());
 		digest.setUpcomingNonCompetitionRoundList(new ArrayList<CompetitionRound>());
+		if (scorecardService.hasActiveScorecard(id)) {
+			digest.setActiveScorecard(scorecardService.getActiveScorecard(digest.getGolfer()
+					.getIdString()));
+		}
 		return digest;
 	}
 }

@@ -38,6 +38,7 @@ public interface Constant {
 
 	public static final String QUERY_PARAM_EMAIL_ADDRESS = "emailAddress";
 	public static final String QUERY_PARAM_PROFILE_HANDLE = "profileHandle";
+	public static final Object QUERY_PARAM_GOLFER_ID = "golferId";
 
 	/* USER ROLES */
 	public static final String ROLE_GOLFER = "ROLE_GOLFER";
