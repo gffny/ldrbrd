@@ -39,11 +39,12 @@ public class ScorecardRestController extends BaseRestController {
 	@Autowired
 	private IScorecardService scorecardService;
 
+	/** */
 	@Autowired
 	private IAuthorisationService authorisationService;
 
 	/**
-	 * @param clas
+	 *  
 	 */
 	public ScorecardRestController() {
 		super(ScorecardRestController.class);
@@ -61,6 +62,31 @@ public class ScorecardRestController extends BaseRestController {
 		try {
 			return new ResponseEntity<Scorecard>(scorecardService.startGeneralScorecard(courseId),
 					HttpStatus.OK);
+		} catch (AuthorisationException e) {
+			LOG.error(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		} catch (ServiceException e) {
+			LOG.error(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	/**
+	 * @return
+	 */
+	@Transactional(value = "ldrbrd_txnMgr", propagation = Propagation.REQUIRED)
+	@RequestMapping(value = "/scorecard/scoreHole", produces = { MediaType.APPLICATION_JSON_VALUE,
+			MediaType.APPLICATION_XML_VALUE })
+	public ResponseEntity<StatusResponse> scoreHole(
+			@RequestParam(required = true) final int scorecardId,
+			@RequestParam(required = false) final String holeId,
+			@RequestParam(required = true) final int holeNumber,
+			@RequestParam(required = true) final int holeScore) {
+		try {
+			// TODO create a return class for scoreHoleArray that will have the scores for a
+			// competition or general (to par, stapleford, etc)
+			scorecardService.scoreHole(scorecardId, holeNumber, holeScore, holeId);
+			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (AuthorisationException e) {
 			LOG.error(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -89,6 +115,9 @@ public class ScorecardRestController extends BaseRestController {
 				// competition or general (to par, stapleford, etc)
 				return new ResponseEntity<StatusResponse>(new StatusResponse("good",
 						String.valueOf(0)), HttpStatus.OK);
+			} catch (AuthorisationException e) {
+				LOG.error(e.getMessage());
+				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			} catch (ServiceException e) {
 				LOG.error(e.getMessage());
 				return new ResponseEntity<StatusResponse>(HttpStatus.INTERNAL_SERVER_ERROR);

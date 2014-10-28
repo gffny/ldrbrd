@@ -18,6 +18,7 @@ import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
 import com.gffny.ldrbrd.common.model.Constant;
 import com.mongodb.MongoClient;
+import com.mongodb.ServerAddress;
 
 /**
  * @author John D. Gaffney | gffny.com
@@ -41,10 +42,15 @@ public class GenericNoSqlDaoMongoImpl<T extends CommonUUIDEntity> implements Gen
 	public GenericNoSqlDaoMongoImpl() {
 		try {
 			// TODO make the mongo connection configurable (almost beanish)
-			mongoClient = new MongoClient("localhost", 27017);
+			mongoClient = new MongoClient(new ServerAddress("localhost", 27017));
+			// mongoClient = new MongoClient(new ServerAddress("ds047050.mongolab.com", 47050),
+			// Arrays.asList(MongoCredential.createMongoCRCredential("ldrbrd", "ldrbrd",
+			// "ldrbrd".toCharArray())));
 			morphia = new Morphia();
-			datastore = morphia.createDatastore(mongoClient, Constant.MONGO_DB_NAME);
 			morphia.mapPackage(Constant.MONGO_MAP_PACKAGE);
+
+			datastore = morphia.createDatastore(mongoClient, Constant.MONGO_DB_NAME);
+
 		} catch (UnknownHostException e) {
 			LOG.error("unable to create MongoClient connection; unknown host: {}", e.getMessage());
 		}

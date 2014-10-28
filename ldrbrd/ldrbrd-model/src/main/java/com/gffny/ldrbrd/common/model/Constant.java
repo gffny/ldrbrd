@@ -53,4 +53,6 @@ public interface Constant {
 	public static final String DB_SCORECARD_GOLFER_ID = "golfer_id";
 	public static final String DB_SCORECARD_SIGNATURE_FIELD = "scorecard_signature";
 
+	/* APPLICATION CONFIGURATION FIELDS */
+	public static final String PROPERTY_APPLICATION_ROOT = "application.root";
 }

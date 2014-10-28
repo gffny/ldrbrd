@@ -4,6 +4,7 @@
 package com.gffny.ldrbrd.common.utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -14,22 +15,23 @@ import java.util.Map.Entry;
 import java.util.Properties;
 
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
+import com.gffny.ldrbrd.common.model.Constant;
+
 /**
  * @author John Gaffney (john@gffny.com) Dec 24, 2012
- * 
  */
 public class ApplicationConfiguration {
 
 	/**
 	 * 
 	 */
-	protected final static Logger logger = Logger
-			.getLogger(ApplicationConfiguration.class);
+	protected final static Logger logger = Logger.getLogger(ApplicationConfiguration.class);
 
 	/**
 	 * 
@@ -41,13 +43,17 @@ public class ApplicationConfiguration {
 	 */
 	private static String fileName = "leaderboard.properties";
 
+	/** private constructor to hide the implicit public constructor */
+	private ApplicationConfiguration() {
+
+	}
+
 	/**
 	 * 
 	 */
 	static {
-		String systemRoot = System.getProperty("application.root");
-		String path = FilenameUtils.concat(
-				FilenameUtils.concat(systemRoot, "config"), fileName);
+		String systemRoot = System.getProperty(Constant.PROPERTY_APPLICATION_ROOT);
+		String path = FilenameUtils.concat(FilenameUtils.concat(systemRoot, "config"), fileName);
 
 		try {
 			if (StringUtils.isEmpty(path)) {
@@ -61,10 +67,11 @@ public class ApplicationConfiguration {
 				}
 			}
 
-			if (config != null)
+			if (config != null) {
 				config.setReloadingStrategy(new FileChangedReloadingStrategy());
+			}
 
-		} catch (Throwable ex) {
+		} catch (ConfigurationException | SecurityException | NullPointerException ex) {
 			logger.error("Unable to load configuration from: " + path, ex);
 		}
 
@@ -73,15 +80,15 @@ public class ApplicationConfiguration {
 			buildProperties.load(ApplicationConfiguration.class
 					.getResourceAsStream("/build.properties"));
 			addProperties(buildProperties);
-		} catch (Throwable ex) {
+		} catch (IOException | NullPointerException ex) {
 			logger.error("Unable to load build info.");
 		}
 
 	}
 
 	/**
-	 * Application specific lookups to reduce property keys from being scattered
-	 * through the application.
+	 * Application specific lookups to reduce property keys from being scattered through the
+	 * application.
 	 */
 	public static boolean useMockEnvironment() {
 		return true;
@@ -89,43 +96,34 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static String getLogDirectory() {
-		return FilenameUtils.concat(System.getProperty("application.root"),
-				"logs");
+		return FilenameUtils.concat(System.getProperty("application.root"), "logs");
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static String getFileCacheDirectory() {
-		return FilenameUtils.concat(System.getProperty("application.root"),
-				"cache");
+		return FilenameUtils.concat(System.getProperty("application.root"), "cache");
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static String getCodebaseDirectory() {
-		return FilenameUtils.concat(System.getProperty("application.root"),
-				"src");
+		return FilenameUtils.concat(System.getProperty("application.root"), "src");
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static String getConfigDirectory() {
-		return FilenameUtils.concat(System.getProperty("application.root"),
-				"config");
+		return FilenameUtils.concat(System.getProperty("application.root"), "config");
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static String getUserCookieName() {
@@ -133,7 +131,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static String getGolferIdHeaderName() {
@@ -141,7 +138,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static String getGolferNameHeaderName() {
@@ -149,7 +145,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static String getTestGolferId() {
@@ -157,7 +152,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static String getTestGolferName() {
@@ -165,7 +159,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static String getBuildNumber() {
@@ -173,7 +166,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static String getRevisionNumber() {
@@ -181,7 +173,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static String getCompetitionRoundIdHeaderName() {
@@ -189,7 +180,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static String getIPhoneAppDownloadLink() {
@@ -197,7 +187,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static boolean isProductionEnvironment() {
@@ -224,12 +213,10 @@ public class ApplicationConfiguration {
 	 * @return
 	 */
 	public static String getAmazonContentUrlPrefixBuildEnv() {
-		return StringUtils.joinPath(getAmazonUrlPrefix(),
-				getAmazonContentBucketBuildEnv());
+		return StringUtils.joinPath(getAmazonUrlPrefix(), getAmazonContentBucketBuildEnv());
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static String getAmazonUrlPrefix() {
@@ -237,7 +224,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static String getAmazonContentBucket() {
@@ -245,16 +231,13 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static String getAmazonContentUrlPrefix() {
-		return StringUtils.joinPath(getAmazonUrlPrefix(),
-				getAmazonContentBucket());
+		return StringUtils.joinPath(getAmazonUrlPrefix(), getAmazonContentBucket());
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static String getAmazonContentBucketBuildEnv() {
@@ -262,7 +245,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static String getAmazonUsername() {
@@ -270,7 +252,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static String getAmazonPassword() {
@@ -278,7 +259,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static String getAmazonAccessKey() {
@@ -286,7 +266,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static String getAmazonSecretKey() {
@@ -294,7 +273,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param keys
 	 * @return
 	 */
@@ -316,7 +294,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static String getBuildDescription() {
@@ -340,13 +317,11 @@ public class ApplicationConfiguration {
 
 		String buildDescription = StringUtils.join(parts, "-");
 
-		return StringUtils.isNotBlank(buildDescription) ? buildDescription
-				: "unknown";
+		return StringUtils.isNotBlank(buildDescription) ? buildDescription : "unknown";
 	}
 
 	/**
-	 * Delegate methods which pass the request down to the underlying
-	 * implementation
+	 * Delegate methods which pass the request down to the underlying implementation
 	 */
 	public static void addProperty(String key, Object value) {
 		if (StringUtils.isNotBlank(key)) {
@@ -355,7 +330,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param properties
 	 */
 	public static void addProperties(Map<?, Object> properties) {
@@ -376,7 +350,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 */
 	public static void clearProperty(String key) {
@@ -384,7 +357,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @return
 	 */
@@ -393,7 +365,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @param value
 	 * @return
@@ -411,7 +382,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @return
 	 */
@@ -420,7 +390,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @param defaultValue
 	 * @return
@@ -430,7 +399,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @return
 	 */
@@ -439,7 +407,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @param defaultValue
 	 * @return
@@ -449,7 +416,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @return
 	 */
@@ -458,7 +424,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @param defaultValue
 	 * @return
@@ -468,7 +433,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @return
 	 */
@@ -477,7 +441,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @param defaultValue
 	 * @return
@@ -487,7 +450,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @param defaultValue
 	 * @return
@@ -497,7 +459,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @return
 	 */
@@ -506,7 +467,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @param defaultValue
 	 * @return
@@ -516,7 +476,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @param defaultValue
 	 * @return
@@ -526,7 +485,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @return
 	 */
@@ -535,7 +493,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @param defaultValue
 	 * @return
@@ -545,7 +502,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @param defaultValue
 	 * @return
@@ -555,7 +511,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @return
 	 */
@@ -564,7 +519,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @param defaultValue
 	 * @return
@@ -574,7 +528,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @param defaultValue
 	 * @return
@@ -584,7 +537,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static Iterator<?> getKeys() {
@@ -592,7 +544,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param prefix
 	 * @return
 	 */
@@ -601,7 +552,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @return
 	 */
@@ -610,7 +560,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @param defaultValue
 	 * @return
@@ -620,7 +569,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @return
 	 */
@@ -629,7 +577,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @param defaultValue
 	 * @return
@@ -639,7 +586,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @param defaultValue
 	 * @return
@@ -649,7 +595,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @return
 	 */
@@ -658,7 +603,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @return
 	 */
@@ -667,7 +611,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @return
 	 */
@@ -676,7 +619,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @param defaultValue
 	 * @return
@@ -686,7 +628,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @param defaultValue
 	 * @return
@@ -696,7 +637,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @return
 	 */
@@ -705,7 +645,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @param defaultValue
 	 * @return
@@ -715,7 +654,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @return
 	 */
@@ -724,7 +662,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @return
 	 */
@@ -734,19 +671,16 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @param defaultEncryptedValue
 	 * @return
 	 */
-	public static String getDecryptedString(String key,
-			String defaultEncryptedValue) {
+	public static String getDecryptedString(String key, String defaultEncryptedValue) {
 		String encrypted = getString(key, defaultEncryptedValue);
 		return Security.decrypt(encrypted);
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public static boolean isEmpty() {
@@ -754,7 +688,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @param value
 	 */
@@ -763,7 +696,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param prefix
 	 * @return
 	 */
@@ -772,7 +704,6 @@ public class ApplicationConfiguration {
 	}
 
 	/**
-	 * 
 	 * @param key
 	 * @param defaultValue
 	 * @return

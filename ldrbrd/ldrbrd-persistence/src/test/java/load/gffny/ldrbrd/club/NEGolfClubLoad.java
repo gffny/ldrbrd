@@ -319,4 +319,14 @@ public class NEGolfClubLoad {
 		Club clubReturned = clubMongoDaoImpl.findById(Club.class, id);
 		System.out.println(clubReturned.getClubName());
 	}
+
+	/**
+	 * @throws PersistenceException
+	 */
+	@Test
+	public void testGetClub() throws PersistenceException {
+		List<Club> clubList = clubMongoDaoImpl.find(Club.class);
+		System.out.println(clubList.size());
+	}
+
 }

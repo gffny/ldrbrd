@@ -52,7 +52,7 @@ public class ScorecardServiceTest {
 
 	/** */
 	@Test
-	public void testScoreHole() throws ServiceException {
+	public void testScoreHole() throws AuthorisationException, ServiceException {
 		scorecardService.scoreHole(0, 10, 5, null);
 	}
 }

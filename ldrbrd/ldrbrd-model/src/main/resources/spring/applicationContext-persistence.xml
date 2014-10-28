@@ -62,9 +62,14 @@
 	<bean id="ldrbrd_dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/ldrbrdv2" />
+<!-- 	ONE OF THESE SHOULD BE USED FOR DEVELOPMENT AND ANOTHER FOR TESTING 
+		<property name="url" value="jdbc:mysql://ldrbrd-dbs1.cit2gadb0fxa.us-east-1.rds.amazonaws.com:3306/ldrbrdv2" /> 
+ 		<property name="url" value="jdbc:mysql://localhost:3306/ldrbrdv2" />
+-->
+ 		<property name="url" value="jdbc:mysql://localhost:3306/ldrbrdv2" />
 		<property name="username" value="ldrbrd" />
-		<property name="password" value="password" />
+<!-- 		<property name="password" value="password" /> -->
+		<property name="password" value="ldrbrdv2" />
 	</bean>
 
 </beans>

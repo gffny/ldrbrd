@@ -90,14 +90,14 @@ public interface IScorecardService {
 	 */
 	public Scorecard startCompetitionScorecard(String golfer, String scoreKeeperId,
 			String competitionId, int roundNumber, List<CommonIDEntity> clubList)
-			throws ServiceException;
+			throws AuthorisationException, ServiceException;
 
 	/**
 	 * @param scorecardHoleScoreMap
 	 * @throws ServiceException
 	 */
 	public void scoreHoleScoreMap(int scorecardId, Map<Integer, Integer> scorecardHoleScoreMap)
-			throws ServiceException;
+			throws AuthorisationException, ServiceException;
 
 	/**
 	 * @param scorecardId
@@ -106,13 +106,14 @@ public interface IScorecardService {
 	 * @throws ServiceException
 	 */
 	public void scoreHole(int scorecardId, int holeNumber, int holeScore, String holeId)
-			throws ServiceException;
+			throws AuthorisationException, ServiceException;
 
 	/**
 	 * @param scorecardId
 	 * @param scorecardArray
 	 */
-	public void scoreHoleArray(String scorecardId, int[] scorecardArray) throws ServiceException;
+	public void scoreHoleArray(String scorecardId, int[] scorecardArray)
+			throws AuthorisationException, ServiceException;
 
 	/**
 	 * @param scorecardId

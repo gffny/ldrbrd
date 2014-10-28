@@ -1,20 +1,20 @@
 package com.gffny.ldrbrd.common.utils;
 
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * 
  * @author John Gaffney (john@gffny.com) Dec 24, 2012
- * 
  */
 public class Security {
 
 	/**
-	 * 
 	 * @param string
 	 * @return
 	 */
@@ -27,13 +27,13 @@ public class Security {
 			byte[] encrypted = cipher.doFinal(string.getBytes());
 
 			return asHex(encrypted);
-		} catch (Throwable ex) {
+		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException
+				| IllegalBlockSizeException | BadPaddingException ex) {
 			return null;
 		}
 	}
 
 	/**
-	 * 
 	 * @param string
 	 * @return
 	 */
@@ -60,11 +60,10 @@ public class Security {
 	private static SecretKeySpec keySpec = null;
 
 	/**
-	 * 
 	 * @return
 	 * @throws Exception
 	 */
-	private static SecretKeySpec getKey() throws Exception {
+	private static SecretKeySpec getKey() throws IllegalArgumentException {
 		if (keySpec == null) {
 			keySpec = new SecretKeySpec(hexStringToByteArray(key), "AES");
 		}
@@ -75,13 +74,11 @@ public class Security {
 	private static Cipher cipher = null;
 
 	/**
-	 * 
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 * @throws NoSuchPaddingException
 	 */
-	private static Cipher getCipher() throws NoSuchAlgorithmException,
-			NoSuchPaddingException {
+	private static Cipher getCipher() throws NoSuchAlgorithmException, NoSuchPaddingException {
 		if (cipher == null) {
 			cipher = Cipher.getInstance("AES");
 		}
@@ -90,7 +87,6 @@ public class Security {
 	}
 
 	/**
-	 * 
 	 * @param buf
 	 * @return
 	 */
@@ -109,7 +105,6 @@ public class Security {
 	}
 
 	/**
-	 * 
 	 * @param s
 	 * @return
 	 */
@@ -117,8 +112,8 @@ public class Security {
 		int len = s.length();
 		byte[] data = new byte[len / 2];
 		for (int i = 0; i < len; i += 2) {
-			data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character
-					.digit(s.charAt(i + 1), 16));
+			data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character.digit(
+					s.charAt(i + 1), 16));
 		}
 		return data;
 	}
