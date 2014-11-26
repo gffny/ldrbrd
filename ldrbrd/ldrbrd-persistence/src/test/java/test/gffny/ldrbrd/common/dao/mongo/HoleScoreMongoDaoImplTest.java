@@ -3,48 +3,45 @@
  */
 package test.gffny.ldrbrd.common.dao.mongo;
 
-import org.junit.Assert;
-import org.junit.Before;
+import java.util.Date;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.gffny.ldrbrd.common.dao.nosql.ClubMongoDaoImpl;
+import com.gffny.ldrbrd.common.dao.GenericNoSqlDao;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
-import com.gffny.ldrbrd.common.model.impl.mongo.Club;
+import com.gffny.ldrbrd.common.model.impl.mongo.HoleScore;
 
 /**
  * @author John D. Gaffney | gffny.com
+ *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "classpath*:spring/applicationContext-persistence.xml",
 		"classpath*:spring/applicationContext-model.xml" })
-public class ClubMongoDaoImplTest {
+public class HoleScoreMongoDaoImplTest {
 
 	@Autowired
-	private ClubMongoDaoImpl clubMongoDao;
+	private GenericNoSqlDao<HoleScore> holeScoreMongoDaoImpl;
 
 	/**
-	 * @throws java.lang.Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-	}
-
-	/**
-	 * Test method for
-	 * {@link com.gffny.ldrbrd.common.dao.mongo.ClubMongoDaoImpl#listCourseByClub(java.lang.String)}
-	 * .
-	 * 
 	 * @throws PersistenceException
+	 * 
 	 */
 	@Test
-	public void testListCourseByClub() throws PersistenceException {
-		Club club = clubMongoDao.findById(Club.class,
-				"53ef8c050364fc04b2d8ed1d");
-		Assert.assertNotNull(club);
+	public void test() throws PersistenceException {
+		HoleScore blah = new HoleScore();
+		blah.setCompetitionId("123");
+		blah.setCompetitionRoundId("123");
+		blah.setCourseId("123");
+		blah.setDateTime(new Date());
+		blah.setHoleCompetitionScore(1);
+		blah.setHoleNumber(1);
+		holeScoreMongoDaoImpl.persist(blah);
+
 	}
 
 }

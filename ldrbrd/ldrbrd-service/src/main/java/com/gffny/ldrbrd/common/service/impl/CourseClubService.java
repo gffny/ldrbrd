@@ -34,7 +34,7 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 
 	/** */
 	@Autowired
-	private GenericNoSqlDaoCourse courseMongoDaoImpl;
+	private ICourseNoSqlDao courseMongoDaoImpl;
 
 	/*
 	 * (non-Javadoc)

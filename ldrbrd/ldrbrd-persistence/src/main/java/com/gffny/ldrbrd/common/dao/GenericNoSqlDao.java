@@ -21,7 +21,9 @@ public interface GenericNoSqlDao<T extends CommonUUIDEntity> {
 	 * @return new object key
 	 * @throws PersistenceException
 	 */
-	public <T extends CommonUUIDEntity> String persist(T entity) throws PersistenceException;
+	@SuppressWarnings("hiding")
+	public <T extends CommonUUIDEntity> String persist(T entity)
+			throws PersistenceException;
 
 	/**
 	 * @param entity
@@ -29,7 +31,8 @@ public interface GenericNoSqlDao<T extends CommonUUIDEntity> {
 	 * @throws PersistenceException
 	 */
 	// @SuppressWarnings("hiding")
-	// public <T extends CommonUUIDEntity> String merge(T entity) throws PersistenceException;
+	// public <T extends CommonUUIDEntity> String merge(T entity) throws
+	// PersistenceException;
 
 	/**
 	 * @param clazz
@@ -47,7 +50,8 @@ public interface GenericNoSqlDao<T extends CommonUUIDEntity> {
 	 * @throws PersistenceException
 	 */
 	@SuppressWarnings("hiding")
-	public <T extends CommonUUIDEntity> List<T> find(Class<T> clazz) throws PersistenceException;
+	public <T extends CommonUUIDEntity> List<T> find(Class<T> clazz)
+			throws PersistenceException;
 
 	/**
 	 * @param clazz
@@ -56,7 +60,8 @@ public interface GenericNoSqlDao<T extends CommonUUIDEntity> {
 	 * @throws PersistenceException
 	 */
 	// @SuppressWarnings("hiding")
-	// <T extends CommonUUIDEntity> T findById(Class<T> clazz, int id) throws PersistenceException;
+	// <T extends CommonUUIDEntity> T findById(Class<T> clazz, int id) throws
+	// PersistenceException;
 
 	/**
 	 * Find by using a query
@@ -64,10 +69,12 @@ public interface GenericNoSqlDao<T extends CommonUUIDEntity> {
 	 * @param query
 	 *            query string
 	 * @param parameters
-	 *            map of query key-value pairs parameters. Pass empty map if no params
+	 *            map of query key-value pairs parameters. Pass empty map if no
+	 *            params
 	 * @return
 	 */
-	// <T extends CommonUUIDEntity> List<T> findByQuery(String query, Map parameters)
+	// <T extends CommonUUIDEntity> List<T> findByQuery(String query, Map
+	// parameters)
 	// throws PersistenceException;
 
 	/**
@@ -76,7 +83,8 @@ public interface GenericNoSqlDao<T extends CommonUUIDEntity> {
 	 * @param clazz
 	 * @return
 	 */
-	// public <T extends CommonUUIDEntity> List<T> findAll(Class<T> clazz) throws
+	// public <T extends CommonUUIDEntity> List<T> findAll(Class<T> clazz)
+	// throws
 	// PersistenceException;
 
 	/**

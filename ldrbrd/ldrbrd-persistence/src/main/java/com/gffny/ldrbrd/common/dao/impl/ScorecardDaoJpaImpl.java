@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.gffny.ldrbrd.common.dao;
+package com.gffny.ldrbrd.common.dao.impl;
 
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import com.gffny.ldrbrd.common.dao.IScorecardDao;
 import com.gffny.ldrbrd.common.exception.ActiveScorecardServiceException;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.model.Constant;
@@ -30,7 +31,8 @@ import com.gffny.ldrbrd.common.utils.CollectionUtils;
 public class ScorecardDaoJpaImpl implements IScorecardDao {
 
 	/** The Constant log. */
-	private static final Logger LOG = LoggerFactory.getLogger(ScorecardDaoJpaImpl.class);
+	private static final Logger LOG = LoggerFactory
+			.getLogger(ScorecardDaoJpaImpl.class);
 
 	/** The em. */
 	@PersistenceContext(unitName = "ldrbrd_pu")
@@ -42,14 +44,19 @@ public class ScorecardDaoJpaImpl implements IScorecardDao {
 	 * @throws PersistenceException
 	 * @see com.gffny.ldrbrd.common.dao.IScorecardDao#isScorecardActive(int)
 	 */
-	public boolean isScorecardActive(int scorecardId) throws PersistenceException {
+	@Override
+	public boolean isScorecardActive(int scorecardId)
+			throws PersistenceException {
 		if (doesScorecardExist(scorecardId)) {
 			BigInteger scorecardCount = (BigInteger) em.createNativeQuery(
 					"select count(" + Constant.DB_ID_FIELD + ") from "
-							+ Constant.DB_TABLE_SCORECARD + " where " + Constant.DB_ID_FIELD + "="
-							+ scorecardId + " and " + Constant.DB_SCORECARD_ACTIVE_FIELD + " = "
-							+ Constant.DB_SCORECARD_ACTIVE_VALUE).getSingleResult();
-			// check if the scorecard count is equal to zero then it does not exists
+							+ Constant.DB_TABLE_SCORECARD + " where "
+							+ Constant.DB_ID_FIELD + "=" + scorecardId
+							+ " and " + Constant.DB_SCORECARD_ACTIVE_FIELD
+							+ " = " + Constant.DB_SCORECARD_ACTIVE_VALUE)
+					.getSingleResult();
+			// check if the scorecard count is equal to zero then it does not
+			// exists
 			if (scorecardCount.intValue() == 0) {
 				return false;
 				// if the scorecard count is equal to one then it exists
@@ -57,7 +64,8 @@ public class ScorecardDaoJpaImpl implements IScorecardDao {
 				return true;
 				// if the scorecard count is greater one then there is an issue
 			}
-			throw new PersistenceException("there should only be one scorecard in existence");
+			throw new PersistenceException(
+					"there should only be one scorecard in existence");
 		}
 		throw new PersistenceException("scorecard does not exist");
 	}
@@ -67,20 +75,22 @@ public class ScorecardDaoJpaImpl implements IScorecardDao {
 	 * @return
 	 * @throws PersistenceException
 	 */
-	private boolean doesScorecardExist(int scorecardId) throws PersistenceException {
+	private boolean doesScorecardExist(int scorecardId)
+			throws PersistenceException {
 		// scorecardId should be greater than zero
 		if (scorecardId > 0) {
 			BigInteger scorecardCount = (BigInteger) em.createNativeQuery(
 					"select count(" + Constant.DB_ID_FIELD + ") from "
-							+ Constant.DB_TABLE_SCORECARD + " where " + Constant.DB_ID_FIELD + "="
-							+ scorecardId).getSingleResult();
+							+ Constant.DB_TABLE_SCORECARD + " where "
+							+ Constant.DB_ID_FIELD + "=" + scorecardId)
+					.getSingleResult();
 			if (scorecardCount != null && scorecardCount.intValue() == 0) {
 				return false;
 			} else if (scorecardCount != null && scorecardCount.intValue() == 1) {
 				return true;
 			}
-			throw new PersistenceException("there should only be one scorecard for id "
-					+ scorecardId);
+			throw new PersistenceException(
+					"there should only be one scorecard for id " + scorecardId);
 		}
 		return false;
 	}
@@ -90,18 +100,21 @@ public class ScorecardDaoJpaImpl implements IScorecardDao {
 	 * 
 	 * @see com.gffny.ldrbrd.common.dao.IScorecardDao#scoreHole(int, int, int)
 	 */
-	public void scoreHole(int scorecardId, int holeNumber, int holeScore, String holeId)
-			throws PersistenceException {
+	@Override
+	public void scoreHole(int scorecardId, int holeNumber, int holeScore,
+			String holeId) throws PersistenceException {
 		BigInteger holeScoreExists = (BigInteger) em.createNativeQuery(
-				"select count(scorecard_id) from " + Constant.DB_TABLE_HOLE_SCORE
-						+ " where scorecard_id=" + scorecardId + " and hole_number=" + holeNumber)
+				"select count(scorecard_id) from "
+						+ Constant.DB_TABLE_HOLE_SCORE + " where scorecard_id="
+						+ scorecardId + " and hole_number=" + holeNumber)
 				.getSingleResult();
 		switch (holeScoreExists.intValue()) {
 		case 0:
 			// insert
-			Query insert = em.createNativeQuery("insert into " + Constant.DB_TABLE_HOLE_SCORE
-					+ " values (" + scorecardId + ", " + holeNumber + ", " + holeScore + ", "
-					+ holeId + ")");
+			Query insert = em.createNativeQuery("insert into "
+					+ Constant.DB_TABLE_HOLE_SCORE + " values (" + scorecardId
+					+ ", " + holeNumber + ", " + holeScore + ", " + holeId
+					+ ")");
 			int res = insert.executeUpdate();
 			LOG.debug(
 					"inserted the hole score for scorecard {}, hole {}, with score {} : result {}",
@@ -109,8 +122,9 @@ public class ScorecardDaoJpaImpl implements IScorecardDao {
 			break;
 		case 1:
 			// update
-			Query update = em.createNativeQuery("update " + Constant.DB_TABLE_HOLE_SCORE
-					+ " set score=" + holeScore + " where scorecard_id=" + scorecardId
+			Query update = em.createNativeQuery("update "
+					+ Constant.DB_TABLE_HOLE_SCORE + " set score=" + holeScore
+					+ " where scorecard_id=" + scorecardId
 					+ " and hole_number=" + holeNumber);
 			int updateResult = update.executeUpdate();
 			LOG.debug(
@@ -122,10 +136,13 @@ public class ScorecardDaoJpaImpl implements IScorecardDao {
 			LOG.info(
 					"removing scores for hole {} for scorecard id {} because there are more than one",
 					holeNumber, scorecardId);
-			Query removeOld = em.createNativeQuery("delete from " + Constant.DB_TABLE_SCORECARD
-					+ " where " + Constant.DB_SCORECARD_SCORECARD_ID + " = " + scorecardId
-					+ " and " + Constant.DB_SCORECARD_HOLE_NUMBER + " = " + holeNumber);
+			Query removeOld = em.createNativeQuery("delete from "
+					+ Constant.DB_TABLE_SCORECARD + " where "
+					+ Constant.DB_SCORECARD_SCORECARD_ID + " = " + scorecardId
+					+ " and " + Constant.DB_SCORECARD_HOLE_NUMBER + " = "
+					+ holeNumber);
 			int deleteResult = removeOld.executeUpdate();
+			LOG.debug(String.valueOf(deleteResult));
 			scoreHole(scorecardId, holeNumber, holeScore, holeId);
 			throw new PersistenceException(
 					"Shouldn't have a situation where there is multiple hole scores for one scorecard");
@@ -137,6 +154,7 @@ public class ScorecardDaoJpaImpl implements IScorecardDao {
 	 * 
 	 * @see com.gffny.ldrbrd.common.dao.IScorecardDao#hasActiveScoreacard(int)
 	 */
+	@Override
 	public boolean hasActiveScoreacard(int golferId) {
 		// check validity
 		if (golferId > 0) {
@@ -154,8 +172,9 @@ public class ScorecardDaoJpaImpl implements IScorecardDao {
 			} else if (CollectionUtils.size(activeScorecardList) == 1) {
 				return true;
 			} else {
-				LOG.error("user id {} has an invalid number of active scorecard: {}", golferId,
-						activeScorecardList.size());
+				LOG.error(
+						"user id {} has an invalid number of active scorecard: {}",
+						golferId, activeScorecardList.size());
 				throw new ActiveScorecardServiceException(
 						"user has an invalid number of active scorecards",
 						activeScorecardList.get(0));
@@ -171,15 +190,18 @@ public class ScorecardDaoJpaImpl implements IScorecardDao {
 	 * @see com.gffny.ldrbrd.common.dao.IScorecardDao#signScorecard(java.lang.String,
 	 *      java.lang.String)
 	 */
-	public boolean signScorecard(String scorecardId, String signature) throws PersistenceException {
+	@Override
+	public boolean signScorecard(String scorecardId, String signature)
+			throws PersistenceException {
 		if (scorecardId != null && signature != null) {
 			int updateResult = em.createNativeQuery(
 					"UPDATE " + Constant.DB_TABLE_SCORECARD + " SET "
 							+ Constant.DB_SCORECARD_ACTIVE_FIELD + " = "
 							+ Constant.DB_SCORECARD_INACTIVE_VALUE + ", "
-							+ Constant.DB_SCORECARD_SIGNATURE_FIELD + " = \'" + signature
-							+ "\' WHERE " + Constant.DB_ID_FIELD + " = " + scorecardId)
-					.executeUpdate();
+							+ Constant.DB_SCORECARD_SIGNATURE_FIELD + " = \'"
+							+ signature + "\' WHERE " + Constant.DB_ID_FIELD
+							+ " = " + scorecardId).executeUpdate();
+			LOG.debug(String.valueOf(updateResult));
 			return true;
 		}
 		return false;

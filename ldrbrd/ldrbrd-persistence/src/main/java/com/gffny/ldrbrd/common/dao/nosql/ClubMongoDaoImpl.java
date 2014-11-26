@@ -1,12 +1,11 @@
 /**
  * 
  */
-package com.gffny.ldrbrd.common.dao.mongo;
+package com.gffny.ldrbrd.common.dao.nosql;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gffny.ldrbrd.common.dao.GenericNoSqlDaoMongoImpl;
 import com.gffny.ldrbrd.common.model.impl.mongo.Club;
 
 /**
@@ -14,10 +13,6 @@ import com.gffny.ldrbrd.common.model.impl.mongo.Club;
  */
 @Transactional
 @Repository
-public class AnalysisScorecardMongoDaoImpl extends GenericNoSqlDaoMongoImpl<Club> {
-
-	public AnalysisScorecardMongoDaoImpl() {
-		super();
-	}
+public class ClubMongoDaoImpl extends GenericNoSqlDaoMongoImpl<Club> {
 
 }

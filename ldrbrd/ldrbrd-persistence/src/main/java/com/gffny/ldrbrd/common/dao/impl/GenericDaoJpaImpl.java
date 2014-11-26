@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.gffny.ldrbrd.common.dao;
+package com.gffny.ldrbrd.common.dao.impl;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gffny.ldrbrd.common.dao.GenericDao;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.model.CommonEntity;
 import com.gffny.ldrbrd.common.model.CommonIDEntity;
@@ -31,7 +32,8 @@ import com.gffny.ldrbrd.common.utils.ClassUtils;
 public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> {
 
 	/** The Constant log. */
-	private static final Logger LOG = LoggerFactory.getLogger(GenericDaoJpaImpl.class);
+	private static final Logger LOG = LoggerFactory
+			.getLogger(GenericDaoJpaImpl.class);
 
 	/** The em. */
 	@PersistenceContext(unitName = "ldrbrd_pu")
@@ -46,8 +48,8 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	@SuppressWarnings("unchecked")
 	public GenericDaoJpaImpl() {
 		// Dynamically set the type of generic class
-		this.setType((Class<T>) ClassUtils.getTypeArguments(GenericDaoJpaImpl.class, getClass())
-				.get(0));
+		this.setType((Class<T>) ClassUtils.getTypeArguments(
+				GenericDaoJpaImpl.class, getClass()).get(0));
 	}
 
 	/**
@@ -129,8 +131,8 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 		if (entity != null) {
 			if (entity instanceof CommonIDEntity) {
 				CommonIDEntity cie = (CommonIDEntity) entity;
-				LOG.debug("mergining entity id: {}. sync version {} ", cie.getId(),
-						cie.getSyncVersionId());
+				LOG.debug("mergining entity id: {}. sync version {} ",
+						cie.getId(), cie.getSyncVersionId());
 			}
 			this.em.merge(entity);
 			this.em.flush();
@@ -168,7 +170,8 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	@SuppressWarnings("unchecked")
 	@Transactional(value = "ldrbrd_txnMgr", propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<T> findAll(Class<? extends CommonEntity> clazz) {
-		Query query = this.getEntityManager().createQuery("from " + clazz.getName(), clazz);
+		Query query = this.getEntityManager().createQuery(
+				"from " + clazz.getName(), clazz);
 		return query.getResultList();
 	}
 
@@ -180,7 +183,8 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	 */
 	@SuppressWarnings("hiding")
 	@Transactional(value = "ldrbrd_txnMgr", propagation = Propagation.SUPPORTS, readOnly = true)
-	public <T> T findById(Class<T> clazz, String id) throws PersistenceException {
+	public <T> T findById(Class<T> clazz, String id)
+			throws PersistenceException {
 		return this.em.find(clazz, id);
 	}
 
@@ -199,7 +203,8 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.gffny.ldrbrd.common.dao.GenericDao#findByNamedQuery(java.lang.String, java.util.Map)
+	 * @see com.gffny.ldrbrd.common.dao.GenericDao#findByNamedQuery(java.lang.String,
+	 *      java.util.Map)
 	 */
 	@Transactional(value = "ldrbrd_txnMgr", propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<T> findByNamedQuery(String name, Map<String, ?> params) {
@@ -229,8 +234,8 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	 * @return the list
 	 */
 	@Transactional(value = "ldrbrd_txnMgr", propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<T> findByNamedQuery(final String name, final Map<String, ?> params,
-			final int maxResults) {
+	public List<T> findByNamedQuery(final String name,
+			final Map<String, ?> params, final int maxResults) {
 		// create the query
 		final Query query = getEntityManager().createNamedQuery(name);
 
@@ -258,7 +263,8 @@ public class GenericDaoJpaImpl<T extends Serializable> implements GenericDao<T> 
 	 * @return
 	 */
 	@Transactional(value = "ldrbrd_txnMgr", propagation = Propagation.SUPPORTS, readOnly = true)
-	public Object findByAggregateNamedQuerySingleResult(String namedQuery, Map<String, ?> parameters) {
+	public Object findByAggregateNamedQuerySingleResult(String namedQuery,
+			Map<String, ?> parameters) {
 		// TODO implement findByAggregateNamedQuery....
 		return null;
 	}

@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.gffny.ldrbrd.common.dao.mongo.GenericNoSqlDaoCourse;
+import com.gffny.ldrbrd.common.dao.ICourseNoSqlDao;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.model.impl.mongo.Course;
 
@@ -26,7 +26,7 @@ import com.gffny.ldrbrd.common.model.impl.mongo.Course;
 public class CourseMongoDaoImplTest {
 
 	@Autowired
-	private GenericNoSqlDaoCourse courseMongoDao;
+	private ICourseNoSqlDao courseMongoDao;
 
 	/**
 	 * @throws java.lang.Exception
@@ -44,7 +44,8 @@ public class CourseMongoDaoImplTest {
 	 */
 	@Test
 	public void testListCourseByClub() throws PersistenceException {
-		List<Course> clubCourseList = courseMongoDao.listCourseByClub("53ef8c050364fc04b2d8ed1d");
+		List<Course> clubCourseList = courseMongoDao
+				.listCourseByClub("53ef8c050364fc04b2d8ed1d");
 		Assert.assertNotNull(clubCourseList);
 		System.out.println("List size: " + clubCourseList.size());
 
@@ -52,7 +53,8 @@ public class CourseMongoDaoImplTest {
 
 	@Test
 	public void testListCourseByCity() throws PersistenceException {
-		List<Course> clubCourseList = courseMongoDao.listCourseByCity("test city");
+		List<Course> clubCourseList = courseMongoDao
+				.listCourseByCity("test city");
 		Assert.assertNotNull(clubCourseList);
 		System.out.println("List size: " + clubCourseList.size());
 
