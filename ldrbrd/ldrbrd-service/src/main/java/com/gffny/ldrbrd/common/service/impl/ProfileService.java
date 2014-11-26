@@ -38,6 +38,7 @@ public class ProfileService extends AbstractService implements IUserProfileServi
 	@Qualifier(value = "genericDaoJpaImpl")
 	private GenericDao<Golfer> personDao;
 
+	/** */
 	@Autowired
 	private IScorecardService scorecardService;
 

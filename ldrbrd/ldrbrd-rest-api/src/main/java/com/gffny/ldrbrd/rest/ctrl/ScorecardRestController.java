@@ -75,7 +75,7 @@ public class ScorecardRestController extends BaseRestController {
 	 * @return
 	 */
 	@Transactional(value = "ldrbrd_txnMgr", propagation = Propagation.REQUIRED)
-	@RequestMapping(value = "/scorecard/scoreHole", produces = { MediaType.APPLICATION_JSON_VALUE,
+	@RequestMapping(value = "/scorecard/scorehole", produces = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<StatusResponse> scoreHole(
 			@RequestParam(required = true) final int scorecardId,

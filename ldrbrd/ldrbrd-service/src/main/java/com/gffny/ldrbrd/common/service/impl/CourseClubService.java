@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gffny.ldrbrd.common.dao.GenericNoSqlDao;
-import com.gffny.ldrbrd.common.dao.mongo.GenericNoSqlDaoCourse;
+import com.gffny.ldrbrd.common.dao.ICourseNoSqlDao;
 import com.gffny.ldrbrd.common.exception.AuthorisationException;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;

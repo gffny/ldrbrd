@@ -137,11 +137,14 @@ public class CompetitionService extends AbstractService implements ICompetitionS
 	public Competition getCompetitionById(String competitionId) throws ServiceException {
 		try {
 			// get the competition by ID!
-			return competitionDao.findById(Competition.class, competitionId);
+			return competitionDao.findById(Competition.class, Integer.parseInt(competitionId));
 			// contain error and bubble (expected pattern)
 		} catch (PersistenceException daEx) {
-			LOG.error(daEx.toString());
+			LOG.error(daEx.toString(), daEx);
 			throw new ServiceException(daEx);
+		} catch (NumberFormatException nfe) {
+			LOG.error(nfe.getMessage(), nfe);
+			throw new ServiceException(nfe);
 		}
 	}
 

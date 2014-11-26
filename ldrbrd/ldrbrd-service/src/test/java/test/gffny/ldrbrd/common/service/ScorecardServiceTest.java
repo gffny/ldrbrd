@@ -46,6 +46,14 @@ public class ScorecardServiceTest {
 
 	/** */
 	@Test
+	public void testStartCompetitionScorecard() throws AuthorisationException, ServiceException {
+		// courseClubService
+		Scorecard scorecard = scorecardService.startCompetitionScorecard("1", "1", "1", 1, null);
+		System.out.println(scorecard.toString());
+	}
+
+	/** */
+	@Test
 	public void testGetScorecardById() throws AuthorisationException, ServiceException {
 		// scorecardService.retriveScorecard("53ef8c0d0364fc04b2d8ed1e");
 	}
