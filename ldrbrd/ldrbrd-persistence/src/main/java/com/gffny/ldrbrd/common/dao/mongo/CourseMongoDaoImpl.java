@@ -8,7 +8,7 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 
-import com.gffny.ldrbrd.common.dao.GenericNoSqlDaoMongoImpl;
+import com.gffny.ldrbrd.common.dao.ICourseNoSqlDao;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.model.impl.mongo.Course;
 import com.gffny.ldrbrd.common.utils.StringUtils;
@@ -18,7 +18,7 @@ import com.gffny.ldrbrd.common.utils.StringUtils;
  */
 @Repository
 public class CourseMongoDaoImpl extends GenericNoSqlDaoMongoImpl<Course> implements
-		GenericNoSqlDaoCourse {
+		ICourseNoSqlDao {
 
 	/*
 	 * (non-Javadoc)

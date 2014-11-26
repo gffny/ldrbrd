@@ -28,12 +28,15 @@ import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.exception.ValidationException;
 import com.gffny.ldrbrd.common.model.CommonIDEntity;
 import com.gffny.ldrbrd.common.model.Constant;
+import com.gffny.ldrbrd.common.model.impl.CompetitionRound;
 import com.gffny.ldrbrd.common.model.impl.Golfer;
 import com.gffny.ldrbrd.common.model.impl.Scorecard;
 import com.gffny.ldrbrd.common.model.impl.UserProfile;
 import com.gffny.ldrbrd.common.model.impl.mongo.AnalysisScorecard;
 import com.gffny.ldrbrd.common.model.impl.mongo.Course;
+import com.gffny.ldrbrd.common.service.ICompetitionService;
 import com.gffny.ldrbrd.common.service.ICourseClubService;
+import com.gffny.ldrbrd.common.service.ILeaderboardService;
 import com.gffny.ldrbrd.common.service.IScorecardService;
 import com.gffny.ldrbrd.common.service.IUserProfileService;
 import com.gffny.ldrbrd.common.utils.AnalysisUtils;
@@ -61,6 +64,19 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 
 	/** */
 	@Autowired
+	@Qualifier(value = "genericDaoJpaImpl")
+	private GenericDao<Scorecard> scorecardDao;
+
+	/** */
+	@Autowired
+	private IScorecardDao scorecardDaoJpaImpl;
+
+	/** */
+	@Autowired
+	private ICompetitionService competitionService;
+
+	/** */
+	@Autowired
 	private ICourseClubService courseClubService;
 
 	/** */
@@ -69,14 +85,11 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 
 	/** */
 	@Autowired
-	private IScorecardDao scorecardDaoJpaImpl;
-
-	@Autowired
-	@Qualifier(value = "genericDaoJpaImpl")
-	private GenericDao<Scorecard> scorecardDao;
-
-	@Autowired
 	private ICourseClubService clubService;
+
+	/** */
+	@Autowired
+	private ILeaderboardService leaderboardService;
 
 	/** */
 	@Autowired
@@ -222,9 +235,7 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 */
 	public Scorecard startGeneralScorecard(String golferId, String scoreKeeperId, String courseId,
 			Map<String, String> hashMap, List<CommonIDEntity> clubList) {
-
-		// TODO Maybe throw a business exception
-		return null;
+		throw new RuntimeException("not implemented");
 	}
 
 	/**
@@ -236,7 +247,7 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 */
 	public Scorecard startGeneralScorecard(String golferId, String scoreKeeperId, String courseId,
 			int handicap, Map<String, String> hashMap, List<CommonIDEntity> clubList) {
-		return null;
+		throw new RuntimeException("not implemented");
 	}
 
 	/**
@@ -257,13 +268,44 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	/**
 	 * (non-Javadoc)
 	 * 
+	 * @throws AuthorisationException
 	 * @see com.gffny.ldrbrd.common.service.impl.IScorecardService#
 	 *      startCompetitionScorecard(java.lang.String, java.lang.String, java.lang.String,
 	 *      java.lang.Integer, java.util.LinkedList)
 	 */
+	@Transactional(value = "ldrbrd_txnMgr", propagation = Propagation.REQUIRED)
 	public Scorecard startCompetitionScorecard(String golferId, String scoreKeeperId,
 			String competitionId, int roundNumber, List<CommonIDEntity> clubList,
 			int competitionHandicap) throws ServiceException {
+
+		// check param
+		DebugUtils.transactionRequired("ScorecardService.startCompetitionScorecard");
+		if (roundNumber > 0) {
+
+			try {
+				// get competition from dao
+				CompetitionRound competitionRound = competitionService.getCompetitionRound(
+						competitionId, roundNumber);
+
+				if (competitionRound != null && competitionRound.getCourse() != null) {
+					Golfer golfer = profileService.getGolferById(golferId);
+					int handicap = competitionHandicap == EXISTING_GOLFER_HANDICAP ? golfer
+							.getHandicap() : competitionHandicap;
+					// persist the new scorecard
+					Scorecard newScorecardId = scorecardDao.persist(Scorecard.createNewScorecard(
+							golfer, competitionRound.getCourse(), handicap));
+					// create the leaderboard round
+					leaderboardService.startCompetitionRound(golfer, handicap, competitionRound);
+					return newScorecardId;
+				}
+			} catch (AuthorisationException | PersistenceException ae) {
+				LOG.error(ae.getMessage(), ae);
+				throw new ServiceException(ae.getMessage(), ae);
+			}
+		} else {
+			LOG.error("round number cannot be less than 1");
+			throw new ServiceException("round number cannot be less than 1");
+		}
 		return null;
 	}
 
@@ -383,7 +425,7 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 
 		// check the parameters
 		if (scorecardId != null && scoreKeeperId != null) {
-
+			throw new RuntimeException("not implemented");
 		} else {
 			LOG.error("method parameter(s) not valid");
 		}
@@ -398,13 +440,13 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 * @see com.gffny.ldrbrd.common.service.IScorecardService#submitScorecard(java .lang.String,
 	 *      java.lang.String, java.lang.String)
 	 */
-	@Transactional
+	@Transactional(value = "ldrbrd_txnMgr", propagation = Propagation.REQUIRED)
 	public boolean submitScorecard(String scorecardId, String scoreKeeperId, String competitionId)
 			throws ServiceException {
 
 		// check the parameters
 		if (scorecardId != null && scoreKeeperId != null && competitionId != null) {
-
+			throw new RuntimeException("not implemented");
 		} else {
 			LOG.error("method parameter(s) not valid");
 		}
@@ -489,7 +531,7 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 */
 	public final static String encodeScorecard(Scorecard scorecard) {
 		if (scorecard != null) {
-
+			throw new RuntimeException("not implemented");
 		}
 		LOG.error("scorecard parameter is null");
 		// don't return null as there may be operations applied to the return

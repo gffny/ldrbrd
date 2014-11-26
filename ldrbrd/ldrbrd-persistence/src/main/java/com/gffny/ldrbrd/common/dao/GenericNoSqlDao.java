@@ -21,7 +21,16 @@ public interface GenericNoSqlDao<T extends CommonUUIDEntity> {
 	 * @return new object key
 	 * @throws PersistenceException
 	 */
+	@SuppressWarnings("hiding")
 	public <T extends CommonUUIDEntity> String persist(T entity) throws PersistenceException;
+
+	/**
+	 * @param entity
+	 * @return
+	 * @throws PersistenceException
+	 */
+	@SuppressWarnings("hiding")
+	public <T extends CommonUUIDEntity> String merge(T entity) throws PersistenceException;
 
 	/**
 	 * @param entity
