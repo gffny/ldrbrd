@@ -1,29 +1,24 @@
 /**
  * 
  */
-package com.gffny.ldrbrd.common.dao.nosql;
+package com.gffny.ldrbrd.common.dao.nosql.mongo;
 
 import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 
-import com.gffny.ldrbrd.common.dao.ICourseNoSqlDao;
+import com.gffny.ldrbrd.common.dao.nosql.ICourseNoSqlDao;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
-import com.gffny.ldrbrd.common.model.impl.mongo.Course;
+import com.gffny.ldrbrd.common.model.nosql.Course;
 import com.gffny.ldrbrd.common.utils.StringUtils;
 
 /**
  * @author John D. Gaffney | gffny.com
  */
 @Repository
-<<<<<<< HEAD:ldrbrd/ldrbrd-persistence/src/main/java/com/gffny/ldrbrd/common/dao/nosql/CourseMongoDaoImpl.java
 public class CourseMongoDaoImpl extends GenericNoSqlDaoMongoImpl<Course>
 		implements ICourseNoSqlDao {
-=======
-public class CourseMongoDaoImpl extends GenericNoSqlDaoMongoImpl<Course> implements
-		ICourseNoSqlDao {
->>>>>>> d4087c8090050451e69742c2c740357dfe64c26d:ldrbrd/ldrbrd-persistence/src/main/java/com/gffny/ldrbrd/common/dao/mongo/CourseMongoDaoImpl.java
 
 	/*
 	 * (non-Javadoc)

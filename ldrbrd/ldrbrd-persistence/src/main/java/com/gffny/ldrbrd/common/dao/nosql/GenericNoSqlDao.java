@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.gffny.ldrbrd.common.dao;
+package com.gffny.ldrbrd.common.dao.nosql;
 
 import java.util.List;
 
@@ -22,12 +22,8 @@ public interface GenericNoSqlDao<T extends CommonUUIDEntity> {
 	 * @throws PersistenceException
 	 */
 	@SuppressWarnings("hiding")
-<<<<<<< HEAD
 	public <T extends CommonUUIDEntity> String persist(T entity)
 			throws PersistenceException;
-=======
-	public <T extends CommonUUIDEntity> String persist(T entity) throws PersistenceException;
->>>>>>> d4087c8090050451e69742c2c740357dfe64c26d
 
 	/**
 	 * @param entity
@@ -35,7 +31,8 @@ public interface GenericNoSqlDao<T extends CommonUUIDEntity> {
 	 * @throws PersistenceException
 	 */
 	@SuppressWarnings("hiding")
-	public <T extends CommonUUIDEntity> String merge(T entity) throws PersistenceException;
+	public <T extends CommonUUIDEntity> String merge(T entity)
+			throws PersistenceException;
 
 	/**
 	 * @param entity

@@ -9,7 +9,7 @@ import com.gffny.ldrbrd.common.model.impl.CompetitionEntry;
 import com.gffny.ldrbrd.common.model.impl.CompetitionRound;
 import com.gffny.ldrbrd.common.model.impl.Golfer;
 import com.gffny.ldrbrd.common.model.impl.Scorecard;
-import com.gffny.ldrbrd.common.model.impl.mongo.Course;
+import com.gffny.ldrbrd.common.model.nosql.Course;
 
 /**
  * @author John D. Gaffney | gffny.com
@@ -17,7 +17,7 @@ import com.gffny.ldrbrd.common.model.impl.mongo.Course;
 public class GolferDigestResponse {
 
 	private Golfer golfer;
-	private List<Course> favouriteCourseList;
+	private List<com.gffny.ldrbrd.common.model.nosql.Course> favouriteCourseList;
 	private List<CompetitionEntry> competitionListForGolfer;
 	private List<CompetitionRound> nonCompetitionRoundList;
 	private List<Scorecard> lastXScorecardList;
@@ -86,7 +86,8 @@ public class GolferDigestResponse {
 	 * @param arrayList
 	 *            the nonCompetitionRoundList to set
 	 */
-	public void setUpcomingNonCompetitionRoundList(List<CompetitionRound> competitionRoundList) {
+	public void setUpcomingNonCompetitionRoundList(
+			List<CompetitionRound> competitionRoundList) {
 		this.nonCompetitionRoundList = competitionRoundList;
 	}
 

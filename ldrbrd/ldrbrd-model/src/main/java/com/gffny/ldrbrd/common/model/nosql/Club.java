@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.gffny.ldrbrd.common.model.impl.mongo;
+package com.gffny.ldrbrd.common.model.nosql;
 
 import java.util.List;
 

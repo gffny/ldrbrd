@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.gffny.ldrbrd.common.model.impl.mongo;
+package com.gffny.ldrbrd.common.model.nosql;
 
 import org.mongodb.morphia.annotations.Entity;
 
@@ -42,8 +42,9 @@ public class CourseHole extends CommonUUIDEntity {
 	 * @param holeImageId
 	 * @return
 	 */
-	public static CourseHole createCourseHole(String name, int par, int distance, int index,
-			String description, int holeNumber, String holeImageId) {
+	public static CourseHole createCourseHole(String name, int par,
+			int distance, int index, String description, int holeNumber,
+			String holeImageId) {
 		CourseHole courseHole = new CourseHole();
 		courseHole.setName(name);
 		courseHole.setHoleDistance(distance);

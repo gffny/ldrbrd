@@ -25,7 +25,7 @@ import org.joda.time.DateTime;
 
 import com.gffny.ldrbrd.common.model.CommonIDEntity;
 import com.gffny.ldrbrd.common.model.Constant;
-import com.gffny.ldrbrd.common.model.impl.mongo.Course;
+import com.gffny.ldrbrd.common.model.nosql.Course;
 
 /**
  * @author John Gaffney (john@gffny.com) Jul 30, 2012
@@ -83,7 +83,8 @@ public class Scorecard extends CommonIDEntity {
 	 * @param handicap
 	 * @return
 	 */
-	public static Scorecard createNewScorecard(Golfer golfer, Course course, int handicap) {
+	public static Scorecard createNewScorecard(Golfer golfer, Course course,
+			int handicap) {
 		Scorecard scorecard = new Scorecard(golfer, course, handicap);
 		scorecard.initDates(new DateTime(System.currentTimeMillis()));
 		return scorecard;
@@ -284,9 +285,10 @@ public class Scorecard extends CommonIDEntity {
 	@Transient
 	@Override
 	public String toString() {
-		return "Scorecard [id=" + getId() + ", golfer=" + golfer + ", courseDocumentId="
-				+ courseDocumentId + ", course=" + course + ", roundDate=" + roundDate
-				+ ", handicap=" + handicap + ", conditions=" + conditions + ", scorecardNotes="
+		return "Scorecard [id=" + getId() + ", golfer=" + golfer
+				+ ", courseDocumentId=" + courseDocumentId + ", course="
+				+ course + ", roundDate=" + roundDate + ", handicap="
+				+ handicap + ", conditions=" + conditions + ", scorecardNotes="
 				+ scorecardNotes + ", holeScoreArray=" + holeScoreArray + "]";
 	}
 

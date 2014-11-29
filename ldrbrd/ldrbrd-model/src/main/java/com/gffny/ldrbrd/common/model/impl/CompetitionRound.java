@@ -16,12 +16,11 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.annotations.ForeignKey;
 import org.joda.time.DateTime;
 
 import com.gffny.ldrbrd.common.model.CommonIDEntity;
 import com.gffny.ldrbrd.common.model.Constant;
-import com.gffny.ldrbrd.common.model.impl.mongo.Course;
+import com.gffny.ldrbrd.common.model.nosql.Course;
 
 /**
  * @author John D. Gaffney | gffny.com
@@ -67,9 +66,11 @@ public class CompetitionRound extends CommonIDEntity {
 	 * @param competitionRoundDT
 	 * @return
 	 */
-	public static CompetitionRound createNewCompetitionRound(Competition competition,
-			DateTime startDate, int roundNumber, String courseDocumentId) {
-		return new CompetitionRound(competition, startDate, roundNumber, courseDocumentId);
+	public static CompetitionRound createNewCompetitionRound(
+			Competition competition, DateTime startDate, int roundNumber,
+			String courseDocumentId) {
+		return new CompetitionRound(competition, startDate, roundNumber,
+				courseDocumentId);
 	}
 
 	/** */
@@ -82,8 +83,8 @@ public class CompetitionRound extends CommonIDEntity {
 	 * @param startDate
 	 * @param roundNumber
 	 */
-	private CompetitionRound(Competition competition, DateTime startDate, int roundNumber,
-			String courseDocumentId) {
+	private CompetitionRound(Competition competition, DateTime startDate,
+			int roundNumber, String courseDocumentId) {
 		this.competition = competition;
 		this.roundNumber = roundNumber;
 		this.courseDocumentId = courseDocumentId;
@@ -96,7 +97,6 @@ public class CompetitionRound extends CommonIDEntity {
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "competition_id", nullable = false)
-	@ForeignKey(name = "id")
 	public Competition getCompetition() {
 		return this.competition;
 	}

@@ -24,17 +24,19 @@ import com.gffny.ldrbrd.common.model.impl.Competition;
 import com.gffny.ldrbrd.common.model.impl.CompetitionEntry;
 import com.gffny.ldrbrd.common.model.impl.CompetitionRound;
 import com.gffny.ldrbrd.common.model.impl.Golfer;
-import com.gffny.ldrbrd.common.model.impl.mongo.Course;
+import com.gffny.ldrbrd.common.model.nosql.Course;
 import com.gffny.ldrbrd.common.service.ICompetitionService;
 
 /**
  * @author John Gaffney (john@gffny.com) Dec 23, 2012
  */
 @Service
-public class CompetitionService extends AbstractService implements ICompetitionService {
+public class CompetitionService extends AbstractService implements
+		ICompetitionService {
 
 	/** The Constant log. */
-	private static final Logger LOG = LoggerFactory.getLogger(CompetitionService.class);
+	private static final Logger LOG = LoggerFactory
+			.getLogger(CompetitionService.class);
 
 	/**
 	 * 
@@ -59,11 +61,15 @@ public class CompetitionService extends AbstractService implements ICompetitionS
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.gffny.ldrbrd.common.service.impl.ICompetitionService#createCompetition
+	 * 
+	 * @see
+	 * com.gffny.ldrbrd.common.service.impl.ICompetitionService#createCompetition
 	 * (java.lang.String)
 	 */
+	@Override
 	@Transactional(value = "lrdbrd_txnMgr", propagation = Propagation.REQUIRED)
-	public Competition createCompetition(String competitionName) throws ServiceException {
+	public Competition createCompetition(String competitionName)
+			throws ServiceException {
 		try {
 
 			// check if the competition already exists
@@ -72,7 +78,8 @@ public class CompetitionService extends AbstractService implements ICompetitionS
 				return competition;
 			} else {
 				// else, create a new one
-				Competition newCompetition = Competition.createNewCompetition(competitionName);
+				Competition newCompetition = Competition
+						.createNewCompetition(competitionName);
 				return competitionDao.persist(newCompetition);
 			}
 		} catch (PersistenceException daEx) {
@@ -83,13 +90,17 @@ public class CompetitionService extends AbstractService implements ICompetitionS
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.gffny.ldrbrd.common.service.impl.ICompetitionService#
 	 * createCompetitionRound(com.gffny.ldrbrd.common.model.impl.Competition,
-	 * org.joda.time.DateTime, java.lang.Integer, com.gffny.ldrbrd.common.model.impl.Course)
+	 * org.joda.time.DateTime, java.lang.Integer,
+	 * com.gffny.ldrbrd.common.model.impl.Course)
 	 */
+	@Override
 	@Transactional(value = "lrdbrd_txnMgr", propagation = Propagation.REQUIRED)
-	public CompetitionRound createCompetitionRound(Competition competition, DateTime roundDate,
-			Integer roundNumber, Course course) throws ServiceException {
+	public CompetitionRound createCompetitionRound(Competition competition,
+			DateTime roundDate, Integer roundNumber, Course course)
+			throws ServiceException {
 
 		// TODO fix the competition service to createCompetitionRound
 		return new CompetitionRound();
@@ -101,9 +112,11 @@ public class CompetitionService extends AbstractService implements ICompetitionS
 	 * @see com.gffny.ldrbrd.common.service.ICompetitionService#registerGolferForCompetitionWithHandicap(com.gffny.ldrbrd.common.model.impl.Golfer,
 	 *      com.gffny.ldrbrd.common.model.impl.Competition, int)
 	 */
+	@Override
 	@Transactional(value = "lrdbrd_txnMgr", propagation = Propagation.REQUIRED)
-	public CompetitionEntry registerGolferForCompetitionWithHandicap(Golfer golfer,
-			Competition competition, int handicap) throws ServiceException {
+	public CompetitionEntry registerGolferForCompetitionWithHandicap(
+			Golfer golfer, Competition competition, int handicap)
+			throws ServiceException {
 
 		// check if the values are valid
 		if (golfer != null && competition != null && handicap > 0) {
@@ -112,32 +125,42 @@ public class CompetitionService extends AbstractService implements ICompetitionS
 			return new CompetitionEntry();
 
 		}
-		throw new ServiceException("invalid parameter: golfer " + golfer.toString()
-				+ ", competition " + competition.toString() + ", handicap " + handicap);
+		throw new ServiceException("invalid parameter: golfer "
+				+ golfer.toString() + ", competition " + competition.toString()
+				+ ", handicap " + handicap);
 	}
 
 	/**
-	 * Uses the golfers handicap to register the golfer in the competition (non-Javadoc)
+	 * Uses the golfers handicap to register the golfer in the competition
+	 * (non-Javadoc)
 	 * 
-	 * @see com.gffny.ldrbrd.common.service.ICompetitionService# registerGolferForCompetition
+	 * @see com.gffny.ldrbrd.common.service.ICompetitionService#
+	 *      registerGolferForCompetition
 	 *      (com.gffny.ldrbrd.common.model.impl.Golfer,
 	 *      com.gffny.ldrbrd.common.model.impl.Competition)
 	 */
+	@Override
 	@Transactional(value = "lrdbrd_txnMgr", propagation = Propagation.REQUIRED)
-	public CompetitionEntry registerGolferForCompetition(Golfer golfer, Competition competition)
-			throws ServiceException {
-		return registerGolferForCompetitionWithHandicap(golfer, competition, golfer.getHandicap());
+	public CompetitionEntry registerGolferForCompetition(Golfer golfer,
+			Competition competition) throws ServiceException {
+		return registerGolferForCompetitionWithHandicap(golfer, competition,
+				golfer.getHandicap());
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.gffny.ldrbrd.common.service.ICompetitionService#getCompetitionById
+	 * 
+	 * @see
+	 * com.gffny.ldrbrd.common.service.ICompetitionService#getCompetitionById
 	 * (java.lang.String)
 	 */
-	public Competition getCompetitionById(String competitionId) throws ServiceException {
+	@Override
+	public Competition getCompetitionById(String competitionId)
+			throws ServiceException {
 		try {
 			// get the competition by ID!
-			return competitionDao.findById(Competition.class, Integer.parseInt(competitionId));
+			return competitionDao.findById(Competition.class,
+					Integer.parseInt(competitionId));
 			// contain error and bubble (expected pattern)
 		} catch (PersistenceException daEx) {
 			LOG.error(daEx.toString(), daEx);
@@ -150,31 +173,42 @@ public class CompetitionService extends AbstractService implements ICompetitionS
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.gffny.ldrbrd.common.service.ICompetitionService#getCompetitionByName
+	 * 
+	 * @see
+	 * com.gffny.ldrbrd.common.service.ICompetitionService#getCompetitionByName
 	 * (java.lang.String)
 	 */
-	public Competition getCompetitionByName(String competitionName) throws ServiceException {
+	@Override
+	public Competition getCompetitionByName(String competitionName)
+			throws ServiceException {
 		try {
 
 			// check if the competition already exists
 			Map<String, String> paramMap = new HashMap<String, String>();
 			paramMap.put("competitionName", competitionName);
-			List<Competition> existingCompetitionList = competitionDao.findByNamedQuery(
-					Competition.FIND_BY_COMPETITION_NAME, paramMap);
-			if (existingCompetitionList != null && existingCompetitionList.size() == 1) {
+			List<Competition> existingCompetitionList = competitionDao
+					.findByNamedQuery(Competition.FIND_BY_COMPETITION_NAME,
+							paramMap);
+			if (existingCompetitionList != null
+					&& existingCompetitionList.size() == 1) {
 
 				// if it does, return it
 				return existingCompetitionList.get(0);
 			} else {
 				if (existingCompetitionList.size() == 0) {
-					LOG.debug("no competition found with the name {}", competitionName);
+					LOG.debug("no competition found with the name {}",
+							competitionName);
 					return null;
 				} else if (existingCompetitionList.size() > 1) {
-					LOG.error("more than one competition found with the name {}", competitionName);
-					throw new ServiceException("more than one competition found with the name "
-							+ competitionName);
+					LOG.error(
+							"more than one competition found with the name {}",
+							competitionName);
+					throw new ServiceException(
+							"more than one competition found with the name "
+									+ competitionName);
 				}
-				LOG.error("error with the result set returned for the competition name {}",
+				LOG.error(
+						"error with the result set returned for the competition name {}",
 						competitionName);
 				throw new ServiceException(
 						"error with the result set returned for the competition name "
@@ -188,13 +222,15 @@ public class CompetitionService extends AbstractService implements ICompetitionS
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see
-	 * com.gffny.ldrbrd.common.service.ICompetitionService#getCompetitionRound(java.lang.String,
-	 * java.lang.Integer)
+	 * com.gffny.ldrbrd.common.service.ICompetitionService#getCompetitionRound
+	 * (java.lang.String, java.lang.Integer)
 	 */
+	@Override
 	@Transactional(readOnly = true)
-	public CompetitionRound getCompetitionRound(String competitionId, Integer roundNumber)
-			throws ServiceException {
+	public CompetitionRound getCompetitionRound(String competitionId,
+			Integer roundNumber) throws ServiceException {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("competitionId", competitionId);
 		params.put("roundNumber", roundNumber);
@@ -207,6 +243,7 @@ public class CompetitionService extends AbstractService implements ICompetitionS
 	 * 
 	 * @see com.gffny.ldrbrd.common.service.ICompetitionService#getCompetitionListForGolfer(java.lang.String)
 	 */
+	@Override
 	public List<CompetitionEntry> getCompetitionListForGolfer(String golferId)
 			throws ServiceException {
 		if (golferId != null) {
@@ -222,6 +259,7 @@ public class CompetitionService extends AbstractService implements ICompetitionS
 	 * @see com.gffny.ldrbrd.common.service.ICompetitionService#getCompetitionRegistrationForGolfer(com.gffny.ldrbrd.common.model.impl.Golfer,
 	 *      com.gffny.ldrbrd.common.model.impl.Competition)
 	 */
+	@Override
 	public CompetitionEntry getCompetitionRegistrationForGolfer(Golfer golfer,
 			Competition competition) throws ServiceException {
 		if (golfer != null && competition != null) {
@@ -231,8 +269,8 @@ public class CompetitionService extends AbstractService implements ICompetitionS
 
 		} else {
 			LOG.error("parameters are malformed");
-			throw new ServiceException("invalid parameter: golfer " + golfer + ", competition "
-					+ competition);
+			throw new ServiceException("invalid parameter: golfer " + golfer
+					+ ", competition " + competition);
 		}
 	}
 

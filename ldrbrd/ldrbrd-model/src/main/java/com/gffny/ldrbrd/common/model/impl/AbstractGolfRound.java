@@ -13,7 +13,7 @@ import org.hibernate.annotations.ForeignKey;
 import org.joda.time.DateTime;
 
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
-import com.gffny.ldrbrd.common.model.impl.mongo.Course;
+import com.gffny.ldrbrd.common.model.nosql.Course;
 
 @Inheritance
 public abstract class AbstractGolfRound extends CommonUUIDEntity {

@@ -10,23 +10,25 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gffny.ldrbrd.common.dao.GenericNoSqlDao;
-import com.gffny.ldrbrd.common.dao.ICourseNoSqlDao;
+import com.gffny.ldrbrd.common.dao.nosql.GenericNoSqlDao;
+import com.gffny.ldrbrd.common.dao.nosql.ICourseNoSqlDao;
 import com.gffny.ldrbrd.common.exception.AuthorisationException;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
-import com.gffny.ldrbrd.common.model.impl.mongo.Club;
-import com.gffny.ldrbrd.common.model.impl.mongo.Course;
+import com.gffny.ldrbrd.common.model.nosql.Club;
+import com.gffny.ldrbrd.common.model.nosql.Course;
 import com.gffny.ldrbrd.common.service.ICourseClubService;
 
 /**
  * @author John D. Gaffney | gffny.com
  */
 @Service
-public class CourseClubService extends AbstractService implements ICourseClubService {
+public class CourseClubService extends AbstractService implements
+		ICourseClubService {
 
 	/** The Constant log. */
-	private static final Logger LOG = LoggerFactory.getLogger(CourseClubService.class);
+	private static final Logger LOG = LoggerFactory
+			.getLogger(CourseClubService.class);
 
 	/** */
 	@Autowired
@@ -38,8 +40,12 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.gffny.ldrbrd.common.service.ICourseClubService#clubById(java.lang.String)
+	 * 
+	 * @see
+	 * com.gffny.ldrbrd.common.service.ICourseClubService#clubById(java.lang
+	 * .String)
 	 */
+	@Override
 	public Club clubById(String clubId) throws ServiceException {
 		try {
 			return clubMongoDaoImpl.findById(Club.class, clubId);
@@ -51,8 +57,11 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.gffny.ldrbrd.common.service.impl.ICourseClubService#getClubList()
+	 * 
+	 * @see
+	 * com.gffny.ldrbrd.common.service.impl.ICourseClubService#getClubList()
 	 */
+	@Override
 	public List<Club> listClub() throws ServiceException {
 		try {
 			return clubMongoDaoImpl.find(Club.class);
@@ -64,8 +73,12 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.gffny.ldrbrd.common.service.ICourseClubService#getCourseById(java .lang.String)
+	 * 
+	 * @see
+	 * com.gffny.ldrbrd.common.service.ICourseClubService#getCourseById(java
+	 * .lang.String)
 	 */
+	@Override
 	public Course courseById(final String courseId) throws ServiceException {
 
 		LOG.debug("getting course with id: {}", courseId);
@@ -73,7 +86,8 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 			try {
 				return courseMongoDaoImpl.findById(Course.class, courseId);
 			} catch (PersistenceException e) {
-				LOG.error("error retrieving course with id {} from datastore. Exception {}",
+				LOG.error(
+						"error retrieving course with id {} from datastore. Exception {}",
 						courseId, e.getMessage());
 				return null;
 			}
@@ -85,8 +99,12 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.gffny.ldrbrd.common.service.ICourseClubService#listCourseByClub(java.lang.String)
+	 * 
+	 * @see
+	 * com.gffny.ldrbrd.common.service.ICourseClubService#listCourseByClub(java
+	 * .lang.String)
 	 */
+	@Override
 	public List<Course> listCourseByClub(String clubId) throws ServiceException {
 		LOG.debug("listCourseByClub id {}", clubId);
 		try {
@@ -99,8 +117,12 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.gffny.ldrbrd.common.service.ICourseClubService#listCourseByCity(java.lang.String)
+	 * 
+	 * @see
+	 * com.gffny.ldrbrd.common.service.ICourseClubService#listCourseByCity(java
+	 * .lang.String)
 	 */
+	@Override
 	public List<Course> listCourseByCity(String city) throws ServiceException {
 		LOG.debug("listCourseByCity id {}", city);
 		try {
@@ -113,11 +135,14 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see
-	 * com.gffny.ldrbrd.common.service.ICourseClubService#listCourseByLocation(java.lang.String,
-	 * java.lang.String)
+	 * com.gffny.ldrbrd.common.service.ICourseClubService#listCourseByLocation
+	 * (java.lang.String, java.lang.String)
 	 */
-	public List<Course> listCourseByLocation(String lat, String lon) throws ServiceException {
+	@Override
+	public List<Course> listCourseByLocation(String lat, String lon)
+			throws ServiceException {
 		LOG.debug("listCourseByLocation: latitude {}, longtitude {}", lat, lon);
 		try {
 			return courseMongoDaoImpl.listCourseByLocation(lat, lon);
@@ -129,35 +154,46 @@ public class CourseClubService extends AbstractService implements ICourseClubSer
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.gffny.ldrbrd.common.service.ICourseClubService#getFavouriteCourseList
+	 * 
+	 * @see
+	 * com.gffny.ldrbrd.common.service.ICourseClubService#getFavouriteCourseList
 	 * (java.lang.String)
 	 */
-	public List<Course> listCourseByGolferFavourite(String golferId) throws ServiceException,
-			AuthorisationException {
+	@Override
+	public List<Course> listCourseByGolferFavourite(String golferId)
+			throws ServiceException, AuthorisationException {
 		LOG.debug("listCourseByGolferFavourite golferId {}", golferId);
 		authorisationService.authorise(golferId);
-		throw new ServiceException("listCourseByGolferFavourite is not yet implemented");
+		throw new ServiceException(
+				"listCourseByGolferFavourite is not yet implemented");
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.gffny.ldrbrd.common.service.ICourseClubService#getFavouriteCourseList
+	 * 
+	 * @see
+	 * com.gffny.ldrbrd.common.service.ICourseClubService#getFavouriteCourseList
 	 * (java.lang.String, int)
 	 */
-	public List<Course> listCourseByGolferFavourite(String golferId, int favouriteLimit)
-			throws ServiceException, AuthorisationException {
-		LOG.debug("listCourseByGolferFavourite golferId {}, favouriteLimit", golferId,
-				favouriteLimit);
+	@Override
+	public List<Course> listCourseByGolferFavourite(String golferId,
+			int favouriteLimit) throws ServiceException, AuthorisationException {
+		LOG.debug("listCourseByGolferFavourite golferId {}, favouriteLimit",
+				golferId, favouriteLimit);
 		authorisationService.authorise(golferId);
-		throw new ServiceException("listCourseByGolferFavourite is not yet implemented");
+		throw new ServiceException(
+				"listCourseByGolferFavourite is not yet implemented");
 
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.gffny.ldrbrd.common.service.ICourseClubService#testList()
 	 */
-	public List<Course> testList() throws ServiceException, AuthorisationException {
+	@Override
+	public List<Course> testList() throws ServiceException,
+			AuthorisationException {
 		LOG.debug("retrieving test course list");
 		try {
 			return courseMongoDaoImpl.testList();

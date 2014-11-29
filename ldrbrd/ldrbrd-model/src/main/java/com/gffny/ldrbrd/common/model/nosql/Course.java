@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.gffny.ldrbrd.common.model.impl.mongo;
+package com.gffny.ldrbrd.common.model.nosql;
 
 import java.util.List;
 
@@ -64,10 +64,11 @@ public class Course extends CommonUUIDEntity {
 	 * @param courseImageReference
 	 * @return
 	 */
-	public static Course createCourse(String courseName, Club club, TeeColour teeColour,
-			Double slopeIndex, Integer par, String courseImageReference) {
-		Course newCourse = new Course(courseName, club, teeColour, slopeIndex, par,
-				courseImageReference);
+	public static Course createCourse(String courseName, Club club,
+			TeeColour teeColour, Double slopeIndex, Integer par,
+			String courseImageReference) {
+		Course newCourse = new Course(courseName, club, teeColour, slopeIndex,
+				par, courseImageReference);
 		return newCourse;
 	}
 
@@ -79,8 +80,8 @@ public class Course extends CommonUUIDEntity {
 	 * @param par
 	 * @param courseImageReference
 	 */
-	private Course(String courseName, Club club, TeeColour teeColour, Double slopeIndex,
-			Integer par, String courseImageReference) {
+	private Course(String courseName, Club club, TeeColour teeColour,
+			Double slopeIndex, Integer par, String courseImageReference) {
 		this.setName(courseName);
 		this.club = club;
 		this.teeColour = teeColour;

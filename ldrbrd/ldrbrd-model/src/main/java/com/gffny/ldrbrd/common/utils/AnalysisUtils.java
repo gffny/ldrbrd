@@ -1,7 +1,7 @@
 package com.gffny.ldrbrd.common.utils;
 
 import com.gffny.ldrbrd.common.model.impl.Scorecard;
-import com.gffny.ldrbrd.common.model.impl.mongo.AnalysisScorecard;
+import com.gffny.ldrbrd.common.model.nosql.AnalysisScorecard;
 
 /**
  * @author John D. Gaffney | gffny.com

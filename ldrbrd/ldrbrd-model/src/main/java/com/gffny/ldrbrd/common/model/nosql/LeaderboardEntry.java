@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.gffny.ldrbrd.common.model.impl.mongo;
+package com.gffny.ldrbrd.common.model.nosql;
 
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
 

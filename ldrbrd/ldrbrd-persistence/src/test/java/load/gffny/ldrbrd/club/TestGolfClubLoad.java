@@ -13,13 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.gffny.ldrbrd.common.dao.GenericNoSqlDao;
+import com.gffny.ldrbrd.common.dao.nosql.GenericNoSqlDao;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.model.Constant;
 import com.gffny.ldrbrd.common.model.enums.TeeColour;
-import com.gffny.ldrbrd.common.model.impl.mongo.Club;
-import com.gffny.ldrbrd.common.model.impl.mongo.Course;
-import com.gffny.ldrbrd.common.model.impl.mongo.CourseHole;
+import com.gffny.ldrbrd.common.model.nosql.Club;
+import com.gffny.ldrbrd.common.model.nosql.Course;
+import com.gffny.ldrbrd.common.model.nosql.CourseHole;
 
 /**
  * @author John D. Gaffney | gffny.com
@@ -76,7 +76,8 @@ public class TestGolfClubLoad {
 		String id = clubDao.persist(loadClub);
 		List<Course> courseList = loadClub.getCourseList();
 		loadClub.setCourseList(new ArrayList<Course>());
-		// TODO CREATE A METHOD TO CLONE CLUB WITHOUT COURSE LIST / OTHER COLLECTIONS OTHERWISE
+		// TODO CREATE A METHOD TO CLONE CLUB WITHOUT COURSE LIST / OTHER
+		// COLLECTIONS OTHERWISE
 		// THERE IS A LOOP OF PERSISTENCE CLUB -> COURSE -> CLUB -> COURSE ....
 		for (Course loadCourse : courseList) {
 			loadCourse.setClub(loadClub);
@@ -93,7 +94,8 @@ public class TestGolfClubLoad {
 	@Test
 	public void getGolfClub() throws PersistenceException {
 
-		Club clubReturned = clubDao.findById(Club.class, "53ef8c050364fc04b2d8ed1d");
+		Club clubReturned = clubDao.findById(Club.class,
+				"53ef8c050364fc04b2d8ed1d");
 		if (clubReturned != null) {
 			System.out.println(clubReturned.getClubName());
 		}
@@ -103,7 +105,8 @@ public class TestGolfClubLoad {
 			System.out.println(clubReturned.getClubName());
 		}
 
-		Course courseReturned = courseDao.findByName(Course.class, "test course");
+		Course courseReturned = courseDao.findByName(Course.class,
+				"test course");
 		if (courseReturned != null) {
 			System.out.println(courseReturned.getName());
 		}

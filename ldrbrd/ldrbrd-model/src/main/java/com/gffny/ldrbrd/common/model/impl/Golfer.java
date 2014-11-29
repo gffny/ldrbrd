@@ -14,7 +14,7 @@ import javax.persistence.Transient;
 
 import com.gffny.ldrbrd.common.model.Constant;
 import com.gffny.ldrbrd.common.model.enums.Dominance;
-import com.gffny.ldrbrd.common.model.impl.mongo.Course;
+import com.gffny.ldrbrd.common.model.nosql.Course;
 
 /**
  * @author
@@ -115,9 +115,10 @@ public class Golfer extends UserProfile {
 	/**
 	 * @see java.lang.Object#toString()
 	 */
+	@Override
 	public String toString() {
-		return "[" + this.getFirstName() + " " + this.getLastName() + " | id: " + this.getId()
-				+ "]";
+		return "[" + this.getFirstName() + " " + this.getLastName() + " | id: "
+				+ this.getId() + "]";
 
 	}
 }

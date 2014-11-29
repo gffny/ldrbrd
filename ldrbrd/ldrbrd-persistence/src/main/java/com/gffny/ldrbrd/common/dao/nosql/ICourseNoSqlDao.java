@@ -1,11 +1,12 @@
-package com.gffny.ldrbrd.common.dao;
+package com.gffny.ldrbrd.common.dao.nosql;
 
 import java.util.List;
 
 import com.gffny.ldrbrd.common.exception.PersistenceException;
-import com.gffny.ldrbrd.common.model.impl.mongo.Course;
+import com.gffny.ldrbrd.common.model.nosql.Course;
 
-public interface ICourseNoSqlDao extends GenericNoSqlDao<Course> {
+public interface ICourseNoSqlDao extends
+		GenericNoSqlDao<com.gffny.ldrbrd.common.model.nosql.Course> {
 
 	/**
 	 * @param clubId

@@ -11,9 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.gffny.ldrbrd.common.dao.GenericNoSqlDao;
+import com.gffny.ldrbrd.common.dao.nosql.GenericNoSqlDao;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
-import com.gffny.ldrbrd.common.model.impl.mongo.HoleScore;
+import com.gffny.ldrbrd.common.model.nosql.HoleScore;
 
 /**
  * @author John D. Gaffney | gffny.com

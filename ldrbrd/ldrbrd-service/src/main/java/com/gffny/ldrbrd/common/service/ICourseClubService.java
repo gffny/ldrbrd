@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gffny.ldrbrd.common.exception.AuthorisationException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
-import com.gffny.ldrbrd.common.model.impl.mongo.Club;
-import com.gffny.ldrbrd.common.model.impl.mongo.Course;
+import com.gffny.ldrbrd.common.model.nosql.Club;
+import com.gffny.ldrbrd.common.model.nosql.Course;
 
 @Transactional(value = "ldrbrd_txnMgr", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = true)
 public interface ICourseClubService {
@@ -39,14 +39,16 @@ public interface ICourseClubService {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public abstract List<Course> listCourseByClub(String clubId) throws ServiceException;
+	public abstract List<Course> listCourseByClub(String clubId)
+			throws ServiceException;
 
 	/**
 	 * @param city
 	 * @return
 	 * @throws ServiceException
 	 */
-	public abstract List<Course> listCourseByCity(String city) throws ServiceException;
+	public abstract List<Course> listCourseByCity(String city)
+			throws ServiceException;
 
 	/**
 	 * @param lat
@@ -72,14 +74,15 @@ public interface ICourseClubService {
 	 * @throws ServiceException
 	 * @throws AuthorisationException
 	 */
-	public abstract List<Course> listCourseByGolferFavourite(String golferId, int favouriteLimit)
-			throws ServiceException, AuthorisationException;
+	public abstract List<Course> listCourseByGolferFavourite(String golferId,
+			int favouriteLimit) throws ServiceException, AuthorisationException;
 
 	/**
 	 * @return
 	 * @throws ServiceException
 	 * @throws AuthorisationException
 	 */
-	public List<Course> testList() throws ServiceException, AuthorisationException;
+	public List<Course> testList() throws ServiceException,
+			AuthorisationException;
 
 }

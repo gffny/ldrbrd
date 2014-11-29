@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.gffny.ldrbrd.common.dao.ICourseNoSqlDao;
+import com.gffny.ldrbrd.common.dao.nosql.ICourseNoSqlDao;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
-import com.gffny.ldrbrd.common.model.impl.mongo.Course;
+import com.gffny.ldrbrd.common.model.nosql.Course;
 
 /**
  * @author John D. Gaffney | gffny.com

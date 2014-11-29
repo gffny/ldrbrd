@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.gffny.ldrbrd.common.exception.AuthorisationException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
-import com.gffny.ldrbrd.common.model.impl.mongo.Club;
-import com.gffny.ldrbrd.common.model.impl.mongo.Course;
+import com.gffny.ldrbrd.common.model.nosql.Club;
+import com.gffny.ldrbrd.common.model.nosql.Course;
 import com.gffny.ldrbrd.common.service.impl.CourseClubService;
 
 /**
@@ -44,12 +44,13 @@ public class CourseRestController extends BaseRestController {
 	/**
 	 * @return
 	 */
-	@RequestMapping(value = "/club/id/{clubId}", produces = { MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE })
+	@RequestMapping(value = "/club/id/{clubId}", produces = {
+			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<Club> clubById(@PathVariable String clubId) {
 
 		try {
-			return new ResponseEntity<Club>(courseClubService.clubById(clubId), HttpStatus.OK);
+			return new ResponseEntity<Club>(courseClubService.clubById(clubId),
+					HttpStatus.OK);
 		} catch (ServiceException e) {
 			LOG.error(e.getMessage());
 			return new ResponseEntity<Club>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -59,27 +60,30 @@ public class CourseRestController extends BaseRestController {
 	/**
 	 * @return
 	 */
-	@RequestMapping(value = "/club/listclub", produces = { MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE })
+	@RequestMapping(value = "/club/listclub", produces = {
+			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<List<Club>> listclub() {
 
 		try {
-			return new ResponseEntity<List<Club>>(courseClubService.listClub(), HttpStatus.OK);
+			return new ResponseEntity<List<Club>>(courseClubService.listClub(),
+					HttpStatus.OK);
 		} catch (ServiceException e) {
 			LOG.error(e.getMessage());
-			return new ResponseEntity<List<Club>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<List<Club>>(
+					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	/**
 	 * @return
 	 */
-	@RequestMapping(value = "/course/id/{courseId}", produces = { MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE })
+	@RequestMapping(value = "/course/id/{courseId}", produces = {
+			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<Course> courseById(@PathVariable String courseId) {
 
 		try {
-			return new ResponseEntity<Course>(courseClubService.courseById(courseId), HttpStatus.OK);
+			return new ResponseEntity<Course>(
+					courseClubService.courseById(courseId), HttpStatus.OK);
 		} catch (ServiceException e) {
 			LOG.error(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -94,11 +98,12 @@ public class CourseRestController extends BaseRestController {
 	public ResponseEntity<List<Course>> courseByCity(@PathVariable String city) {
 
 		try {
-			return new ResponseEntity<List<Course>>(courseClubService.listCourseByCity(city),
-					HttpStatus.OK);
+			return new ResponseEntity<List<Course>>(
+					courseClubService.listCourseByCity(city), HttpStatus.OK);
 		} catch (ServiceException e) {
 			LOG.error(e.getMessage());
-			return new ResponseEntity<List<Course>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<List<Course>>(
+					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -107,32 +112,36 @@ public class CourseRestController extends BaseRestController {
 	 */
 	@RequestMapping(value = "/course/listfavouritebygolfer/{golferId}", produces = {
 			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-	public ResponseEntity<List<Course>> courseByGolfer(@PathVariable String golferId) {
+	public ResponseEntity<List<Course>> courseByGolfer(
+			@PathVariable String golferId) {
 
 		try {
 			return new ResponseEntity<List<Course>>(
-					courseClubService.listCourseByGolferFavourite(golferId), HttpStatus.OK);
+					courseClubService.listCourseByGolferFavourite(golferId),
+					HttpStatus.OK);
 		} catch (AuthorisationException e) {
 			LOG.error(e.getMessage());
 			return new ResponseEntity<List<Course>>(HttpStatus.UNAUTHORIZED);
 		} catch (ServiceException e) {
 			LOG.error(e.getMessage());
-			return new ResponseEntity<List<Course>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<List<Course>>(
+					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	/**
 	 * @return
 	 */
-	@RequestMapping(value = "/course/testlist", produces = { MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE })
+	@RequestMapping(value = "/course/testlist", produces = {
+			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<List<Course>> testlist() {
 
 		try {
 			List<Course> courseList = courseClubService.testList();
 			List<Course> returnList = new ArrayList<Course>();
 			for (Course course : courseList) {
-				course.setCourseHoleList(course.getCourseHoleList().subList(0, 2));
+				course.setCourseHoleList(course.getCourseHoleList().subList(0,
+						2));
 				returnList.add(course);
 			}
 
@@ -142,7 +151,8 @@ public class CourseRestController extends BaseRestController {
 			return new ResponseEntity<List<Course>>(HttpStatus.UNAUTHORIZED);
 		} catch (ServiceException e) {
 			LOG.error(e.getMessage());
-			return new ResponseEntity<List<Course>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<List<Course>>(
+					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

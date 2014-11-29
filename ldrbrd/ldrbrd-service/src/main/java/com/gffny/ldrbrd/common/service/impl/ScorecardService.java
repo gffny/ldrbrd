@@ -20,8 +20,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
-import com.gffny.ldrbrd.common.dao.GenericNoSqlDao;
 import com.gffny.ldrbrd.common.dao.IScorecardDao;
+import com.gffny.ldrbrd.common.dao.nosql.GenericNoSqlDao;
 import com.gffny.ldrbrd.common.exception.AuthorisationException;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
@@ -32,8 +32,8 @@ import com.gffny.ldrbrd.common.model.impl.CompetitionRound;
 import com.gffny.ldrbrd.common.model.impl.Golfer;
 import com.gffny.ldrbrd.common.model.impl.Scorecard;
 import com.gffny.ldrbrd.common.model.impl.UserProfile;
-import com.gffny.ldrbrd.common.model.impl.mongo.AnalysisScorecard;
-import com.gffny.ldrbrd.common.model.impl.mongo.Course;
+import com.gffny.ldrbrd.common.model.nosql.AnalysisScorecard;
+import com.gffny.ldrbrd.common.model.nosql.Course;
 import com.gffny.ldrbrd.common.service.ICompetitionService;
 import com.gffny.ldrbrd.common.service.ICourseClubService;
 import com.gffny.ldrbrd.common.service.ILeaderboardService;
@@ -51,7 +51,8 @@ import com.gffny.ldrbrd.common.utils.StringUtils;
  */
 @Transactional(value = "ldrbrd_txnMgr", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = true)
 @Service
-public class ScorecardService extends AbstractService implements IScorecardService {
+public class ScorecardService extends AbstractService implements
+		IScorecardService {
 
 	/**	*/
 	private static final int NEED_TO_BE_PUSHED_INTO_PROFILE = 5;
@@ -100,14 +101,19 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 * 
 	 * @see com.gffny.ldrbrd.common.service.IScorecardService#hasActiveScorecard(java.lang.String)
 	 */
+	@Override
 	public boolean hasActiveScorecard(String golferId) {
 		try {
-			// if the golferId is null, then return the logged in users scorecard active status
+			// if the golferId is null, then return the logged in users
+			// scorecard active status
 			if (golferId == null) {
-				UserProfile loggedInUser = authorisationService.getLoggedInUser();
-				return scorecardDaoJpaImpl.hasActiveScoreacard(loggedInUser.getId());
+				UserProfile loggedInUser = authorisationService
+						.getLoggedInUser();
+				return scorecardDaoJpaImpl.hasActiveScoreacard(loggedInUser
+						.getId());
 			} else {
-				return scorecardDaoJpaImpl.hasActiveScoreacard(Integer.parseInt(golferId));
+				return scorecardDaoJpaImpl.hasActiveScoreacard(Integer
+						.parseInt(golferId));
 			}
 		} catch (ServiceException | NumberFormatException e) {
 			LOG.error(e.getMessage());
@@ -122,27 +128,36 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 * @throws ServiceException
 	 * @see com.gffny.ldrbrd.common.service.IScorecardService#getActiveScorecard(java.lang.String)
 	 */
-	public Scorecard getActiveScorecard(String golferId) throws ServiceException {
+	@Override
+	public Scorecard getActiveScorecard(String golferId)
+			throws ServiceException {
 
 		// if the there is no golferId passed, use the loggedIn Golfer's id
 		if (golferId == null) {
-			golferId = String.valueOf(authorisationService.getLoggedInUser().getId());
-			LOG.debug("golfer id was null, setting it to the logged in user's id {}", golferId);
+			golferId = String.valueOf(authorisationService.getLoggedInUser()
+					.getId());
+			LOG.debug(
+					"golfer id was null, setting it to the logged in user's id {}",
+					golferId);
 		}
 		try {
 			// get the list of active scorecards
-			List<Scorecard> activeScorecardList = scorecardDao.findByNamedQuery(
-					Scorecard.FIND_ACTIVE_SCORECARD,
-					populateParamMap(Constant.QUERY_PARAM_GOLFER_ID, Integer.valueOf(golferId)));
+			List<Scorecard> activeScorecardList = scorecardDao
+					.findByNamedQuery(
+							Scorecard.FIND_ACTIVE_SCORECARD,
+							populateParamMap(Constant.QUERY_PARAM_GOLFER_ID,
+									Integer.valueOf(golferId)));
 			if (CollectionUtils.safeSize(activeScorecardList) == 1) {
 				// get the course of the scorecard
 				Scorecard scorecard = activeScorecardList.get(0);
 				if (scorecard != null) {
-					scorecard.setCourse(clubService.courseById(scorecard.getCourseDocumentId()));
+					scorecard.setCourse(clubService.courseById(scorecard
+							.getCourseDocumentId()));
 				}
 				return scorecard;
 			} else {
-				LOG.debug("no active scorecards found for golfer id {}", golferId);
+				LOG.debug("no active scorecards found for golfer id {}",
+						golferId);
 			}
 		} catch (PersistenceException e) {
 			LOG.error(e.getMessage());
@@ -159,35 +174,42 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 * @see com.gffny.ldrbrd.common.service.IScorecardService#startGeneralScorecard(int,
 	 *      java.lang.String)
 	 */
+	@Override
 	@Transactional(value = "ldrbrd_txnMgr", propagation = Propagation.REQUIRED)
-	public Scorecard startGeneralScorecard(String courseId) throws AuthorisationException,
-			ServiceException {
+	public Scorecard startGeneralScorecard(String courseId)
+			throws AuthorisationException, ServiceException {
 		// check param
 		if (StringUtils.isNotEmpty(courseId)) {
 			try {
-				DebugUtils.transactionRequired("ScorecardService.startGeneralScorecard");
+				DebugUtils
+						.transactionRequired("ScorecardService.startGeneralScorecard");
 
 				// get the course
 				Course courseToPlay = courseClubService.courseById(courseId);
-				UserProfile loggedInUser = authorisationService.getLoggedInUser();
+				UserProfile loggedInUser = authorisationService
+						.getLoggedInUser();
 				if (courseToPlay != null) {
-					scorecardDaoJpaImpl.hasActiveScoreacard(loggedInUser.getId());
+					scorecardDaoJpaImpl.hasActiveScoreacard(loggedInUser
+							.getId());
 					// get the logged in golfer for whom to create the scorecard
 					if (loggedInUser instanceof Golfer) {
 						Golfer golfer = (Golfer) loggedInUser;
 						// persist the new scorecard
-						Scorecard result = Scorecard.createNewScorecard(golfer, courseToPlay,
-								golfer.getHandicap().intValue());
+						Scorecard result = Scorecard.createNewScorecard(golfer,
+								courseToPlay, golfer.getHandicap().intValue());
 						scorecardDao.persist(result);
 						return result;
-						// return scorecardDaoJpaImpl.persist(Scorecard.createNewScorecard(golfer,
+						// return
+						// scorecardDaoJpaImpl.persist(Scorecard.createNewScorecard(golfer,
 						// courseToPlay, golfer.getHandicap().intValue()));
 					} else {
-						Golfer golfer = profileService.getGolferByHandle(loggedInUser
-								.getProfileHandle());
+						Golfer golfer = profileService
+								.getGolferByHandle(loggedInUser
+										.getProfileHandle());
 						// persist the new scorecard
-						return scorecardDao.persist(Scorecard.createNewScorecard(golfer,
-								courseToPlay, golfer.getHandicap().intValue()));
+						return scorecardDao.persist(Scorecard
+								.createNewScorecard(golfer, courseToPlay,
+										golfer.getHandicap().intValue()));
 					}
 				} else {
 					LOG.error("no course returned for id {}", courseId);
@@ -204,37 +226,46 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 * (non-Javadoc)
 	 * 
 	 * @see com.gffny.ldrbrd.common.service.IScorecardService#startGeneralScorecard
-	 *      (java.lang.String, java.lang.String, java.util.HashMap, java.util.LinkedList)
+	 *      (java.lang.String, java.lang.String, java.util.HashMap,
+	 *      java.util.LinkedList)
 	 */
+	@Override
 	public Scorecard startGeneralScorecard(String golferId, String courseId,
 			Map<String, String> hashMap, List<CommonIDEntity> clubList) {
 
 		// return other method
-		return startGeneralScorecard(golferId, golferId, courseId, hashMap, clubList);
+		return startGeneralScorecard(golferId, golferId, courseId, hashMap,
+				clubList);
 	}
 
 	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see com.gffny.ldrbrd.common.service.IScorecardService#startGeneralScorecard
-	 *      (java.lang.String, java.lang.String, int, java.util.HashMap, java.util.LinkedList)
-	 */
-	public Scorecard startGeneralScorecard(String golferId, String courseId, int handicap,
-			Map<String, String> hashMap, List<CommonIDEntity> clubList) {
-
-		// return other method
-		return startGeneralScorecard(golferId, golferId, courseId, handicap, hashMap, clubList);
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.gffny.ldrbrd.common.service.IScorecardService#startGeneralScorecard
-	 *      (java.lang.String, java.lang.String, java.lang.String, java.util.HashMap,
+	 *      (java.lang.String, java.lang.String, int, java.util.HashMap,
 	 *      java.util.LinkedList)
 	 */
-	public Scorecard startGeneralScorecard(String golferId, String scoreKeeperId, String courseId,
-			Map<String, String> hashMap, List<CommonIDEntity> clubList) {
+	@Override
+	public Scorecard startGeneralScorecard(String golferId, String courseId,
+			int handicap, Map<String, String> hashMap,
+			List<CommonIDEntity> clubList) {
+
+		// return other method
+		return startGeneralScorecard(golferId, golferId, courseId, handicap,
+				hashMap, clubList);
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gffny.ldrbrd.common.service.IScorecardService#startGeneralScorecard
+	 *      (java.lang.String, java.lang.String, java.lang.String,
+	 *      java.util.HashMap, java.util.LinkedList)
+	 */
+	@Override
+	public Scorecard startGeneralScorecard(String golferId,
+			String scoreKeeperId, String courseId, Map<String, String> hashMap,
+			List<CommonIDEntity> clubList) {
 		throw new RuntimeException("not implemented");
 	}
 
@@ -242,11 +273,13 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 * (non-Javadoc)
 	 * 
 	 * @see com.gffny.ldrbrd.common.service.IScorecardService#startGeneralScorecard
-	 *      (java.lang.String, java.lang.String, java.lang.String, int, java.util.HashMap,
-	 *      java.util.LinkedList)
+	 *      (java.lang.String, java.lang.String, java.lang.String, int,
+	 *      java.util.HashMap, java.util.LinkedList)
 	 */
-	public Scorecard startGeneralScorecard(String golferId, String scoreKeeperId, String courseId,
-			int handicap, Map<String, String> hashMap, List<CommonIDEntity> clubList) {
+	@Override
+	public Scorecard startGeneralScorecard(String golferId,
+			String scoreKeeperId, String courseId, int handicap,
+			Map<String, String> hashMap, List<CommonIDEntity> clubList) {
 		throw new RuntimeException("not implemented");
 	}
 
@@ -254,15 +287,17 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 * (non-Javadoc)
 	 * 
 	 * @see com.gffny.ldrbrd.common.service.IScorecardService#startCompetitionScorecard
-	 *      (java.lang.String, java.lang.String, java.lang.String, int, java.util.LinkedList)
+	 *      (java.lang.String, java.lang.String, java.lang.String, int,
+	 *      java.util.LinkedList)
 	 */
-	public Scorecard startCompetitionScorecard(String golferId, String scoreKeeperId,
-			String competitionId, int roundNumber, List<CommonIDEntity> clubList)
-			throws ServiceException {
+	@Override
+	public Scorecard startCompetitionScorecard(String golferId,
+			String scoreKeeperId, String competitionId, int roundNumber,
+			List<CommonIDEntity> clubList) throws ServiceException {
 
 		// if there is no handicap passed, use the golfer's existing handicap
-		return startCompetitionScorecard(golferId, scoreKeeperId, competitionId, roundNumber,
-				clubList, EXISTING_GOLFER_HANDICAP);
+		return startCompetitionScorecard(golferId, scoreKeeperId,
+				competitionId, roundNumber, clubList, EXISTING_GOLFER_HANDICAP);
 	}
 
 	/**
@@ -270,32 +305,38 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 * 
 	 * @throws AuthorisationException
 	 * @see com.gffny.ldrbrd.common.service.impl.IScorecardService#
-	 *      startCompetitionScorecard(java.lang.String, java.lang.String, java.lang.String,
-	 *      java.lang.Integer, java.util.LinkedList)
+	 *      startCompetitionScorecard(java.lang.String, java.lang.String,
+	 *      java.lang.String, java.lang.Integer, java.util.LinkedList)
 	 */
+	@Override
 	@Transactional(value = "ldrbrd_txnMgr", propagation = Propagation.REQUIRED)
-	public Scorecard startCompetitionScorecard(String golferId, String scoreKeeperId,
-			String competitionId, int roundNumber, List<CommonIDEntity> clubList,
-			int competitionHandicap) throws ServiceException {
+	public Scorecard startCompetitionScorecard(String golferId,
+			String scoreKeeperId, String competitionId, int roundNumber,
+			List<CommonIDEntity> clubList, int competitionHandicap)
+			throws ServiceException {
 
 		// check param
-		DebugUtils.transactionRequired("ScorecardService.startCompetitionScorecard");
+		DebugUtils
+				.transactionRequired("ScorecardService.startCompetitionScorecard");
 		if (roundNumber > 0) {
 
 			try {
 				// get competition from dao
-				CompetitionRound competitionRound = competitionService.getCompetitionRound(
-						competitionId, roundNumber);
+				CompetitionRound competitionRound = competitionService
+						.getCompetitionRound(competitionId, roundNumber);
 
-				if (competitionRound != null && competitionRound.getCourse() != null) {
+				if (competitionRound != null
+						&& competitionRound.getCourse() != null) {
 					Golfer golfer = profileService.getGolferById(golferId);
 					int handicap = competitionHandicap == EXISTING_GOLFER_HANDICAP ? golfer
 							.getHandicap() : competitionHandicap;
 					// persist the new scorecard
-					Scorecard newScorecardId = scorecardDao.persist(Scorecard.createNewScorecard(
-							golfer, competitionRound.getCourse(), handicap));
+					Scorecard newScorecardId = scorecardDao.persist(Scorecard
+							.createNewScorecard(golfer,
+									competitionRound.getCourse(), handicap));
 					// create the leaderboard round
-					leaderboardService.startCompetitionRound(golfer, handicap, competitionRound);
+					leaderboardService.startCompetitionRound(golfer, handicap,
+							competitionRound);
 					return newScorecardId;
 				}
 			} catch (AuthorisationException | PersistenceException ae) {
@@ -312,11 +353,12 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.gffny.ldrbrd.common.service.IScorecardService#scoreHoleScoreMap(java .lang.String,
-	 *      java.util.Map)
+	 * @see com.gffny.ldrbrd.common.service.IScorecardService#scoreHoleScoreMap(java
+	 *      .lang.String, java.util.Map)
 	 */
-	public void scoreHoleScoreMap(int scorecardId, Map<Integer, Integer> holeScoreMap)
-			throws ServiceException {
+	@Override
+	public void scoreHoleScoreMap(int scorecardId,
+			Map<Integer, Integer> holeScoreMap) throws ServiceException {
 
 		// check is list is valid
 		if (holeScoreMap != null) {
@@ -325,8 +367,8 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 			// traverse hole map to score holes
 			for (Integer holeScoreKey : holeScoreKeySet) {
 				// score hole
-				scoreHole(scorecardId, holeScoreKey.intValue(), holeScoreMap.get(holeScoreKey)
-						.intValue(), null);
+				scoreHole(scorecardId, holeScoreKey.intValue(), holeScoreMap
+						.get(holeScoreKey).intValue(), null);
 			}
 		}
 	}
@@ -337,35 +379,40 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 * @see com.gffny.ldrbrd.common.service.IScorecardService#scoreHoleArray(java.lang.String,
 	 *      int[])
 	 */
-	public void scoreHoleArray(String scorecardId, int[] scorecardArray) throws ServiceException {
+	@Override
+	public void scoreHoleArray(String scorecardId, int[] scorecardArray)
+			throws ServiceException {
 
-		LOG.debug("scoring scorecard id {} with array of scores {}", scorecardId,
-				Arrays.toString(scorecardArray));
+		LOG.debug("scoring scorecard id {} with array of scores {}",
+				scorecardId, Arrays.toString(scorecardArray));
 		boolean scorecardIsActive;
 		int scorecardIdInt;
 		try {
 			// parse scorecard to int
 			scorecardIdInt = Integer.parseInt(scorecardId);
 			// check if the scorecard is active
-			scorecardIsActive = scorecardDaoJpaImpl.isScorecardActive(scorecardIdInt);
+			scorecardIsActive = scorecardDaoJpaImpl
+					.isScorecardActive(scorecardIdInt);
 		} catch (PersistenceException | NumberFormatException e) {
 			LOG.error(e.getMessage());
 			throw new ServiceException(e.getMessage(), e);
 		}
 		//
-		if (scorecardId != null && scorecardArray != null && scorecardArray.length > 0
-				&& scorecardIsActive) {
+		if (scorecardId != null && scorecardArray != null
+				&& scorecardArray.length > 0 && scorecardIsActive) {
 			// traverse scorecard array
 			int holeNumber = 1;
 			for (int holeScore : scorecardArray) {
 				// score each hole (TODO maybe get the holeId in scoreHoleArray)
-				scoreHole(scorecardIdInt, holeNumber, holeScore, null, scorecardIsActive);
+				scoreHole(scorecardIdInt, holeNumber, holeScore, null,
+						scorecardIsActive);
 				holeNumber++;
 			}
 		} else {
 			LOG.error(
 					"invalid parameters for scoreHoleArray. ID: {}, scorecardArray: {}, scorecardArray.length {}, scorecardIsActice {}",
-					scorecardId, scorecardArray, scorecardArray.length, scorecardIsActive);
+					scorecardId, scorecardArray, scorecardArray.length,
+					scorecardIsActive);
 			throw new ServiceException("invalid parameters for scoreHoleArray");
 		}
 	}
@@ -373,8 +420,9 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	/**
 	 * 
 	 */
-	public void scoreHole(int scorecardId, int holeNumber, int holeScore, String holeId)
-			throws ServiceException {
+	@Override
+	public void scoreHole(int scorecardId, int holeNumber, int holeScore,
+			String holeId) throws ServiceException {
 		scoreHole(scorecardId, holeNumber, holeScore, holeId, false);
 	}
 
@@ -384,13 +432,14 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 * @see com.gffny.ldrbrd.common.service.IScorecardService#scoreHole(com.gffny
 	 *      .ldrbrd.common.model.impl.HoleScore)
 	 */
-	private void scoreHole(int scorecardId, int holeNumber, int holeScore, String holeId,
-			boolean scorecardIsActive) throws ServiceException {
+	private void scoreHole(int scorecardId, int holeNumber, int holeScore,
+			String holeId, boolean scorecardIsActive) throws ServiceException {
 
 		// if we don't know that the scorecard is active, then check
 		if (!scorecardIsActive) {
 			try {
-				scorecardIsActive = scorecardDaoJpaImpl.isScorecardActive(scorecardId);
+				scorecardIsActive = scorecardDaoJpaImpl
+						.isScorecardActive(scorecardId);
 			} catch (PersistenceException e) {
 				LOG.error(e.getMessage());
 				throw new ServiceException(e.getMessage(), e);
@@ -400,7 +449,8 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 		// check hole validity
 		if (holeNumber > 0 && holeScore > 0 && scorecardIsActive) {
 			try {
-				scorecardDaoJpaImpl.scoreHole(scorecardId, holeNumber, holeScore, holeId);
+				scorecardDaoJpaImpl.scoreHole(scorecardId, holeNumber,
+						holeScore, holeId);
 			} catch (PersistenceException e) {
 				LOG.error(e.getMessage());
 				throw new ServiceException(e.getMessage(), e);
@@ -421,7 +471,9 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 * @see com.gffny.ldrbrd.common.service.IScorecardService#checkScorecardScoreKeeper
 	 *      (java.lang.String, java.lang.String)
 	 */
-	public boolean checkScorecardScoreKeeper(String scorecardId, String scoreKeeperId) {
+	@Override
+	public boolean checkScorecardScoreKeeper(String scorecardId,
+			String scoreKeeperId) {
 
 		// check the parameters
 		if (scorecardId != null && scoreKeeperId != null) {
@@ -437,15 +489,17 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 * 
 	 * @return
 	 * @throws ServiceException
-	 * @see com.gffny.ldrbrd.common.service.IScorecardService#submitScorecard(java .lang.String,
-	 *      java.lang.String, java.lang.String)
+	 * @see com.gffny.ldrbrd.common.service.IScorecardService#submitScorecard(java
+	 *      .lang.String, java.lang.String, java.lang.String)
 	 */
+	@Override
 	@Transactional(value = "ldrbrd_txnMgr", propagation = Propagation.REQUIRED)
-	public boolean submitScorecard(String scorecardId, String scoreKeeperId, String competitionId)
-			throws ServiceException {
+	public boolean submitScorecard(String scorecardId, String scoreKeeperId,
+			String competitionId) throws ServiceException {
 
 		// check the parameters
-		if (scorecardId != null && scoreKeeperId != null && competitionId != null) {
+		if (scorecardId != null && scoreKeeperId != null
+				&& competitionId != null) {
 			throw new RuntimeException("not implemented");
 		} else {
 			LOG.error("method parameter(s) not valid");
@@ -457,57 +511,71 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 	 * (non-Javadoc)
 	 * 
 	 * @throws ServiceException
-	 * @see com.gffny.ldrbrd.common.service.IScorecardService#signScorecard(java. lang.String,
-	 *      java.lang.String, java.lang.String)
+	 * @see com.gffny.ldrbrd.common.service.IScorecardService#signScorecard(java.
+	 *      lang.String, java.lang.String, java.lang.String)
 	 */
+	@Override
 	@Transactional(value = "ldrbrd_txnMgr", propagation = Propagation.REQUIRED)
 	public boolean signScorecard(String scorecardId) throws ServiceException {
 
 		LOG.debug("signing scorecard");
 		UserProfile uProfile = authorisationService.getLoggedInUser();
 		// check the parameters
-		if (scorecardId != null && uProfile != null && uProfile.getIdString() != null) {
+		if (scorecardId != null && uProfile != null
+				&& uProfile.getIdString() != null) {
 			try {
 				/*
-				 * order: 1. check that the scorecard with id is active 2. check that the logged in
-				 * user has authority to edit scorecard with this id 3. set Scorecard.isActive =
-				 * false and apply signature 4. create and persist AnalysisScorecard
+				 * order: 1. check that the scorecard with id is active 2. check
+				 * that the logged in user has authority to edit scorecard with
+				 * this id 3. set Scorecard.isActive = false and apply signature
+				 * 4. create and persist AnalysisScorecard
 				 */
-				// check if the scorecard is active and the user is authorised to update it
-				if (scorecardDaoJpaImpl.isScorecardActive(Integer.parseInt(scorecardId))
-						&& authorisationService.isPermitted(uProfile.getIdString(), scorecardId)) {
+				// check if the scorecard is active and the user is authorised
+				// to update it
+				if (scorecardDaoJpaImpl.isScorecardActive(Integer
+						.parseInt(scorecardId))
+						&& authorisationService.isPermitted(
+								uProfile.getIdString(), scorecardId)) {
 					// set Scorecard.isActive = false and apply signature
-					String signature = Security.encrypt(uProfile.getIdString().concat(
-							DateUtils.formatSignatureDate(new Date())));
+					String signature = Security.encrypt(uProfile.getIdString()
+							.concat(DateUtils.formatSignatureDate(new Date())));
 					LOG.debug("signature for scorecard: {}", signature);
-					boolean scorecardSigned = scorecardDaoJpaImpl.signScorecard(scorecardId,
-							signature);
+					boolean scorecardSigned = scorecardDaoJpaImpl
+							.signScorecard(scorecardId, signature);
 					// create an analysis scorecard and persist it
-					// do this last because I'm not sure about transactional support in Mongo (yet)
+					// do this last because I'm not sure about transactional
+					// support in Mongo (yet)
 					AnalysisScorecard analysisScorecard = AnalysisUtils
-							.analyseScorecard(scorecardDao.findById(Scorecard.class,
+							.analyseScorecard(scorecardDao.findById(
+									Scorecard.class,
 									Integer.valueOf(scorecardId)));
 					analysisScorecardMongoDaoImpl.persist(analysisScorecard);
 					return scorecardSigned;
 				} else {
 					// scorecard is inactive
-					if (scorecardDaoJpaImpl.isScorecardActive(Integer.parseInt(scorecardId))) {
-						LOG.error("scorecard with id {} is not active and cannot be signed",
+					if (scorecardDaoJpaImpl.isScorecardActive(Integer
+							.parseInt(scorecardId))) {
+						LOG.error(
+								"scorecard with id {} is not active and cannot be signed",
 								scorecardId);
 						throw new ValidationException(
 								"scorecard is not active and cannot be signed");
 					}
-					if (authorisationService.isPermitted(uProfile.getIdString(), scorecardId)) {
-						LOG.error("user with id {} is not permited to update scorecard with id {}",
+					if (authorisationService.isPermitted(
+							uProfile.getIdString(), scorecardId)) {
+						LOG.error(
+								"user with id {} is not permited to update scorecard with id {}",
 								uProfile.getIdString(), scorecardId);
-						throw new ValidationException("user is not permited to update scorecard");
+						throw new ValidationException(
+								"user is not permited to update scorecard");
 					}
 				}
 			} catch (PersistenceException pex) {
 				LOG.error("error retrieving scorecard for id {}", scorecardId);
 				throw new ServiceException(pex);
 			} catch (NumberFormatException nfex) {
-				LOG.error("error converting scorecardId {} to an integer", scorecardId);
+				LOG.error("error converting scorecardId {} to an integer",
+						scorecardId);
 				throw new ServiceException(nfex);
 			}
 		} else {
@@ -517,7 +585,8 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 			}
 			if (uProfile == null || uProfile.getIdString() == null) {
 				LOG.error("logged in user is null");
-				throw new ValidationException("logged in user is null or id is null");
+				throw new ValidationException(
+						"logged in user is null or id is null");
 			}
 		}
 		throw new ServiceException(
@@ -541,9 +610,12 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.gffny.ldrbrd.common.service.IScorecardService#getLastXScorecards( java.lang.String,
-	 * int)
+	 * 
+	 * @see
+	 * com.gffny.ldrbrd.common.service.IScorecardService#getLastXScorecards(
+	 * java.lang.String, int)
 	 */
+	@Override
 	public List<Scorecard> getLastXScorecards(String golferId, int xScorecards)
 			throws ServiceException {
 		if (!StringUtils.isEmpty(golferId) && xScorecards > 0) {
@@ -557,9 +629,14 @@ public class ScorecardService extends AbstractService implements IScorecardServi
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.gffny.ldrbrd.common.service.IScorecardService#getLastXScorecards( java.lang.String)
+	 * 
+	 * @see
+	 * com.gffny.ldrbrd.common.service.IScorecardService#getLastXScorecards(
+	 * java.lang.String)
 	 */
-	public List<Scorecard> getLastXScorecards(String golferId) throws ServiceException {
+	@Override
+	public List<Scorecard> getLastXScorecards(String golferId)
+			throws ServiceException {
 		// TODO add the "last x" value to the profile
 		return getLastXScorecards(golferId, NEED_TO_BE_PUSHED_INTO_PROFILE);
 	}
