@@ -1,0 +1,65 @@
+<head>
+	<title>Leaderboard - Live Scoreboard</title>
+</head>
+
+<body>
+	<h1>Competition: </h1>
+	<table>
+		<tr>
+			<th>1</th>
+			<th>2</th>
+			<th>3</th>
+			<th>4</th>
+			<th>5</th>
+			<th>6</th>
+			<th>7</th>
+			<th>8</th>
+			<th>9</th>
+		</tr>
+		<tr>
+  		{{#each holeScoreList "competitionId" "roundNumber"}}
+  			<td>
+  				{{> holeScore}}
+  			</td>
+  		{{/each}}
+  		</tr>
+	</table>
+
+	<h2>RoundScore:</h2>
+	<table>
+		<tr>
+			<th>Player</th>
+			<th>1</th>
+			<th>2</th>
+			<th>3</th>
+			<th>4</th>
+			<th>5</th>
+			<th>6</th>
+			<th>7</th>
+			<th>8</th>
+			<th>9</th>
+		</tr>
+		{{#each roundScoreList "competitionId" "roundNumber"}}
+		<tr>
+			{{> roundScore}}
+		</tr>
+		{{/each}}
+	</table>
+</body>
+
+<template name="holeScore">
+	{{holeScore}}
+</template>
+
+<template name="roundScore">
+	<td>{{playerName}}</td>
+	<td>{{hole1Score}}</td>
+	<td>{{hole2Score}}</td>
+	<td>{{hole3Score}}</td>
+	<td>{{hole4Score}}</td>
+	<td>{{hole5Score}}</td>
+	<td>{{hole6Score}}</td>
+	<td>{{hole7Score}}</td>
+	<td>{{hole8Score}}</td>
+	<td>{{hole9Score}}</td>
+</template>
