@@ -37,3 +37,6 @@ ldrbrd-config
 
 #log files
 *.log
+
+#meteor folder
+.meteor/
