@@ -1,0 +1,1 @@
+RoundScoreCollection = new Meteor.Collection("RoundScore");

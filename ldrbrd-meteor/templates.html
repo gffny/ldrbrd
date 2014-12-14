@@ -1,0 +1,51 @@
+<template name="roundscore">
+
+{{_competitionId}}
+<table>
+  <tr>
+    <th>Golfer Name</th>
+    <th>1</th>
+    <th>2</th>
+    <th>3</th>
+    <th>4</th>
+    <th>5</th>
+    <th>6</th>
+    <th>7</th>
+    <th>8</th>
+    <th>9</th>
+    <th>10</th>
+    <th>11</th>
+    <th>12</th>
+    <th>13</th>
+    <th>14</th>
+    <th>15</th>
+    <th>16</th>
+    <th>17</th>
+    <th>18</th>
+  </tr>
+{{#each _roundScore}}
+  <tr>
+    <th>{{golferName}}</th>
+    <td>{{hole1Score}}</td>
+    <td>{{hole2Score}}</td>
+    <td>{{hole3Score}}</td>
+    <td>{{hole4Score}}</td>
+    <td>{{hole5Score}}</td>
+    <td>{{hole6Score}}</td>
+    <td>{{hole7Score}}</td>
+    <td>{{hole8Score}}</td>
+    <td>{{hole9Score}}</td>
+    <td>{{hole10Score}}</td>
+    <td>{{hole11Score}}</td>
+    <td>{{hole12Score}}</td>
+    <td>{{hole13Score}}</td>
+    <td>{{hole14Score}}</td>
+    <td>{{hole15Score}}</td>
+    <td>{{hole16Score}}</td>
+    <td>{{hole17Score}}</td>
+    <td>{{hole18Score}}</td>
+  </tr>
+{{/each}}
+</table>
+
+</template>
