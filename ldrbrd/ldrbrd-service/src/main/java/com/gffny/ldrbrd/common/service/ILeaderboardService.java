@@ -20,7 +20,24 @@ public interface ILeaderboardService {
 	 * @param competitionRound
 	 * @throws ServiceException
 	 */
-	public void startCompetitionRound(Golfer golfer, int handicap, CompetitionRound competitionRound)
+	public void startCompetitionRound(Golfer golfer,
+			CompetitionRound competitionRound, int handicap)
+			throws ServiceException;
+
+	/**
+	 * 
+	 * @param golfer
+	 * @param competitionRound
+	 * @param holeNumber
+	 * @param holeScore
+	 * @param toPar
+	 * @param toHandicapPar
+	 * @param competitionScore
+	 * @throws ServiceException
+	 */
+	public abstract void publishHoleScore(Golfer golfer,
+			CompetitionRound competitionRound, int holeNumber, int holeScore,
+			int toPar, int toHandicapPar, int competitionScore)
 			throws ServiceException;
 
 }

@@ -5,11 +5,13 @@ package com.gffny.ldrbrd.common.dao.nosql.mongo;
 
 import java.util.List;
 
+import org.mongodb.morphia.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gffny.ldrbrd.common.dao.nosql.IRoundScoreNoSqlDao;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
+import com.gffny.ldrbrd.common.model.nosql.HoleScore;
 import com.gffny.ldrbrd.common.model.nosql.RoundScore;
 
 /**
@@ -29,7 +31,6 @@ public class RoundScoreMongoDaoImpl extends
 	@Override
 	public List<RoundScore> listRoundScoreByCompetition(String competitionId)
 			throws PersistenceException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -81,11 +82,11 @@ public class RoundScoreMongoDaoImpl extends
 	 * java.lang.String, java.lang.String)
 	 */
 	@Override
-	public RoundScore findGolferRoundScoreByCompetitionRound(String golerId,
+	public RoundScore findGolferRoundScoreByCompetitionRound(String golferId,
 			String competitionId, String roundNumber)
 			throws PersistenceException {
-		// TODO Auto-generated method stub
-		return null;
+		return buildCompetitionRoundQuery(competitionId, roundNumber)
+				.field(RoundScore.GOLFER_ID).equal(golferId).get();
 	}
 
 	/*
@@ -96,26 +97,33 @@ public class RoundScoreMongoDaoImpl extends
 	 * java.lang.String)
 	 */
 	@Override
-	public RoundScore findGolferRoundScoreByCompetitionRound(String golerId,
+	public RoundScore findGolferRoundScoreByCompetitionRound(String golferId,
 			String competitionRoundId) throws PersistenceException {
-		// TODO Auto-generated method stub
-		return null;
+		return buildCompetitionRoundQuery(competitionRoundId)
+				.field(RoundScore.GOLFER_ID).equal(golferId).get();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.gffny.ldrbrd.common.dao.nosql.IRoundScoreNoSqlDao#scoreHole(java.
-	 * lang.String, java.lang.String, java.lang.String, int, int, int, int, int)
+	/**
+	 * @param competitionId
+	 * @param roundNumber
+	 * @return
 	 */
-	@Override
-	public RoundScore scoreHole(String competitionId, String roundNumber,
-			String playerId, int holeNumber, int holeScore, int toPar,
-			int toHandicapPar, int competitionScore)
-			throws PersistenceException {
-		// TODO Auto-generated method stub
-		return null;
+	private Query<RoundScore> buildCompetitionRoundQuery(String competitionId,
+			String roundNumber) {
+		return this.datastore.createQuery(RoundScore.class)
+				.field(HoleScore.COMPETITION_ID).equal(competitionId)
+				.field(HoleScore.ROUND_NUMBER).equal(roundNumber);
+	}
+
+	/**
+	 * @param competitionRoundId
+	 * @return
+	 */
+	private Query<RoundScore> buildCompetitionRoundQuery(
+			String competitionRoundId) {
+		return this.datastore.createQuery(RoundScore.class)
+				.field(HoleScore.COMPETITION_ROUND_ID)
+				.equal(competitionRoundId);
 	}
 
 }

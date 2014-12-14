@@ -147,7 +147,7 @@ public class HoleScoreMongoDaoImpl extends GenericNoSqlDaoMongoImpl<HoleScore>
 	private Query<HoleScore> buildCompetitionRoundGolferQuery(String golferId,
 			String competitionRoundId) {
 		return buildCompetitionRoundQuery(competitionRoundId).field(
-				HoleScore.PLAYER_ID).equal(golferId);
+				HoleScore.GOLFER_ID).equal(golferId);
 	}
 
 	/**
@@ -182,7 +182,7 @@ public class HoleScoreMongoDaoImpl extends GenericNoSqlDaoMongoImpl<HoleScore>
 	private Query<HoleScore> buildCompetitionRoundGolferQuery(String golferId,
 			String competitionId, String roundNumber) {
 		return buildCompetitionRoundQuery(competitionId, roundNumber).field(
-				HoleScore.PLAYER_ID).equal(golferId);
+				HoleScore.GOLFER_ID).equal(golferId);
 	}
 
 }

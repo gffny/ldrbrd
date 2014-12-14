@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,28 +22,28 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
 import com.gffny.ldrbrd.common.dao.IScorecardDao;
-import com.gffny.ldrbrd.common.dao.nosql.GenericNoSqlDao;
 import com.gffny.ldrbrd.common.exception.AuthorisationException;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.exception.ValidationException;
 import com.gffny.ldrbrd.common.model.CommonIDEntity;
 import com.gffny.ldrbrd.common.model.Constant;
+import com.gffny.ldrbrd.common.model.impl.CompetitionEntry;
 import com.gffny.ldrbrd.common.model.impl.CompetitionRound;
 import com.gffny.ldrbrd.common.model.impl.Golfer;
 import com.gffny.ldrbrd.common.model.impl.Scorecard;
 import com.gffny.ldrbrd.common.model.impl.UserProfile;
-import com.gffny.ldrbrd.common.model.nosql.AnalysisScorecard;
 import com.gffny.ldrbrd.common.model.nosql.Course;
+import com.gffny.ldrbrd.common.scoring.impl.Stableford;
 import com.gffny.ldrbrd.common.service.ICompetitionService;
 import com.gffny.ldrbrd.common.service.ICourseClubService;
 import com.gffny.ldrbrd.common.service.ILeaderboardService;
 import com.gffny.ldrbrd.common.service.IScorecardService;
 import com.gffny.ldrbrd.common.service.IUserProfileService;
-import com.gffny.ldrbrd.common.utils.AnalysisUtils;
 import com.gffny.ldrbrd.common.utils.CollectionUtils;
 import com.gffny.ldrbrd.common.utils.DateUtils;
-import com.gffny.ldrbrd.common.utils.DebugUtils;
+import com.gffny.ldrbrd.common.utils.MapUtils;
+import com.gffny.ldrbrd.common.utils.ScoringUtils;
 import com.gffny.ldrbrd.common.utils.Security;
 import com.gffny.ldrbrd.common.utils.StringUtils;
 
@@ -91,10 +92,6 @@ public class ScorecardService extends AbstractService implements
 	/** */
 	@Autowired
 	private ILeaderboardService leaderboardService;
-
-	/** */
-	@Autowired
-	private GenericNoSqlDao<AnalysisScorecard> analysisScorecardMongoDaoImpl;
 
 	/**
 	 * (non-Javadoc)
@@ -181,8 +178,6 @@ public class ScorecardService extends AbstractService implements
 		// check param
 		if (StringUtils.isNotEmpty(courseId)) {
 			try {
-				DebugUtils
-						.transactionRequired("ScorecardService.startGeneralScorecard");
 
 				// get the course
 				Course courseToPlay = courseClubService.courseById(courseId);
@@ -199,9 +194,6 @@ public class ScorecardService extends AbstractService implements
 								courseToPlay, golfer.getHandicap().intValue());
 						scorecardDao.persist(result);
 						return result;
-						// return
-						// scorecardDaoJpaImpl.persist(Scorecard.createNewScorecard(golfer,
-						// courseToPlay, golfer.getHandicap().intValue()));
 					} else {
 						Golfer golfer = profileService
 								.getGolferByHandle(loggedInUser
@@ -316,28 +308,35 @@ public class ScorecardService extends AbstractService implements
 			throws ServiceException {
 
 		// check param
-		DebugUtils
-				.transactionRequired("ScorecardService.startCompetitionScorecard");
 		if (roundNumber > 0) {
-
+			LOG.debug(
+					"starting competition scorecard for golfer {} with scorekeeper {} for competition {} and round {} with handicap {}",
+					golferId, scoreKeeperId, competitionId, roundNumber,
+					competitionHandicap);
 			try {
+				CompetitionEntry competitionEntry = competitionService
+						.getCompetitionRegistrationForGolfer(golferId,
+								competitionId);
 				// get competition from dao
 				CompetitionRound competitionRound = competitionService
 						.getCompetitionRound(competitionId, roundNumber);
 
-				if (competitionRound != null
+				if (competitionEntry != null && competitionRound != null
 						&& competitionRound.getCourse() != null) {
 					Golfer golfer = profileService.getGolferById(golferId);
 					int handicap = competitionHandicap == EXISTING_GOLFER_HANDICAP ? golfer
 							.getHandicap() : competitionHandicap;
 					// persist the new scorecard
-					Scorecard newScorecardId = scorecardDao.persist(Scorecard
+					Scorecard newScorecard = scorecardDao.persist(Scorecard
 							.createNewScorecard(golfer,
 									competitionRound.getCourse(), handicap));
+					// register the score for the competition
+					competitionService.registerCompetitionScorecard(
+							competitionEntry, newScorecard, competitionRound);
 					// create the leaderboard round
-					leaderboardService.startCompetitionRound(golfer, handicap,
-							competitionRound);
-					return newScorecardId;
+					leaderboardService.startCompetitionRound(golfer,
+							competitionRound, handicap);
+					return newScorecard;
 				}
 			} catch (AuthorisationException | PersistenceException ae) {
 				LOG.error(ae.getMessage(), ae);
@@ -361,7 +360,7 @@ public class ScorecardService extends AbstractService implements
 			Map<Integer, Integer> holeScoreMap) throws ServiceException {
 
 		// check is list is valid
-		if (holeScoreMap != null) {
+		if (MapUtils.isNotEmpty(holeScoreMap)) {
 			// get the key set for the hole score map
 			Set<Integer> holeScoreKeySet = holeScoreMap.keySet();
 			// traverse hole map to score holes
@@ -385,34 +384,40 @@ public class ScorecardService extends AbstractService implements
 
 		LOG.debug("scoring scorecard id {} with array of scores {}",
 				scorecardId, Arrays.toString(scorecardArray));
-		boolean scorecardIsActive;
-		int scorecardIdInt;
-		try {
-			// parse scorecard to int
-			scorecardIdInt = Integer.parseInt(scorecardId);
-			// check if the scorecard is active
-			scorecardIsActive = scorecardDaoJpaImpl
-					.isScorecardActive(scorecardIdInt);
-		} catch (PersistenceException | NumberFormatException e) {
-			LOG.error(e.getMessage());
-			throw new ServiceException(e.getMessage(), e);
-		}
 		//
-		if (scorecardId != null && scorecardArray != null
-				&& scorecardArray.length > 0 && scorecardIsActive) {
-			// traverse scorecard array
-			int holeNumber = 1;
-			for (int holeScore : scorecardArray) {
-				// score each hole (TODO maybe get the holeId in scoreHoleArray)
-				scoreHole(scorecardIdInt, holeNumber, holeScore, null,
-						scorecardIsActive);
-				holeNumber++;
+		if (StringUtils.isNotBlank(scorecardId)
+				&& ArrayUtils.isNotEmpty(scorecardArray)) {
+			try {
+				// check if the scorecard is active
+				Scorecard scorecard = scorecardDao.findById(Scorecard.class,
+						Integer.parseInt(scorecardId));
+				// check if scorecard is for a competition
+				CompetitionRound competitionRound = competitionService
+						.getCompetitionRoundByScorecardId(scorecardId);
+
+				// if scorecard isn't null persist score to RDMS
+				if (scorecard != null) {
+					// traverse scorecard array
+					int holeNumber = 1;
+					for (int holeScore : scorecardArray) {
+						// score each hole
+						scoreHole(scorecard.getId(), holeNumber, holeScore,
+								null, scorecard.isActive());
+						// then publish
+						publishHoleScore(holeNumber, holeScore, scorecard,
+								competitionRound);
+						holeNumber++;
+					}
+				}
+				// TODO HANDLE CASE
+			} catch (PersistenceException | NumberFormatException e) {
+				LOG.error(e.getMessage());
+				throw new ServiceException(e.getMessage(), e);
 			}
 		} else {
 			LOG.error(
-					"invalid parameters for scoreHoleArray. ID: {}, scorecardArray: {}, scorecardArray.length {}, scorecardIsActice {}",
-					scorecardId, scorecardArray, scorecardArray.length,
-					scorecardIsActive);
+					"invalid parameters for scoreHoleArray. ID: {}, scorecardArray: {}, scorecardArray.length {}",
+					scorecardId, scorecardArray, scorecardArray.length);
 			throw new ServiceException("invalid parameters for scoreHoleArray");
 		}
 	}
@@ -423,7 +428,53 @@ public class ScorecardService extends AbstractService implements
 	@Override
 	public void scoreHole(int scorecardId, int holeNumber, int holeScore,
 			String holeId) throws ServiceException {
-		scoreHole(scorecardId, holeNumber, holeScore, holeId, false);
+
+		try {
+			// check if the scorecard is active
+			Scorecard scorecard = scorecardDao.findById(Scorecard.class,
+					scorecardId);
+
+			// check if scorecard is for a competition
+			CompetitionRound competitionRound = competitionService
+					.getCompetitionRoundByScorecardId(String
+							.valueOf(scorecardId));
+			// if scorecard isn't null then score the hole to the RDMS
+			if (scorecard != null) {
+				scoreHole(scorecard.getId(), holeNumber, holeScore, holeId,
+						scorecard.isActive());
+				// then publish to the leaderboard
+				publishHoleScore(holeNumber, holeScore, scorecard,
+						competitionRound);
+			}
+		} catch (ServiceException | PersistenceException e) {
+			LOG.error(e.getMessage(), e);
+			scoreHole(scorecardId, holeNumber, holeScore, holeId, false);
+		}
+
+	}
+
+	/**
+	 * @param holeNumber
+	 * @param holeScore
+	 * @param scorecard
+	 * @param competitionRound
+	 * @throws ServiceException
+	 */
+	private void publishHoleScore(int holeNumber, int holeScore,
+			Scorecard scorecard, CompetitionRound competitionRound)
+			throws ServiceException {
+		// if entry does not exist then it's a general scorecard
+		if (competitionRound != null) {
+			leaderboardService.publishHoleScore(scorecard.getGolfer(),
+					competitionRound, holeNumber, holeScore, //
+					ScoringUtils.toPar(competitionRound.getCourse(),
+							holeNumber, holeScore), //
+					ScoringUtils.toHandicapPar(competitionRound.getCourse(),
+							holeNumber, holeScore, scorecard.getHandicap()), //
+					ScoringUtils.competitionScore(competitionRound.getCourse(),
+							holeNumber, holeScore, scorecard.getHandicap(),
+							new Stableford()));
+		}
 	}
 
 	/**
@@ -545,11 +596,7 @@ public class ScorecardService extends AbstractService implements
 					// create an analysis scorecard and persist it
 					// do this last because I'm not sure about transactional
 					// support in Mongo (yet)
-					AnalysisScorecard analysisScorecard = AnalysisUtils
-							.analyseScorecard(scorecardDao.findById(
-									Scorecard.class,
-									Integer.valueOf(scorecardId)));
-					analysisScorecardMongoDaoImpl.persist(analysisScorecard);
+
 					return scorecardSigned;
 				} else {
 					// scorecard is inactive

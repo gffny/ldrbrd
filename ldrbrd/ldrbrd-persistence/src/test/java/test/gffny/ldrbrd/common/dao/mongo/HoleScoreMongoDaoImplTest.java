@@ -33,13 +33,8 @@ public class HoleScoreMongoDaoImplTest {
 	 */
 	@Test
 	public void test() throws PersistenceException {
-		HoleScore blah = new HoleScore();
-		blah.setCompetitionId("123");
-		blah.setCompetitionRoundId("123");
-		blah.setCourseId("123");
-		blah.setDateTime(new Date());
-		blah.setHoleCompetitionScore(1);
-		blah.setHoleNumber(1);
+		HoleScore blah = HoleScore.instance("123", "123", "1", "123", "1",
+				new Date(), 1, 4, 2, 0, -1, 4, 0, -1, 2);
 		holeScoreMongoDaoImpl.persist(blah);
 
 	}

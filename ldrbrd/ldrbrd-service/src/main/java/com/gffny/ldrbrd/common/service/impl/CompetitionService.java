@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,12 +19,16 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
+import com.gffny.ldrbrd.common.dao.nosql.GenericNoSqlDao;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.impl.Competition;
 import com.gffny.ldrbrd.common.model.impl.CompetitionEntry;
 import com.gffny.ldrbrd.common.model.impl.CompetitionRound;
+import com.gffny.ldrbrd.common.model.impl.CompetitionRoundScore;
 import com.gffny.ldrbrd.common.model.impl.Golfer;
+import com.gffny.ldrbrd.common.model.impl.Scorecard;
+import com.gffny.ldrbrd.common.model.nosql.Club;
 import com.gffny.ldrbrd.common.model.nosql.Course;
 import com.gffny.ldrbrd.common.service.ICompetitionService;
 
@@ -59,6 +64,17 @@ public class CompetitionService extends AbstractService implements
 	@Qualifier(value = "genericDaoJpaImpl")
 	private GenericDao<CompetitionEntry> competitionRegistrationDao;
 
+	/**
+	 * 
+	 */
+	@Autowired
+	@Qualifier(value = "genericDaoJpaImpl")
+	private GenericDao<CompetitionRoundScore> competitionRoundScoreDao;
+
+	/** */
+	@Autowired
+	private GenericNoSqlDao<Club> clubMongoDaoImpl;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -86,65 +102,6 @@ public class CompetitionService extends AbstractService implements
 			LOG.error(daEx.toString());
 			throw new ServiceException(daEx);
 		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.gffny.ldrbrd.common.service.impl.ICompetitionService#
-	 * createCompetitionRound(com.gffny.ldrbrd.common.model.impl.Competition,
-	 * org.joda.time.DateTime, java.lang.Integer,
-	 * com.gffny.ldrbrd.common.model.impl.Course)
-	 */
-	@Override
-	@Transactional(value = "lrdbrd_txnMgr", propagation = Propagation.REQUIRED)
-	public CompetitionRound createCompetitionRound(Competition competition,
-			DateTime roundDate, Integer roundNumber, Course course)
-			throws ServiceException {
-
-		// TODO fix the competition service to createCompetitionRound
-		return new CompetitionRound();
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.gffny.ldrbrd.common.service.ICompetitionService#registerGolferForCompetitionWithHandicap(com.gffny.ldrbrd.common.model.impl.Golfer,
-	 *      com.gffny.ldrbrd.common.model.impl.Competition, int)
-	 */
-	@Override
-	@Transactional(value = "lrdbrd_txnMgr", propagation = Propagation.REQUIRED)
-	public CompetitionEntry registerGolferForCompetitionWithHandicap(
-			Golfer golfer, Competition competition, int handicap)
-			throws ServiceException {
-
-		// check if the values are valid
-		if (golfer != null && competition != null && handicap > 0) {
-
-			// TODO fix the competition service to register
-			return new CompetitionEntry();
-
-		}
-		throw new ServiceException("invalid parameter: golfer "
-				+ golfer.toString() + ", competition " + competition.toString()
-				+ ", handicap " + handicap);
-	}
-
-	/**
-	 * Uses the golfers handicap to register the golfer in the competition
-	 * (non-Javadoc)
-	 * 
-	 * @see com.gffny.ldrbrd.common.service.ICompetitionService#
-	 *      registerGolferForCompetition
-	 *      (com.gffny.ldrbrd.common.model.impl.Golfer,
-	 *      com.gffny.ldrbrd.common.model.impl.Competition)
-	 */
-	@Override
-	@Transactional(value = "lrdbrd_txnMgr", propagation = Propagation.REQUIRED)
-	public CompetitionEntry registerGolferForCompetition(Golfer golfer,
-			Competition competition) throws ServiceException {
-		return registerGolferForCompetitionWithHandicap(golfer, competition,
-				golfer.getHandicap());
 	}
 
 	/*
@@ -220,24 +177,6 @@ public class CompetitionService extends AbstractService implements
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.gffny.ldrbrd.common.service.ICompetitionService#getCompetitionRound
-	 * (java.lang.String, java.lang.Integer)
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public CompetitionRound getCompetitionRound(String competitionId,
-			Integer roundNumber) throws ServiceException {
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("competitionId", competitionId);
-		params.put("roundNumber", roundNumber);
-		return namedQuerySingleResultOrNull(competitionRoundDao,
-				CompetitionRound.FIND_BY_COMP_ID_AND_RND_NMBR, params);
-	}
-
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -253,6 +192,137 @@ public class CompetitionService extends AbstractService implements
 		throw new ServiceException("invalid parameter: golfer " + golferId);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gffny.ldrbrd.common.service.impl.ICompetitionService#
+	 * createCompetitionRound(com.gffny.ldrbrd.common.model.impl.Competition,
+	 * org.joda.time.DateTime, java.lang.Integer,
+	 * com.gffny.ldrbrd.common.model.impl.Course)
+	 */
+	@Override
+	@Transactional(value = "lrdbrd_txnMgr", propagation = Propagation.REQUIRED)
+	public CompetitionRound createCompetitionRound(Competition competition,
+			DateTime roundDate, Integer roundNumber, Course course)
+			throws ServiceException {
+
+		// TODO fix the competition service to createCompetitionRound
+		return new CompetitionRound();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.gffny.ldrbrd.common.service.ICompetitionService#getCompetitionRound
+	 * (java.lang.String, java.lang.Integer)
+	 */
+	@Override
+	@Transactional(readOnly = true)
+	public CompetitionRound getCompetitionRound(String competitionId,
+			Integer roundNumber) throws ServiceException {
+		try {
+
+			CompetitionRound competitionRound = namedQuerySingleResultOrNull(
+					competitionRoundDao,
+					CompetitionRound.FIND_BY_COMP_ID_AND_RND_NMBR,
+					populateParamMap("competitionId",
+							Integer.valueOf(competitionId), "roundNumber",
+							roundNumber));
+			return populateCourseForCompetitionRound(competitionRound);
+		} catch (ServiceException | NumberFormatException
+				| PersistenceException e) {
+			LOG.error(e.getMessage(), e);
+			throw new ServiceException(e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @throws ServiceException
+	 * 
+	 * @see com.gffny.ldrbrd.common.service.ICompetitionService#getCompetitionRoundByScorecardId(java.lang.String)
+	 */
+	@Override
+	public CompetitionRound getCompetitionRoundByScorecardId(String scorecardId)
+			throws ServiceException {
+		if (StringUtils.isNotBlank(scorecardId)) {
+			try {
+				LOG.debug("retrieving competition round by scorecard id {}",
+						scorecardId);
+
+				CompetitionRoundScore competitionRoundScore = namedQuerySingleResultOrNull(
+						competitionRoundScoreDao,
+						CompetitionRoundScore.FIND_BY_SCORECARD_ID,
+						populateParamMap("scorecardId",
+								Integer.valueOf(scorecardId)));
+				if (competitionRoundScore != null
+						&& competitionRoundScore.getCompetitionRound() != null) {
+					return populateCourseForCompetitionRound(competitionRoundScore
+							.getCompetitionRound());
+				}
+				LOG.error(
+						"no round score returned for scorecard id {}, or round was null",
+						scorecardId);
+			} catch (ServiceException | PersistenceException
+					| NumberFormatException e) {
+				LOG.error(e.getMessage(), e);
+				throw new ServiceException(e.getMessage(), e);
+			}
+		}
+		LOG.error("invalid parameters: scorecardId and/or roundNumber is null");
+		return null;
+	}
+
+	/**
+	 * @param competitionRound
+	 * @return
+	 * @throws PersistenceException
+	 */
+	private CompetitionRound populateCourseForCompetitionRound(
+			CompetitionRound competitionRound) throws PersistenceException {
+		// check params
+		if (competitionRound != null) {
+			LOG.debug("populating course object with courseId {}",
+					competitionRound.getCourseDocumentId());
+			competitionRound.setCourse(clubMongoDaoImpl.findById(Course.class,
+					competitionRound.getCourseDocumentId()));
+		}
+		return competitionRound;
+	}
+
+	/**
+	 * Uses the golfers handicap to register the golfer in the competition
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gffny.ldrbrd.common.service.ICompetitionService#
+	 *      registerGolferForCompetition
+	 *      (com.gffny.ldrbrd.common.model.impl.Golfer,
+	 *      com.gffny.ldrbrd.common.model.impl.Competition)
+	 */
+	@Override
+	@Transactional(value = "lrdbrd_txnMgr", propagation = Propagation.REQUIRED)
+	public CompetitionEntry registerGolferForCompetition(Golfer golfer,
+			Competition competition) throws ServiceException {
+
+		// check if the values are valid
+		if (golfer != null && competition != null) {
+			try {
+				LOG.debug("registering golfer {} for competition {}",
+						golfer.getId(), competition.getId());
+				return competitionRegistrationDao.persist(new CompetitionEntry(
+						competition, golfer));
+			} catch (PersistenceException e) {
+				LOG.error(e.getMessage(), e);
+				throw new ServiceException(e.getMessage(), e);
+			}
+		}
+		LOG.error("invalid parameter: golfer and/or competition invalid");
+		throw new ServiceException(
+				"invalid parameter: golfer and/or competition invalid");
+	}
+
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -260,18 +330,72 @@ public class CompetitionService extends AbstractService implements
 	 *      com.gffny.ldrbrd.common.model.impl.Competition)
 	 */
 	@Override
-	public CompetitionEntry getCompetitionRegistrationForGolfer(Golfer golfer,
-			Competition competition) throws ServiceException {
-		if (golfer != null && competition != null) {
+	public CompetitionEntry getCompetitionRegistrationForGolfer(
+			String golferId, String competitionId) throws ServiceException {
+		if (StringUtils.isNotBlank(golferId)
+				&& StringUtils.isNotBlank(competitionId)) {
 
-			// TODO fix the competition service to get competition
-			return new CompetitionEntry();
+			return namedQuerySingleResultOrNull(
+					competitionRegistrationDao,
+					CompetitionEntry.FIND_BY_COMPETITION_AND_GOLFER,
+					populateParamMap("competitionId",
+							Integer.valueOf(competitionId), "golferId",
+							Integer.valueOf(golferId)));
 
 		} else {
 			LOG.error("parameters are malformed");
-			throw new ServiceException("invalid parameter: golfer " + golfer
-					+ ", competition " + competition);
+			throw new ServiceException(
+					"invalid parameter: golfer id or competition id");
 		}
 	}
 
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gffny.ldrbrd.common.service.ICompetitionService#
+	 *      getCompetitionRegistrationByScorecardId(java.lang.String)
+	 */
+	@Override
+	public CompetitionEntry getCompetitionRegistrationByScorecardId(
+			String scorecardId) throws ServiceException {
+		// check params
+		if (StringUtils.isNotBlank(scorecardId)) {
+			CompetitionRoundScore competitionRoundScore = namedQuerySingleResultOrNull(
+					competitionRoundScoreDao,
+					CompetitionRoundScore.FIND_BY_SCORECARD_ID,
+					populateParamMap("scorecardId",
+							Integer.valueOf(scorecardId)));
+			return (competitionRoundScore == null ? null
+					: competitionRoundScore.getCompetitionEntry());
+
+		}
+		return null;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gffny.ldrbrd.common.service.ICompetitionService#registerCompetitionScorecard(int,
+	 *      com.gffny.ldrbrd.common.model.impl.Scorecard)
+	 */
+	@Override
+	public CompetitionRoundScore registerCompetitionScorecard(
+			CompetitionEntry competitionEntry, Scorecard scorecard,
+			CompetitionRound competitionRound) throws ServiceException {
+		// check params
+		if (scorecard != null && competitionEntry != null
+				&& competitionRound != null) {
+			try {
+				return competitionRoundScoreDao
+						.persist(new CompetitionRoundScore(competitionEntry,
+								scorecard, competitionRound));
+			} catch (PersistenceException e) {
+				LOG.error(e.getMessage(), e);
+				throw new ServiceException(e.getMessage(), e);
+			}
+		}
+		LOG.error("invalid parameters: scorecard, competitionEntry, or competitionRound is null");
+		throw new ServiceException(
+				"invalid parameters: scorecard, competitionEntry, or competitionRound is null");
+	}
 }

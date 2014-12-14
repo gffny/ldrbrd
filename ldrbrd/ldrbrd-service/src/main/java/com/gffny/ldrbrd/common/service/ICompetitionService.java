@@ -8,27 +8,21 @@ import com.gffny.ldrbrd.common.exception.ServiceException;
 import com.gffny.ldrbrd.common.model.impl.Competition;
 import com.gffny.ldrbrd.common.model.impl.CompetitionEntry;
 import com.gffny.ldrbrd.common.model.impl.CompetitionRound;
+import com.gffny.ldrbrd.common.model.impl.CompetitionRoundScore;
 import com.gffny.ldrbrd.common.model.impl.Golfer;
+import com.gffny.ldrbrd.common.model.impl.Scorecard;
 import com.gffny.ldrbrd.common.model.nosql.Course;
 
 public interface ICompetitionService {
 
 	/**
+	 * 
 	 * @param competitionName
 	 * @return
+	 * @throws ServiceException
 	 */
 	public abstract Competition createCompetition(String competitionName)
 			throws ServiceException;
-
-	/**
-	 * @param competition
-	 * @param roundDate
-	 * @param roundNumber
-	 * @return
-	 */
-	public abstract CompetitionRound createCompetitionRound(
-			Competition competition, DateTime roundDate, Integer roundNumber,
-			Course course) throws ServiceException;
 
 	/**
 	 * @param competitionId
@@ -39,20 +33,13 @@ public interface ICompetitionService {
 			throws ServiceException;
 
 	/**
+	 * 
 	 * @param competitionName
-	 * @return
-	 */
-	public abstract Competition getCompetitionByName(String competitionName)
-			throws ServiceException;
-
-	/**
-	 * @param competitionId
-	 * @param roundNumber
 	 * @return
 	 * @throws ServiceException
 	 */
-	public abstract CompetitionRound getCompetitionRound(String competitionId,
-			Integer roundNumber) throws ServiceException;
+	public abstract Competition getCompetitionByName(String competitionName)
+			throws ServiceException;
 
 	/**
 	 * Should return a list of competitions for which the golfer is registered
@@ -67,27 +54,72 @@ public interface ICompetitionService {
 			String golferId) throws ServiceException;
 
 	/**
+	 * 
+	 * @param competition
+	 * @param roundDate
+	 * @param roundNumber
+	 * @param course
+	 * @return
+	 * @throws ServiceException
+	 */
+	public abstract CompetitionRound createCompetitionRound(
+			Competition competition, DateTime roundDate, Integer roundNumber,
+			Course course) throws ServiceException;
+
+	/**
+	 * @param competitionId
+	 * @param roundNumber
+	 * @return
+	 * @throws ServiceException
+	 */
+	public abstract CompetitionRound getCompetitionRound(String competitionId,
+			Integer roundNumber) throws ServiceException;
+
+	/**
+	 * @param scorecardId
+	 * @return
+	 * @throws ServiceException
+	 */
+	public abstract CompetitionRound getCompetitionRoundByScorecardId(
+			String scorecardId) throws ServiceException;
+
+	/**
+	 * 
 	 * @param golfer
 	 * @param competition
 	 * @return
-	 */
-	public abstract CompetitionEntry getCompetitionRegistrationForGolfer(
-			Golfer golfer, Competition competition) throws ServiceException;
-
-	/**
-	 * @param golfer
-	 * @param competition
-	 * @param handicap
-	 */
-	public abstract CompetitionEntry registerGolferForCompetitionWithHandicap(
-			Golfer golfer, Competition competition, int handicap)
-			throws ServiceException;
-
-	/**
-	 * @param golfer
-	 * @param competition
+	 * @throws ServiceException
 	 */
 	public abstract CompetitionEntry registerGolferForCompetition(
 			Golfer golfer, Competition competition) throws ServiceException;
+
+	/**
+	 * 
+	 * @param golfer
+	 * @param competition
+	 * @return
+	 * @throws ServiceException
+	 */
+	public abstract CompetitionEntry getCompetitionRegistrationForGolfer(
+			String golferId, String competitionId) throws ServiceException;
+
+	/**
+	 * 
+	 * @param scorecardId
+	 * @return
+	 * @throws ServiceException
+	 */
+	public abstract CompetitionEntry getCompetitionRegistrationByScorecardId(
+			String scorecardId) throws ServiceException;
+
+	/**
+	 * 
+	 * @param id
+	 * @param newScorecardId
+	 * @throws ServiceException
+	 */
+	public abstract CompetitionRoundScore registerCompetitionScorecard(
+			CompetitionEntry competitionEntry, Scorecard scorecard,
+			CompetitionRound competitionRound) throws ServiceException;
 
 }

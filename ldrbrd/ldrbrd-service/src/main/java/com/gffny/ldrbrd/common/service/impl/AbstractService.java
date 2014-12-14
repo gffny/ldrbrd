@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,20 +25,22 @@ public class AbstractService {
 	protected IAuthorisationService authorisationService;
 
 	/**
-	 * Utility method to get the non-collection result of a named query (if there is intended to be
-	 * only one result)
+	 * Utility method to get the non-collection result of a named query (if
+	 * there is intended to be only one result)
 	 * 
 	 * @param genericDao
 	 * @param namedQuery
 	 * @param params
 	 * @return
 	 */
-	protected <T> T namedQuerySingleResultOrNull(GenericDao<T> genericDao, String namedQuery,
-			Map<String, Object> params) throws ServiceException {
+	protected <T> T namedQuerySingleResultOrNull(GenericDao<T> genericDao,
+			String namedQuery, Map<String, Object> params)
+			throws ServiceException {
 
 		// get the result list
 		try {
-			List<T> resultList = genericDao.findByNamedQuery(namedQuery, params);
+			List<T> resultList = genericDao
+					.findByNamedQuery(namedQuery, params);
 			// check the result list validity
 			if (resultList != null && resultList.size() == 1) {
 				// if there's only one, return it
@@ -59,7 +62,8 @@ public class AbstractService {
 
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		// check param validity
-		if (keyParamPairs != null && keyParamPairs.length % 2 == 0) {
+		if (ArrayUtils.isNotEmpty(keyParamPairs)
+				&& keyParamPairs.length % 2 == 0) {
 			LOG.debug("populating param map with pairs {}",
 					StringUtils.arrayToCommaDelimitedString(keyParamPairs));
 			// loop through the pairs

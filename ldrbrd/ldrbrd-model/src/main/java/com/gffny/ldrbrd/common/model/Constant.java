@@ -13,22 +13,33 @@ public interface Constant {
 
 	public static final String DB_TABLE_PREFIX = "ldrbrd_";
 	public static final String DB_TABLE_GOLFER = DB_TABLE_PREFIX + "golfer";
-	public static final String DB_TABLE_COMPETITION = DB_TABLE_PREFIX + "competition";
-	public static final String DB_TABLE_COMPETITION_ROUND = DB_TABLE_PREFIX + "competition_round";
-	public static final String DB_TABLE_COMPETITION_ENTRY = DB_TABLE_PREFIX + "competition_entry";
-	public static final String DB_TABLE_SCORECARD = DB_TABLE_PREFIX + "scorecard";
-	public static final String DB_TABLE_HOLE_SCORE = DB_TABLE_PREFIX + "hole_score";
+	public static final String DB_TABLE_COMPETITION = DB_TABLE_PREFIX
+			+ "competition";
+	public static final String DB_TABLE_COMPETITION_ROUND = DB_TABLE_PREFIX
+			+ "competition_round";
+	public static final String DB_TABLE_COMPETITION_ENTRY = DB_TABLE_PREFIX
+			+ "competition_entry";
+	public static final String DB_TABLE_SCORECARD = DB_TABLE_PREFIX
+			+ "scorecard";
+	public static final String DB_TABLE_HOLE_SCORE = DB_TABLE_PREFIX
+			+ "hole_score";
 	public static final String DB_TABLE_COMPETITION_ROUND_SCORE = DB_TABLE_PREFIX
 			+ "competition_round_score";
+	public static final String DB_TABLE_SCORING_FORMAT = DB_TABLE_PREFIX
+			+ "scoring_format";
 
-	public static final String MONGO_DB_CLUB_COLLECTION = DB_TABLE_PREFIX + "club";
-	public static final String MONGO_DB_COURSE_COLLECTION = DB_TABLE_PREFIX + "course";
-	public static final String MONGO_DB_SCORECARD_COLLECTION = DB_TABLE_PREFIX + "scorecard";
+	public static final String MONGO_DB_CLUB_COLLECTION = DB_TABLE_PREFIX
+			+ "club";
+	public static final String MONGO_DB_COURSE_COLLECTION = DB_TABLE_PREFIX
+			+ "course";
+	public static final String MONGO_DB_SCORECARD_COLLECTION = DB_TABLE_PREFIX
+			+ "scorecard";
 
 	public static final String MONGO_DB_NAME = "ldrbrd";
 	public static final String MONGO_MAP_PACKAGE = "com.gffny.ldrbrd.common.model.impl.mongo";
 
 	public static final int EIGHTEEN_HOLE = 18;
+	public static final int INITIAL_SCORE = 0;
 
 	public static final int PROFILE = 1;
 	public static final int EMAIL = 2;

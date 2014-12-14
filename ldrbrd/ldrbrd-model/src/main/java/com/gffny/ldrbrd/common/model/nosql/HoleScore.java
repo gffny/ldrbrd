@@ -19,18 +19,18 @@ public class HoleScore extends CommonUUIDEntity {
 	// FIELD CONSTANTS
 	public static String COMPETITION_ID = "competitionId";
 	public static String COMPETITION_ROUND_ID = "competitionRoundId";
-	public static String ROUND_NUMBER = " roundNumber";
+	public static String ROUND_NUMBER = "roundNumber";
 	public static String COURSE_ID = "courseId";
-	public static String PLAYER_ID = " playerId";
-	public static String DATE_TIME = " dateTime";
+	public static String GOLFER_ID = "golferId";
+	public static String DATE_TIME = "dateTime";
 	public static String HOLE_NUMBER = "holeNumber";
 	public static String HOLE_SCORE = "holeScore";
-	public static String HOLE_COMPETITION_SCORE = " holeCompetitionScore";
-	public static String HOLE_TO_PAR = " holeToPar";
+	public static String HOLE_COMPETITION_SCORE = "holeCompetitionScore";
+	public static String HOLE_TO_PAR = "holeToPar";
 	public static String HOLE_TO_HANDICAP_PAR = "holeToHandicapPar";
-	public static String OVERVIEW_SCORE = " overviewScore";
-	public static String OVERVIEW_TO_PAR = " overviewToPar";
-	public static String OVERVIEW_TO_HANDICAP_PAR = " overviewToHandicapPar";
+	public static String OVERVIEW_SCORE = "overviewScore";
+	public static String OVERVIEW_TO_PAR = "overviewToPar";
+	public static String OVERVIEW_TO_HANDICAP_PAR = "overviewToHandicapPar";
 	public static String OVERVIEW_COMPETITION_ROUND = "overviewCompetitionScore";
 
 	// FIELDS
@@ -38,7 +38,7 @@ public class HoleScore extends CommonUUIDEntity {
 	private String competitionRoundId;
 	private String roundNumber;
 	private String courseId;
-	private String playerId;
+	private String golferId;
 	private Date dateTime;
 	private int holeNumber;
 	private int holeScore;
@@ -62,7 +62,7 @@ public class HoleScore extends CommonUUIDEntity {
 	 * @param competitionRoundId
 	 * @param roundNumber
 	 * @param courseId
-	 * @param playerId
+	 * @param golferId
 	 * @param dateTime
 	 * @param holeNumber
 	 * @param holeScore
@@ -74,9 +74,9 @@ public class HoleScore extends CommonUUIDEntity {
 	 * @param overviewToHandicapPar
 	 * @param overviewCompetitionScore
 	 */
-	public HoleScore instance(String competitionId, String competitionRoundId,
-			String roundNumber, String courseId, String playerId,
-			Date dateTime, int holeNumber, int holeScore,
+	public static HoleScore instance(String competitionId,
+			String competitionRoundId, String roundNumber, String courseId,
+			String golferId, Date dateTime, int holeNumber, int holeScore,
 			int holeCompetitionScore, int holeToPar, int holeToHandicapPar,
 			int overviewScore, int overviewToPar, int overviewToHandicapPar,
 			int overviewCompetitionScore) {
@@ -85,7 +85,7 @@ public class HoleScore extends CommonUUIDEntity {
 		instance.setCompetitionRoundId(competitionRoundId);
 		instance.setRoundNumber(roundNumber);
 		instance.setCourseId(courseId);
-		instance.setPlayerId(playerId);
+		instance.setGolferId(golferId);
 		instance.setDateTime(dateTime);
 		instance.setHoleNumber(holeNumber);
 		instance.setHoleScore(holeScore);
@@ -178,15 +178,15 @@ public class HoleScore extends CommonUUIDEntity {
 	 * @return the playerId
 	 */
 	public String getPlayerId() {
-		return this.playerId;
+		return this.golferId;
 	}
 
 	/**
 	 * @param playerId
 	 *            the playerId to set
 	 */
-	public void setPlayerId(String playerId) {
-		this.playerId = playerId;
+	public void setGolferId(String playerId) {
+		this.golferId = playerId;
 	}
 
 	/**

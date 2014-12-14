@@ -48,42 +48,25 @@ public interface IRoundScoreNoSqlDao extends GenericNoSqlDao<RoundScore> {
 
 	/**
 	 * 
-	 * @param golerId
+	 * @param golferId
 	 * @param competitionId
 	 * @param roundNumber
 	 * @return
 	 * @throws PersistenceException
 	 */
 	public abstract RoundScore findGolferRoundScoreByCompetitionRound(
-			String golerId, String competitionId, String roundNumber)
+			String golferId, String competitionId, String roundNumber)
 			throws PersistenceException;
 
 	/**
 	 * 
-	 * @param golerId
+	 * @param golferId
 	 * @param competitionRoundId
 	 * @return
 	 * @throws PersistenceException
 	 */
 	public abstract RoundScore findGolferRoundScoreByCompetitionRound(
-			String golerId, String competitionRoundId)
+			String golferId, String competitionRoundId)
 			throws PersistenceException;
 
-	/**
-	 * 
-	 * @param competitionId
-	 * @param roundNumber
-	 * @param playerId
-	 * @param holeNumber
-	 * @param holeScore
-	 * @param toPar
-	 * @param toHandicapPar
-	 * @param competitionScore
-	 * @return
-	 * @throws PersistenceException
-	 */
-	public abstract RoundScore scoreHole(String competitionId,
-			String roundNumber, String playerId, int holeNumber, int holeScore,
-			int toPar, int toHandicapPar, int competitionScore)
-			throws PersistenceException;
 }

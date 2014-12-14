@@ -28,13 +28,18 @@ import com.gffny.ldrbrd.common.model.nosql.Course;
 
 // TODO REFACTOR TO EXTRACT INTERFACE COMMON TO NON COMPETITION ROUND AND COMP
 // ROUND
-@NamedQueries({ @NamedQuery(name = CompetitionRound.FIND_BY_COMP_ID_AND_RND_NMBR, query = "SELECT cr FROM CompetitionRound cr WHERE cr.roundNumber = :roundNumber AND cr.competition.id  = :competitionId") })
+@NamedQueries({
+		@NamedQuery(name = CompetitionRound.FIND_BY_COMP_ID_AND_RND_NMBR, query = "SELECT cr FROM CompetitionRound cr WHERE cr.roundNumber = :roundNumber AND cr.competition.id  = :competitionId"),
+		@NamedQuery(name = CompetitionRound.FIND_BY_SCORECARD_ID_AND_RND_NMBR, query = "SELECT cr FROM CompetitionRound cr WHERE cr.roundNumber = :roundNumber AND cr.competition.id = (SELECT ce.competition.id FROM CompetitionEntry ce WHERE ce.id = (SELECT crs.competitionEntry.id FROM CompetitionRoundScore crs WHERE crs.scorecard.id = :scorecardId))") })
 @Entity
 @Table(name = Constant.DB_TABLE_COMPETITION_ROUND)
 public class CompetitionRound extends CommonIDEntity {
 
 	/** */
-	public static final String FIND_BY_COMP_ID_AND_RND_NMBR = "find_by_comp_id_and_rnd_nmbr";
+	public static final String FIND_BY_COMP_ID_AND_RND_NMBR = "FIND_BY_COMP_ID_AND_RND_NMBR";
+
+	/** */
+	public static final String FIND_BY_SCORECARD_ID_AND_RND_NMBR = "FIND_BY_SCORECARD_ID_AND_RND_NMBR";
 
 	/** */
 	private static final long serialVersionUID = -8135318864907425168L;
@@ -58,7 +63,7 @@ public class CompetitionRound extends CommonIDEntity {
 	private DateTime teeTime;
 
 	/** TODO change to an enum */
-	private int scoringFormat;
+	private ScoringFormat scoringFormat;
 
 	/**
 	 * @param competition
@@ -219,15 +224,17 @@ public class CompetitionRound extends CommonIDEntity {
 	/**
 	 * @return
 	 */
-	@Column(name = "scoring_format")
-	public int getScoringFormat() {
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "scoring_format_id", nullable = false)
+	public ScoringFormat getScoringFormat() {
 		return this.scoringFormat;
 	}
 
 	/**
 	 * @param scoringFormat
 	 */
-	public void setScoringFormat(int scoringFormat) {
+	public void setScoringFormat(ScoringFormat scoringFormat) {
 		this.scoringFormat = scoringFormat;
 	}
 }

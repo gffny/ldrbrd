@@ -1,16 +1,23 @@
-HoleScore = new Mongo.Collection("HoleScore");
-RoundScore = new Mongo.Collection("RoundScore");
-
 if (Meteor.isClient) {
-  // This code only runs on the client
-  Template.body.helpers({
-    holeScoreList: function (competitionId, roundNumber) {
-      console.log(competitionId);
-      return HoleScore.find({"competitionId":competitionId,"roundNumber":roundNumber});
-    },
-    roundScoreList: function (competitionId, roundNumber) {
+  // counter starts at 0
+  // Session.setDefault("counter", 0);
 
-    	return RoundScore.find({"competitionId":competitionId,"roundNumber":roundNumber}, {sort: { hole2Score: 1 }});
-    }
-  });
+  // Template.hello.helpers({
+  //   counter: function () {
+  //     return Session.get("counter");
+  //   }
+  // });
+
+  // Template.hello.events({
+  //   'click button': function () {
+  //     // increment the counter when button is clicked
+  //     Session.set("counter", Session.get("counter") + 1);
+  //   }
+  // });
+}
+
+if (Meteor.isServer) {
+  // Meteor.startup(function () {
+    // code to run on server at startup
+  // });
 }

@@ -13,6 +13,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -29,12 +31,16 @@ import com.gffny.ldrbrd.common.model.Constant;
 /**
  * @author John D. Gaffney | gffny.com
  */
+@NamedQueries(@NamedQuery(name = CompetitionEntry.FIND_BY_COMPETITION_AND_GOLFER, query = "select c from CompetitionEntry c where c.competition.id = :competitionId and c.golfer.id = :golferId"))
 @Entity
 @Table(name = Constant.DB_TABLE_COMPETITION_ENTRY)
 public class CompetitionEntry extends CommonIDEntity {
 
 	/** */
 	private static final long serialVersionUID = -6660447296357325296L;
+
+	/** */
+	public static final String FIND_BY_COMPETITION_AND_GOLFER = "FIND_BY_COMPETITION_AND_GOLFER";
 
 	/** */
 	private Competition competition;
@@ -48,11 +54,20 @@ public class CompetitionEntry extends CommonIDEntity {
 	/** */
 	private List<Scorecard> entryScorecardList;
 
-	/**
-	 * 
-	 */
+	/** */
 	public CompetitionEntry() {
 		// hibernate required non-zero constructor
+	}
+
+	/**
+	 * 
+	 * @param competition
+	 * @param golfer
+	 */
+	public CompetitionEntry(Competition competition, Golfer golfer) {
+		this.competition = competition;
+		this.golfer = golfer;
+		this.entryDate = new DateTime(new Date());
 	}
 
 	/**

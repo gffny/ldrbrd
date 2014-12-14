@@ -43,9 +43,7 @@ public class ScorecardRestController extends BaseRestController {
 	@Autowired
 	private IAuthorisationService authorisationService;
 
-	/**
-	 *  
-	 */
+	/** */
 	public ScorecardRestController() {
 		super(ScorecardRestController.class);
 	}
@@ -54,13 +52,14 @@ public class ScorecardRestController extends BaseRestController {
 	 * @return
 	 */
 	@Transactional(value = "ldrbrd_txnMgr", propagation = Propagation.REQUIRED)
-	@RequestMapping(value = "/scorecard/start", produces = { MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE })
+	@RequestMapping(value = "/scorecard/start", produces = {
+			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<Scorecard> startScorecardWithCourseId(
 			@RequestParam(required = true) final String courseId) {
 
 		try {
-			return new ResponseEntity<Scorecard>(scorecardService.startGeneralScorecard(courseId),
+			return new ResponseEntity<Scorecard>(
+					scorecardService.startGeneralScorecard(courseId),
 					HttpStatus.OK);
 		} catch (AuthorisationException e) {
 			LOG.error(e.getMessage());
@@ -75,17 +74,19 @@ public class ScorecardRestController extends BaseRestController {
 	 * @return
 	 */
 	@Transactional(value = "ldrbrd_txnMgr", propagation = Propagation.REQUIRED)
-	@RequestMapping(value = "/scorecard/scorehole", produces = { MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE })
+	@RequestMapping(value = "/scorecard/scorehole", produces = {
+			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<StatusResponse> scoreHole(
 			@RequestParam(required = true) final int scorecardId,
 			@RequestParam(required = false) final String holeId,
 			@RequestParam(required = true) final int holeNumber,
 			@RequestParam(required = true) final int holeScore) {
 		try {
-			// TODO create a return class for scoreHoleArray that will have the scores for a
+			// TODO create a return class for scoreHoleArray that will have the
+			// scores for a
 			// competition or general (to par, stapleford, etc)
-			scorecardService.scoreHole(scorecardId, holeNumber, holeScore, holeId);
+			scorecardService.scoreHole(scorecardId, holeNumber, holeScore,
+					holeId);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (AuthorisationException e) {
 			LOG.error(e.getMessage());
@@ -107,23 +108,28 @@ public class ScorecardRestController extends BaseRestController {
 		if (CollectionUtils.safeSize(scorecardSubmission.getScorecardArray()) > 0
 				&& StringUtils.isNotBlank(scorecardSubmission.getScorecardId())) {
 			LOG.debug("Array Size: "
-					+ CollectionUtils.safeSize(scorecardSubmission.getScorecardArray()));
+					+ CollectionUtils.safeSize(scorecardSubmission
+							.getScorecardArray()));
 			try {
-				scorecardService.scoreHoleArray(scorecardSubmission.getScorecardId(),
+				scorecardService.scoreHoleArray(
+						scorecardSubmission.getScorecardId(),
 						scorecardSubmission.getScorecardArray());
-				// TODO create a return class for scoreHoleArray that will have the scores for a
+				// TODO create a return class for scoreHoleArray that will have
+				// the scores for a
 				// competition or general (to par, stapleford, etc)
-				return new ResponseEntity<StatusResponse>(new StatusResponse("good",
-						String.valueOf(0)), HttpStatus.OK);
+				return new ResponseEntity<StatusResponse>(new StatusResponse(
+						"good", String.valueOf(0)), HttpStatus.OK);
 			} catch (AuthorisationException e) {
 				LOG.error(e.getMessage());
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			} catch (ServiceException e) {
 				LOG.error(e.getMessage());
-				return new ResponseEntity<StatusResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
+				return new ResponseEntity<StatusResponse>(
+						HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
-		return new ResponseEntity<StatusResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<StatusResponse>(
+				HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	/**
@@ -138,11 +144,13 @@ public class ScorecardRestController extends BaseRestController {
 		LOG.debug("signing scorecard");
 		if (scorecardIdMap != null && scorecardIdMap.get("scorecardId") != null) {
 			try {
-				scorecardService.signScorecard(scorecardIdMap.get("scorecardId"));
+				scorecardService.signScorecard(scorecardIdMap
+						.get("scorecardId"));
 			} catch (ServiceException e) {
 				LOG.error(e.getMessage());
 				// check what the error is (might be a 500 or a 400)
-				return new ResponseEntity<StatusResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
+				return new ResponseEntity<StatusResponse>(
+						HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
 		return new ResponseEntity<StatusResponse>(HttpStatus.OK);
