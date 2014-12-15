@@ -9,7 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.ForeignKey;
 import org.joda.time.DateTime;
 
 import com.gffny.ldrbrd.common.model.CommonUUIDEntity;
@@ -55,7 +54,6 @@ public abstract class AbstractGolfRound extends CommonUUIDEntity {
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "crs_id", nullable = false)
-	@ForeignKey(name = "id")
 	public Course getCourse() {
 		return this.course;
 	}

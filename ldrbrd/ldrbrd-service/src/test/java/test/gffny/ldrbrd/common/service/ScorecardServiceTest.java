@@ -3,12 +3,9 @@
  */
 package test.gffny.ldrbrd.common.service;
 
-import java.util.Arrays;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -59,7 +56,7 @@ public class ScorecardServiceTest {
 		Golfer golfer = new Golfer();
 		golfer.setId(1);
 		LdrbrdAuthenticationToken lat = new LdrbrdAuthenticationToken(golfer,
-				Arrays.asList(new GrantedAuthorityImpl("ROLE_ADMIN")));
+				null);
 		SecurityContextHolder.getContext().setAuthentication(lat);
 		// courseClubService
 		// TODO LOGGED IN USER
@@ -78,6 +75,6 @@ public class ScorecardServiceTest {
 	/** */
 	@Test
 	public void testScoreHole() throws AuthorisationException, ServiceException {
-		scorecardService.scoreHole(2, 3, 3, null);
+		scorecardService.scoreHole(2, 2, 3, null);
 	}
 }

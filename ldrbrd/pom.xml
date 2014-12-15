@@ -13,6 +13,7 @@
 		<module>ldrbrd-persistence</module>
 		<module>ldrbrd-service</module>
 		<module>ldrbrd-rest-api</module>
+		<module>ldrbrd-notification</module>
 	</modules>
 
 	<properties>

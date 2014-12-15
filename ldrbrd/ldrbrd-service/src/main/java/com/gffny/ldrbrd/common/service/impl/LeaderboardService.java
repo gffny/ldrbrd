@@ -185,21 +185,30 @@ public class LeaderboardService extends AbstractService implements
 						.findGolferHoleScoreByCompetitionRound(
 								golfer.getIdString(),
 								competitionRound.getIdString(), holeNumber);
-				hs = HoleScore
-						.instance(competitionRound.getCompetition()
-								.getIdString(), competitionRound.getIdString(),
-								String.valueOf(competitionRound
-										.getRoundNumber()), competitionRound
-										.getCourseDocumentId(), golfer
-										.getIdString(), new Date(), holeNumber,
-								holeScore, competitionScore, toPar,
-								toHandicapPar, prevHs.getOverviewScore()
-										+ holeScore, prevHs.getOverviewToPar()
-										+ toPar,
-								prevHs.getOverviewToHandicapPar()
-										+ toHandicapPar,
-								prevHs.getOverviewCompetitionScore()
-										+ competitionScore);
+				if (prevHs != null) {
+					hs = HoleScore.instance(competitionRound.getCompetition()
+							.getIdString(), competitionRound.getIdString(),
+							String.valueOf(competitionRound.getRoundNumber()),
+							competitionRound.getCourseDocumentId(), golfer
+									.getIdString(), new Date(), holeNumber,
+							holeScore, competitionScore, toPar, toHandicapPar,
+							prevHs.getOverviewScore() + holeScore,
+							prevHs.getOverviewToPar() + toPar,
+							prevHs.getOverviewToHandicapPar() + toHandicapPar,
+							prevHs.getOverviewCompetitionScore()
+									+ competitionScore);
+				} else {
+					LOG.error(
+							"no previous hole {} recorded; setting overall values to 0",
+							holeNumber - 1);
+					hs = HoleScore.instance(competitionRound.getCompetition()
+							.getIdString(), competitionRound.getIdString(),
+							String.valueOf(competitionRound.getRoundNumber()),
+							competitionRound.getCourseDocumentId(), golfer
+									.getIdString(), new Date(), holeNumber,
+							holeScore, competitionScore, toPar, toHandicapPar,
+							holeScore, toPar, toHandicapPar, competitionScore);
+				}
 			} else {
 				// set the hole score with the initial score value
 				hs = HoleScore.instance(competitionRound.getCompetition()

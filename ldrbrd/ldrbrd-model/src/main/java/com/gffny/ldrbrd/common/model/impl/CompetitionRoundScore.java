@@ -13,7 +13,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.annotations.ForeignKey;
 
 import com.gffny.ldrbrd.common.model.CommonIDEntity;
 import com.gffny.ldrbrd.common.model.Constant;
@@ -70,7 +69,6 @@ public class CompetitionRoundScore extends CommonIDEntity {
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "competition_entry_id", nullable = false)
-	@ForeignKey(name = "id")
 	public CompetitionEntry getCompetitionEntry() {
 		return this.competitionEntry;
 	}
@@ -88,7 +86,6 @@ public class CompetitionRoundScore extends CommonIDEntity {
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "scorecard_id", nullable = false)
-	@ForeignKey(name = "id")
 	public Scorecard getScorecard() {
 		return this.scorecard;
 	}
@@ -105,7 +102,6 @@ public class CompetitionRoundScore extends CommonIDEntity {
 	 */
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "competition_round_id", nullable = false)
-	@ForeignKey(name = "id")
 	public CompetitionRound getCompetitionRound() {
 		return competitionRound;
 	}

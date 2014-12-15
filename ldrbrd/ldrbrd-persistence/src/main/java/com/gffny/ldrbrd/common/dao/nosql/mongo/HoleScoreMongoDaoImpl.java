@@ -135,8 +135,7 @@ public class HoleScoreMongoDaoImpl extends GenericNoSqlDaoMongoImpl<HoleScore>
 			String competitionRoundId, int holeNumber)
 			throws PersistenceException {
 		return buildCompetitionRoundGolferQuery(golferId, competitionRoundId)
-				.field(HoleScore.HOLE_NUMBER)
-				.equal(Integer.valueOf(holeNumber)).get();
+				.field(HoleScore.HOLE_NUMBER).equal(holeNumber).get();
 	}
 
 	/**

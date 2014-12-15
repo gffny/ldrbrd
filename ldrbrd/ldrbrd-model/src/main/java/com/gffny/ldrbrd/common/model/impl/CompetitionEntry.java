@@ -20,7 +20,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.joda.time.DateTime;
@@ -76,7 +75,6 @@ public class CompetitionEntry extends CommonIDEntity {
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "competition_id", nullable = false)
-	@ForeignKey(name = "id")
 	public Competition getCompetition() {
 		return competition;
 	}
@@ -95,7 +93,6 @@ public class CompetitionEntry extends CommonIDEntity {
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "golfer_id", nullable = false)
-	@ForeignKey(name = "id")
 	public Golfer getGolfer() {
 		return golfer;
 	}

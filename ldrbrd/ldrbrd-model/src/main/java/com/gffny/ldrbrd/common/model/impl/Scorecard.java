@@ -18,7 +18,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 import org.joda.time.DateTime;
@@ -83,16 +82,13 @@ public class Scorecard extends CommonIDEntity {
 	 * @param handicap
 	 * @return
 	 */
-	public static Scorecard createNewScorecard(Golfer golfer, Course course,
-			int handicap) {
+	public static Scorecard instance(Golfer golfer, Course course, int handicap) {
 		Scorecard scorecard = new Scorecard(golfer, course, handicap);
 		scorecard.initDates(new DateTime(System.currentTimeMillis()));
 		return scorecard;
 	}
 
-	/**
-	 *
-	 */
+	/** */
 	public Scorecard() {
 		// hibernate required non-private zero-argument constructor
 	}
@@ -117,7 +113,6 @@ public class Scorecard extends CommonIDEntity {
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "golfer_id", nullable = false)
-	@ForeignKey(name = "id")
 	public Golfer getGolfer() {
 		return this.golfer;
 	}
