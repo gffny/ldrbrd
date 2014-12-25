@@ -55,8 +55,7 @@ public class RoundScoreMongoDaoImpl extends
 	 */
 	@Override
 	public List<RoundScore> listRoundScoreByCompetitionRound(
-			String competitionId, String roundNumber)
-			throws PersistenceException {
+			String competitionId, int roundNumber) throws PersistenceException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -83,8 +82,7 @@ public class RoundScoreMongoDaoImpl extends
 	 */
 	@Override
 	public RoundScore findGolferRoundScoreByCompetitionRound(String golferId,
-			String competitionId, String roundNumber)
-			throws PersistenceException {
+			String competitionId, int roundNumber) throws PersistenceException {
 		return buildCompetitionRoundQuery(competitionId, roundNumber)
 				.field(RoundScore.GOLFER_ID).equal(golferId).get();
 	}
@@ -109,7 +107,7 @@ public class RoundScoreMongoDaoImpl extends
 	 * @return
 	 */
 	private Query<RoundScore> buildCompetitionRoundQuery(String competitionId,
-			String roundNumber) {
+			int roundNumber) {
 		return this.datastore.createQuery(RoundScore.class)
 				.field(HoleScore.COMPETITION_ID).equal(competitionId)
 				.field(HoleScore.ROUND_NUMBER).equal(roundNumber);

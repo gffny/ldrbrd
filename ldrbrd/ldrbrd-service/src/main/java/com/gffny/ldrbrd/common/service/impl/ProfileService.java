@@ -15,11 +15,11 @@ import com.gffny.ldrbrd.common.dao.GenericDao;
 import com.gffny.ldrbrd.common.exception.AuthorisationException;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
-import com.gffny.ldrbrd.common.model.impl.CompetitionEntry;
 import com.gffny.ldrbrd.common.model.impl.CompetitionRound;
 import com.gffny.ldrbrd.common.model.impl.Golfer;
 import com.gffny.ldrbrd.common.model.impl.Scorecard;
 import com.gffny.ldrbrd.common.model.web.GolferDigestResponse;
+import com.gffny.ldrbrd.common.service.ICompetitionService;
 import com.gffny.ldrbrd.common.service.IScorecardService;
 import com.gffny.ldrbrd.common.service.IUserProfileService;
 import com.gffny.ldrbrd.common.utils.QueryUtils;
@@ -28,15 +28,21 @@ import com.gffny.ldrbrd.common.utils.QueryUtils;
  * @author John D. Gaffney | gffny.com
  */
 @Service
-public class ProfileService extends AbstractService implements IUserProfileService {
+public class ProfileService extends AbstractService implements
+		IUserProfileService {
 
 	/** The Constant log. */
-	private static final Logger LOG = LoggerFactory.getLogger(ProfileService.class);
+	private static final Logger LOG = LoggerFactory
+			.getLogger(ProfileService.class);
 
 	/** */
 	@Autowired
 	@Qualifier(value = "genericDaoJpaImpl")
 	private GenericDao<Golfer> personDao;
+
+	/** */
+	@Autowired
+	private ICompetitionService competitionService;
 
 	/** */
 	@Autowired
@@ -49,14 +55,17 @@ public class ProfileService extends AbstractService implements IUserProfileServi
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.gffny.ldrbrd.common.service.IUserProfileService#getGolferByHandle (java.lang.String)
+	 * @see com.gffny.ldrbrd.common.service.IUserProfileService#getGolferByHandle
+	 *      (java.lang.String)
 	 */
-	public Golfer getGolferByHandle(String golferHandle) throws ServiceException,
-			AuthorisationException {
+	@Override
+	public Golfer getGolferByHandle(String golferHandle)
+			throws ServiceException, AuthorisationException {
 
 		if (golferHandle != null) {
 			authorisationService.authorise(golferHandle);
-			return namedQuerySingleResultOrNull(personDao, Golfer.FIND_BY_HANDLE,
+			return namedQuerySingleResultOrNull(personDao,
+					Golfer.FIND_BY_HANDLE,
 					QueryUtils.paramMap("profileHandle", golferHandle));
 		}
 		LOG.error("error with parameters for method");
@@ -68,12 +77,14 @@ public class ProfileService extends AbstractService implements IUserProfileServi
 	 * 
 	 * @see com.gffny.ldrbrd.common.service.IUserProfileService#getGolferByEmail(java.lang.String)
 	 */
+	@Override
 	public Golfer getGolferByEmail(String golferEmail) throws ServiceException,
 			AuthorisationException {
 
 		if (golferEmail != null) {
 			authorisationService.authorise(golferEmail);
-			return namedQuerySingleResultOrNull(personDao, Golfer.FIND_BY_EMAIL,
+			return namedQuerySingleResultOrNull(personDao,
+					Golfer.FIND_BY_EMAIL,
 					QueryUtils.paramMap("emailAddress", golferEmail));
 		}
 		LOG.error("error with parameters for method");
@@ -86,7 +97,9 @@ public class ProfileService extends AbstractService implements IUserProfileServi
 	 * @throws AuthorisationException
 	 * @see com.gffny.ldrbrd.common.service.IUserProfileService#getGolferById(int)
 	 */
-	public Golfer getGolferById(String id) throws ServiceException, AuthorisationException {
+	@Override
+	public Golfer getGolferById(String id) throws ServiceException,
+			AuthorisationException {
 
 		try {
 			// authorize the user
@@ -104,18 +117,33 @@ public class ProfileService extends AbstractService implements IUserProfileServi
 	 * 
 	 * @see com.gffny.ldrbrd.common.service.IUserProfileService#getDigestById(int)
 	 */
-	public GolferDigestResponse getDigestById(String id) throws AuthorisationException,
-			ServiceException {
+	@Override
+	public GolferDigestResponse getDigestById(String id)
+			throws AuthorisationException, ServiceException {
 
-		GolferDigestResponse digest = new GolferDigestResponse(getGolferById(id));
+		GolferDigestResponse digest = new GolferDigestResponse(
+				getGolferById(id));
 		digest.setFavouriteCourseList(courseClubService.testList());
 		digest.setLastXScorecardList(new ArrayList<Scorecard>());
-		digest.setUpcomingCompetitionEntryList(new ArrayList<CompetitionEntry>());
+		digest.setUpcomingCompetitionRoundList(competitionService
+				.listCompetitionRoundForGolfer(id));
 		digest.setUpcomingNonCompetitionRoundList(new ArrayList<CompetitionRound>());
 		if (scorecardService.hasActiveScorecard(id)) {
-			digest.setActiveScorecard(scorecardService.getActiveScorecard(digest.getGolfer()
-					.getIdString()));
+			digest.setActiveScorecard(scorecardService
+					.getActiveScorecard(digest.getGolfer().getIdString()));
 		}
 		return digest;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gffny.ldrbrd.common.service.IUserProfileService#getLoggedInGolferDigest()
+	 */
+	@Override
+	public GolferDigestResponse getLoggedInGolferDigest()
+			throws AuthorisationException, ServiceException {
+		return getDigestById(authorisationService.getLoggedInUser()
+				.getIdString());
 	}
 }

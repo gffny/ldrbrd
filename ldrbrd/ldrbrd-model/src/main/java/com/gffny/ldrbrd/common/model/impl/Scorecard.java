@@ -30,7 +30,13 @@ import com.gffny.ldrbrd.common.model.nosql.Course;
  * @author John Gaffney (john@gffny.com) Jul 30, 2012
  */
 
-@NamedQueries({ @NamedQuery(name = Scorecard.FIND_ACTIVE_SCORECARD, query = "SELECT s FROM Scorecard s WHERE s.active = true and s.golfer.id = :golferId") })
+@NamedQueries({
+		@NamedQuery(name = Scorecard.FIND_ACTIVE_SCORECARD, query = "SELECT s FROM Scorecard s WHERE s.active = true and s.golfer.id = :golferId"),
+		@NamedQuery(name = Scorecard.FIND_ACTIVE_SCORECARD_BY_COMPETITION_ROUND_AND_GOLFER, query = ""
+				+ "SELECT s FROM Scorecard s WHERE s.active = true and s.id = ("
+				+ "SELECT crs.scorecard.id FROM CompetitionRoundScore crs WHERE crs.complete = FALSE AND crs.competitionRound.id = :competitionRoundId AND crs.competitionEntry.id = ("
+				+ "SELECT ce.id FROM CompetitionEntry ce WHERE ce.golfer.id = :golferId AND ce.competition.id = :competitionId"
+				+ "))") })
 @Entity
 @Table(name = Constant.DB_TABLE_SCORECARD)
 public class Scorecard extends CommonIDEntity {
@@ -42,7 +48,10 @@ public class Scorecard extends CommonIDEntity {
 	public static final String FIND_ACTIVE_SCORECARD = "SCORECARD.FIND_ACTIVE_SCORECARD";
 
 	/** */
-	public static final String FIND_SCORECARD_BY_COMPETITION_ROUND_AND_GOLFER = "findScorecardByCompetitionRoundAndGolfer";
+	public static final String FIND_ACTIVE_SCORECARD_BY_COMPETITION_ROUND_AND_GOLFER = "findActiveScorecardByCompetitionRoundAndGolfer";
+
+	/** */
+	public static final String FIND_ALL_SCORECARD_BY_COMPETITION_ROUND_AND_GOLFER = "findAllScorecardByCompetitionRoundAndGolfer";
 
 	/** */
 	public static final String FIND_SCORECARDS_BY_GOLFER_ID = "findScorecardsByGolferId";

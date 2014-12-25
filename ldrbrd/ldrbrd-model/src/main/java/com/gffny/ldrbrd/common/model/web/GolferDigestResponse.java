@@ -5,7 +5,6 @@ package com.gffny.ldrbrd.common.model.web;
 
 import java.util.List;
 
-import com.gffny.ldrbrd.common.model.impl.CompetitionEntry;
 import com.gffny.ldrbrd.common.model.impl.CompetitionRound;
 import com.gffny.ldrbrd.common.model.impl.Golfer;
 import com.gffny.ldrbrd.common.model.impl.Scorecard;
@@ -17,8 +16,8 @@ import com.gffny.ldrbrd.common.model.nosql.Course;
 public class GolferDigestResponse {
 
 	private Golfer golfer;
-	private List<com.gffny.ldrbrd.common.model.nosql.Course> favouriteCourseList;
-	private List<CompetitionEntry> competitionListForGolfer;
+	private List<Course> favouriteCourseList;
+	private List<CompetitionRound> competitionRoundListForGolfer;
 	private List<CompetitionRound> nonCompetitionRoundList;
 	private List<Scorecard> lastXScorecardList;
 	private Scorecard activeScorecard;
@@ -63,16 +62,16 @@ public class GolferDigestResponse {
 	/**
 	 * @return the competitionListForGolfer
 	 */
-	public List<CompetitionEntry> getUpcomingCompetitionEntryList() {
-		return competitionListForGolfer;
+	public List<CompetitionRound> getUpcomingCompetitionRoundList() {
+		return competitionRoundListForGolfer;
 	}
 
 	/**
-	 * @param list
+	 * @param competitionRoundList
 	 *            the competitionListForGolfer to set
 	 */
-	public void setUpcomingCompetitionEntryList(List<CompetitionEntry> list) {
-		this.competitionListForGolfer = list;
+	public void setUpcomingCompetitionRoundList(List<CompetitionRound> competitionRoundList) {
+		this.competitionRoundListForGolfer = competitionRoundList;
 	}
 
 	/**

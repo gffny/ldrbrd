@@ -72,4 +72,5 @@ public class ScorecardDaoTest {
 			fail(e.getMessage());
 		}
 	}
+
 }

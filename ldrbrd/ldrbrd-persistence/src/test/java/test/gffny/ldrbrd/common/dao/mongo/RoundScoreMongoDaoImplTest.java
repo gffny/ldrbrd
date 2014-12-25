@@ -13,7 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gffny.ldrbrd.common.dao.nosql.IRoundScoreNoSqlDao;
-import com.gffny.ldrbrd.common.model.nosql.RoundScore;
+import com.gffny.ldrbrd.common.model.nosql.RoundScoreNineHole;
 
 /**
  * @author John D. Gaffney | gffny.com
@@ -44,7 +44,7 @@ public class RoundScoreMongoDaoImplTest {
 
 	@Test
 	public void testFindGolferRoundScoreByCompetitionRound() throws Exception {
-		RoundScore rs = leaderboardRoundScoreMongoDaoImpl
+		RoundScoreNineHole rs = leaderboardRoundScoreMongoDaoImpl
 				.findGolferRoundScoreByCompetitionRound("1", "1");
 		assertNotNull(rs);
 	}

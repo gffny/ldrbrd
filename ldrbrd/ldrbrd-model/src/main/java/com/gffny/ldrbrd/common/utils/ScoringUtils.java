@@ -115,7 +115,8 @@ public class ScoringUtils {
 	 * @return
 	 */
 	private static boolean isValidCourse(Course course, int holeNumber) {
-		return course != null && course.getCourseHoleList() != null
-				&& course.getCourseHoleList().size() <= holeNumber;
+		return course != null
+				&& CollectionUtils.isNotEmpty(course.getCourseHoleList())
+				&& course.getCourseHoleList().size() >= holeNumber;
 	}
 }

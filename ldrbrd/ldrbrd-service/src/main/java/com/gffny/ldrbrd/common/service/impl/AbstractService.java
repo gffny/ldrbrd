@@ -55,6 +55,48 @@ public class AbstractService {
 	}
 
 	/**
+	 * 
+	 * @param genericDao
+	 * @param namedQuery
+	 * @param params
+	 * @return
+	 * @throws ServiceException
+	 */
+	protected <T> List<T> namedQueryListResultOrNull(GenericDao<T> genericDao,
+			String namedQuery, Map<String, Object> params)
+			throws ServiceException {
+
+		// get the result list
+		try {
+			return genericDao.findByNamedQuery(namedQuery, params);
+		} catch (PersistenceException e) {
+			LOG.error(e.getMessage());
+			throw new ServiceException(e);
+		}
+	}
+
+	/**
+	 * 
+	 * @param genericDao
+	 * @param namedQuery
+	 * @param params
+	 * @param maxResults
+	 * @return
+	 * @throws ServiceException
+	 */
+	protected <T> List<T> namedQueryListResultOrNull(GenericDao<T> genericDao,
+			String namedQuery, Map<String, Object> params, int maxResults)
+			throws ServiceException {
+		// get the result list
+		try {
+			return genericDao.findByNamedQuery(namedQuery, params, maxResults);
+		} catch (PersistenceException e) {
+			LOG.error(e.getMessage());
+			throw new ServiceException(e);
+		}
+	}
+
+	/**
 	 * @param keyParamPairs
 	 * @return
 	 */

@@ -7,6 +7,9 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -21,7 +24,7 @@ import com.gffny.ldrbrd.common.model.Constant;
 /**
  * @author John D. Gaffney | gffny.com
  */
-@NamedQueries(@NamedQuery(name = Competition.FIND_BY_COMPETITION_NAME, query = "select c from Competition c where c.competitionName = :competitionName"))
+@NamedQueries(@NamedQuery(name = Competition.FIND_BY_COMPETITION_NAME, query = "SELECT c FROM Competition c WHERE c.competitionName = :competitionName"))
 @Entity
 @Table(name = Constant.DB_TABLE_COMPETITION)
 public class Competition extends CommonIDEntity {
@@ -33,16 +36,22 @@ public class Competition extends CommonIDEntity {
 	public static final String FIND_BY_COMPETITION_NAME = "COMPETITION_FIND_BY_NAME";
 
 	/** */
-	@JsonIgnore
 	private String competitionName;
 
 	/** */
-	@JsonIgnore
 	private int competitorLimit;
 
 	/** */
 	@JsonIgnore
 	private DateTime startDate;
+
+	/** */
+	@JsonIgnore
+	private Society society;
+
+	/** */
+	@JsonIgnore
+	private Golfer golfer;
 
 	/**
 	 * @param competitionName
@@ -127,6 +136,39 @@ public class Competition extends CommonIDEntity {
 		this.competitorLimit = competitorLimit;
 	}
 
-	// TODO add the organising society and golfer
-	// TODO make organising golf not-null in database
+	/**
+	 * @return the golfer
+	 */
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "organising_society", nullable = true)
+	public Society getSociety() {
+		return society;
+	}
+
+	/**
+	 * @param golfer
+	 *            the golfer to set
+	 */
+	public void setSociety(Society society) {
+		this.society = society;
+	}
+
+	/**
+	 * @return the golfer
+	 */
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "organising_golfer", nullable = true)
+	public Golfer getGolfer() {
+		return golfer;
+	}
+
+	/**
+	 * @param golfer
+	 *            the golfer to set
+	 */
+	public void setGolfer(Golfer golfer) {
+		this.golfer = golfer;
+	}
 }

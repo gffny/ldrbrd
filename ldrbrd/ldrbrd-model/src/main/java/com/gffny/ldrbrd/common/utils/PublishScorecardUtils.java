@@ -120,38 +120,42 @@ public class PublishScorecardUtils {
 		// check params
 		if (rs != null) {
 			LOG.debug("updating the round score");
-			rs.setOverviewScore(rs.getInitialScore() + rs.getHole01Score()
-					+ rs.getHole02Score() + rs.getHole03Score()
-					+ rs.getHole04Score() + rs.getHole05Score()
-					+ rs.getHole06Score() + rs.getHole07Score()
-					+ rs.getHole08Score() + rs.getHole09Score()
-					+ rs.getHole10Score() + rs.getHole11Score()
-					+ rs.getHole12Score() + rs.getHole13Score()
-					+ rs.getHole14Score() + rs.getHole15Score()
-					+ rs.getHole16Score() + rs.getHole17Score()
-					+ rs.getHole18Score());
-			rs.setOverviewToPar(rs.getInitialToPar() + rs.getHole01ToPar()
-					+ rs.getHole02ToPar() + rs.getHole03ToPar()
-					+ rs.getHole04ToPar() + rs.getHole05ToPar()
-					+ rs.getHole06ToPar() + rs.getHole07ToPar()
-					+ rs.getHole08ToPar() + rs.getHole09ToPar()
-					+ rs.getHole10ToPar() + rs.getHole11ToPar()
-					+ rs.getHole12ToPar() + rs.getHole13ToPar()
-					+ rs.getHole14ToPar() + rs.getHole15ToPar()
-					+ rs.getHole16ToPar() + rs.getHole17ToPar()
-					+ rs.getHole18ToPar());
+			rs.setRoundScore(rs.getHole01Score() + rs.getHole02Score()
+					+ rs.getHole03Score() + rs.getHole04Score()
+					+ rs.getHole05Score() + rs.getHole06Score()
+					+ rs.getHole07Score() + rs.getHole08Score()
+					+ rs.getHole09Score() + rs.getHole10Score()
+					+ rs.getHole11Score() + rs.getHole12Score()
+					+ rs.getHole13Score() + rs.getHole14Score()
+					+ rs.getHole15Score() + rs.getHole16Score()
+					+ rs.getHole17Score() + rs.getHole18Score());
+			rs.setOverviewScore(rs.getInitialScore() + rs.getRoundScore());
+
+			rs.setRoundToPar(rs.getHole01ToPar() + rs.getHole02ToPar()
+					+ rs.getHole03ToPar() + rs.getHole04ToPar()
+					+ rs.getHole05ToPar() + rs.getHole06ToPar()
+					+ rs.getHole07ToPar() + rs.getHole08ToPar()
+					+ rs.getHole09ToPar() + rs.getHole10ToPar()
+					+ rs.getHole11ToPar() + rs.getHole12ToPar()
+					+ rs.getHole13ToPar() + rs.getHole14ToPar()
+					+ rs.getHole15ToPar() + rs.getHole16ToPar()
+					+ rs.getHole17ToPar() + rs.getHole18ToPar());
+			rs.setOverviewToPar(rs.getInitialToPar() + rs.getRoundToPar());
+
+			rs.setRoundToHandicapPar(rs.getHole01ToHandicapPar()
+					+ rs.getHole02ToHandicapPar() + rs.getHole03ToHandicapPar()
+					+ rs.getHole04ToHandicapPar() + rs.getHole05ToHandicapPar()
+					+ rs.getHole06ToHandicapPar() + rs.getHole07ToHandicapPar()
+					+ rs.getHole08ToHandicapPar() + rs.getHole09ToHandicapPar()
+					+ rs.getHole10ToHandicapPar() + rs.getHole11ToHandicapPar()
+					+ rs.getHole12ToHandicapPar() + rs.getHole13ToHandicapPar()
+					+ rs.getHole14ToHandicapPar() + rs.getHole15ToHandicapPar()
+					+ rs.getHole16ToHandicapPar() + rs.getHole17ToHandicapPar()
+					+ rs.getHole18ToHandicapPar());
 			rs.setOverviewToHandicapPar(rs.getInitialToHandicapPar()
-					+ rs.getHole01ToHandicapPar() + rs.getHole02ToHandicapPar()
-					+ rs.getHole03ToHandicapPar() + rs.getHole04ToHandicapPar()
-					+ rs.getHole05ToHandicapPar() + rs.getHole06ToHandicapPar()
-					+ rs.getHole07ToHandicapPar() + rs.getHole08ToHandicapPar()
-					+ rs.getHole09ToHandicapPar() + rs.getHole10ToHandicapPar()
-					+ rs.getHole11ToHandicapPar() + rs.getHole12ToHandicapPar()
-					+ rs.getHole13ToHandicapPar() + rs.getHole14ToHandicapPar()
-					+ rs.getHole15ToHandicapPar() + rs.getHole16ToHandicapPar()
-					+ rs.getHole17ToHandicapPar() + rs.getHole18ToHandicapPar());
-			rs.setOverviewCompetitionScore(rs.getInitialCompetitionScore()
-					+ rs.getHole01CompetitionScore()
+					+ rs.getRoundToHandicapPar());
+
+			rs.setRoundCompetitionScore(rs.getHole01CompetitionScore()
 					+ rs.getHole02CompetitionScore()
 					+ rs.getHole03CompetitionScore()
 					+ rs.getHole04CompetitionScore()
@@ -169,6 +173,8 @@ public class PublishScorecardUtils {
 					+ rs.getHole16CompetitionScore()
 					+ rs.getHole17CompetitionScore()
 					+ rs.getHole18CompetitionScore());
+			rs.setOverviewCompetitionScore(rs.getInitialCompetitionScore()
+					+ rs.getRoundCompetitionScore());
 		}
 	}
 
@@ -180,6 +186,10 @@ public class PublishScorecardUtils {
 		rs.setInitialToHandicapPar(Constant.INITIAL_SCORE);
 		rs.setInitialToPar(Constant.INITIAL_SCORE);
 		rs.setInitialCompetitionScore(Constant.INITIAL_SCORE);
+		rs.setRoundScore(Constant.INITIAL_SCORE);
+		rs.setRoundToPar(Constant.INITIAL_SCORE);
+		rs.setRoundToHandicapPar(Constant.INITIAL_SCORE);
+		rs.setRoundCompetitionScore(Constant.INITIAL_SCORE);
 	}
 
 	/**
@@ -195,9 +205,14 @@ public class PublishScorecardUtils {
 					prevRs.getOverviewToHandicapPar(),
 					prevRs.getOverviewCompetitionScore());
 			newRs.setInitialScore(prevRs.getOverviewScore());
-			newRs.setInitialToHandicapPar(newRs.getOverviewToHandicapPar());
+			newRs.setInitialToHandicapPar(prevRs.getOverviewToHandicapPar());
 			newRs.setInitialToPar(prevRs.getOverviewToPar());
-			newRs.setInitialCompetitionScore(newRs.getInitialCompetitionScore());
+			newRs.setInitialCompetitionScore(prevRs
+					.getInitialCompetitionScore());
+			newRs.setRoundScore(Constant.INITIAL_SCORE);
+			newRs.setRoundToPar(Constant.INITIAL_SCORE);
+			newRs.setRoundToHandicapPar(Constant.INITIAL_SCORE);
+			newRs.setRoundCompetitionScore(Constant.INITIAL_SCORE);
 		}
 	}
 }

@@ -42,18 +42,6 @@ public interface ICompetitionService {
 			throws ServiceException;
 
 	/**
-	 * Should return a list of competitions for which the golfer is registered
-	 * and have not been completed (TODO heuristic required for competition
-	 * completion)
-	 * 
-	 * @param golferId
-	 * @return
-	 * @throws ServiceException
-	 */
-	public abstract List<CompetitionEntry> getCompetitionListForGolfer(
-			String golferId) throws ServiceException;
-
-	/**
 	 * 
 	 * @param competition
 	 * @param roundDate
@@ -82,6 +70,34 @@ public interface ICompetitionService {
 	 */
 	public abstract CompetitionRound getCompetitionRoundByScorecardId(
 			String scorecardId) throws ServiceException;
+
+	/**
+	 * @param competitionRoundId
+	 * @throws ServiceException
+	 */
+	public abstract CompetitionRound getCompetitionRoundById(
+			String competitionRoundId) throws ServiceException;
+
+	/**
+	 * 
+	 * @param golferId
+	 * @return
+	 * @throws ServiceException
+	 */
+	public abstract List<CompetitionRound> listCompetitionRoundForGolfer(
+			String golferId) throws ServiceException;
+
+	/**
+	 * Should return a list of competitions for which the golfer is registered
+	 * and have not been completed (TODO heuristic required for competition
+	 * completion)
+	 * 
+	 * @param golferId
+	 * @return
+	 * @throws ServiceException
+	 */
+	public abstract List<CompetitionEntry> getCompetitionListForGolfer(
+			String golferId) throws ServiceException;
 
 	/**
 	 * 
@@ -122,4 +138,32 @@ public interface ICompetitionService {
 			CompetitionEntry competitionEntry, Scorecard scorecard,
 			CompetitionRound competitionRound) throws ServiceException;
 
+	/**
+	 * @param scorecardId
+	 * @return
+	 * @throws ServiceException
+	 */
+	public abstract CompetitionRoundScore getCompetitionRoundScoreByScorecardId(
+			String scorecardId) throws ServiceException;
+
+	/**
+	 * @param scorecardId
+	 */
+	public abstract void signScorecard(String scorecardId,
+			String scorerSignature, String golferSignature)
+			throws ServiceException;
+
+	/**
+	 * @param scorecardId
+	 * @return
+	 */
+	public abstract boolean isCompetitionRoundScoreCompleteForScorecardId(
+			String scorecardId);
+
+	/**
+	 * @param idString
+	 * @return
+	 */
+	public abstract boolean isCompetitionRoundScoreCompleteForScorecard(
+			String golferId, String competitionRoundId);
 }

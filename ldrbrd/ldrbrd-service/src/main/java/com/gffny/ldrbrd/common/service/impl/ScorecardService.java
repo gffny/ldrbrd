@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gffny.ldrbrd.common.dao.GenericDao;
 import com.gffny.ldrbrd.common.dao.IScorecardDao;
+import com.gffny.ldrbrd.common.dao.nosql.GenericNoSqlDao;
 import com.gffny.ldrbrd.common.exception.AuthorisationException;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.exception.ServiceException;
@@ -33,6 +34,7 @@ import com.gffny.ldrbrd.common.model.impl.CompetitionRound;
 import com.gffny.ldrbrd.common.model.impl.Golfer;
 import com.gffny.ldrbrd.common.model.impl.Scorecard;
 import com.gffny.ldrbrd.common.model.impl.UserProfile;
+import com.gffny.ldrbrd.common.model.nosql.Club;
 import com.gffny.ldrbrd.common.model.nosql.Course;
 import com.gffny.ldrbrd.common.scoring.impl.Stableford;
 import com.gffny.ldrbrd.common.service.ICompetitionService;
@@ -92,6 +94,10 @@ public class ScorecardService extends AbstractService implements
 	/** */
 	@Autowired
 	private ILeaderboardService leaderboardService;
+
+	/** */
+	@Autowired
+	private GenericNoSqlDao<Club> clubMongoDaoImpl;
 
 	/**
 	 * (non-Javadoc)
@@ -320,23 +326,8 @@ public class ScorecardService extends AbstractService implements
 				CompetitionRound competitionRound = competitionService
 						.getCompetitionRound(competitionId, roundNumber);
 
-				if (competitionEntry != null && competitionRound != null
-						&& competitionRound.getCourse() != null) {
-					Golfer golfer = profileService.getGolferById(golferId);
-					int handicap = competitionHandicap == EXISTING_GOLFER_HANDICAP ? golfer
-							.getHandicap() : competitionHandicap;
-					// persist the new scorecard
-					Scorecard newScorecard = scorecardDao.persist(Scorecard
-							.instance(golfer, competitionRound.getCourse(),
-									handicap));
-					// register the score for the competition
-					competitionService.registerCompetitionScorecard(
-							competitionEntry, newScorecard, competitionRound);
-					// create the leaderboard round
-					leaderboardService.startCompetitionRound(golfer,
-							competitionRound, handicap);
-					return newScorecard;
-				}
+				return startCompetitionScorecard(golferId, competitionHandicap,
+						competitionEntry, competitionRound);
 			} catch (AuthorisationException | PersistenceException ae) {
 				LOG.error(ae.getMessage(), ae);
 				throw new ServiceException(ae.getMessage(), ae);
@@ -345,7 +336,154 @@ public class ScorecardService extends AbstractService implements
 			LOG.error("round number cannot be less than 1");
 			throw new ServiceException("round number cannot be less than 1");
 		}
-		return null;
+	}
+
+	/**
+	 * @param golferId
+	 * @param competitionHandicap
+	 * @param competitionEntry
+	 * @param competitionRound
+	 * @throws AuthorisationException
+	 * @throws ServiceException
+	 * @throws PersistenceException
+	 */
+	private Scorecard startCompetitionScorecard(String golferId,
+			int competitionHandicap, CompetitionEntry competitionEntry,
+			CompetitionRound competitionRound) throws AuthorisationException,
+			ServiceException, PersistenceException {
+
+		if (competitionEntry != null && competitionRound != null
+				&& competitionRound.getCourse() != null) {
+
+			Golfer golfer = profileService.getGolferById(golferId);
+			int handicap = competitionHandicap == EXISTING_GOLFER_HANDICAP ? golfer
+					.getHandicap() : competitionHandicap;
+			// persist the new scorecard
+			Scorecard newScorecard = scorecardDao.persist(Scorecard.instance(
+					golfer, competitionRound.getCourse(), handicap));
+			// register the score for the competition
+			competitionService.registerCompetitionScorecard(competitionEntry,
+					newScorecard, competitionRound);
+			// create the leaderboard round
+			leaderboardService.startCompetitionRound(golfer, competitionRound,
+					handicap);
+			return newScorecard;
+		} else {
+			LOG.error("invalidParameters; competitionEntry, or competitionRound, or course is null");
+			throw new ServiceException(
+					"invalidParameters; competitionEntry, or competitionRound, or course is null");
+		}
+	}
+
+	/**
+	 * 
+	 * @param golferId
+	 * @param scoreKeeperId
+	 * @param competitionRoundId
+	 * @param clubList
+	 * @return
+	 * @throws ServiceException
+	 * @throws AuthorisationException
+	 */
+	@Override
+	@Transactional(value = "ldrbrd_txnMgr", propagation = Propagation.REQUIRED)
+	public Scorecard startCompetitionScorecardWithGolferScorerAndCompetitionRoundId(
+			String golferId, String scoreKeeperId, String competitionRoundId,
+			List<CommonIDEntity> clubList) throws ServiceException,
+			AuthorisationException {
+
+		CompetitionRound cr = competitionService
+				.getCompetitionRoundById(competitionRoundId);
+		Scorecard scorecard = namedQuerySingleResultOrNull(
+				scorecardDao,
+				Scorecard.FIND_ACTIVE_SCORECARD_BY_COMPETITION_ROUND_AND_GOLFER,
+				populateParamMap("competitionId", cr.getCompetition().getId(),
+						"competitionRoundId", cr.getId(), "golferId",
+						Integer.parseInt(golferId)));
+		Golfer golfer = profileService.getGolferById(golferId);
+		CompetitionEntry ce = competitionService
+				.getCompetitionRegistrationForGolfer(golferId, cr
+						.getCompetition().getIdString());
+		if (scorecard != null && !scorecard.isActive()) {
+			// check if the scorecard is not active, and if not activate it.
+			// This is a temporary measure where I will load scorecards for
+			// competitionRounds so that there does not need to be a UI for this
+			LOG.debug("scorecard {} is inactive. setting it as active and merging");
+			scorecard.setActive(true);
+			try {
+				createLeaderboardEntryIfNeeded(scorecard, cr, golfer);
+				return scorecardDao.merge(scorecard);
+			} catch (PersistenceException e) {
+				LOG.error(e.getMessage(), e);
+				throw new ServiceException(e.getMessage(), e);
+			}
+		} else if (scorecard == null
+				&& !competitionService
+						.isCompetitionRoundScoreCompleteForScorecard(golferId,
+								competitionRoundId)) {
+			LOG.debug("scorecard is null; going to create a new one with the golfer's handicap");
+			try {
+				if (golfer != null && ce != null) {
+					scorecard = Scorecard.instance(golfer, cr.getCourse(),
+							golfer.getHandicap().intValue());
+					// persiste the scorecard
+					scorecard = scorecardDao.persist(scorecard);
+					LOG.debug("scorecard persisted with id {}",
+							scorecard.getIdString());
+					// register the scorecard for the round
+					competitionService.registerCompetitionScorecard(ce,
+							scorecard, cr);
+					createLeaderboardEntryIfNeeded(scorecard, cr, golfer);
+					return scorecard;
+				}
+			} catch (PersistenceException e) {
+				LOG.error(e.getMessage(), e);
+				throw new ServiceException(e.getMessage(), e);
+			}
+		}
+		createLeaderboardEntryIfNeeded(scorecard, cr, golfer);
+		return populateCourseForScorecard(scorecard);
+	}
+
+	/**
+	 * @param scorecard
+	 * @param cr
+	 * @param intValue
+	 * @throws ServiceException
+	 */
+	private void createLeaderboardEntryIfNeeded(Scorecard scorecard,
+			CompetitionRound cr, Golfer golfer) throws ServiceException {
+		// check params
+		if (scorecard != null && cr != null
+				&& !leaderboardService.hasLeaderboardBeenStarted(golfer, cr)) {
+			// create the leaderboard round
+			leaderboardService.startCompetitionRound(golfer, cr, golfer
+					.getHandicap().intValue());
+		} else if (scorecard == null || cr == null) {
+			LOG.error("null scorecard or competitionRound");
+		}
+	}
+
+	/**
+	 * @param scorecard
+	 * @return
+	 * @throws PersistenceException
+	 */
+	private Scorecard populateCourseForScorecard(Scorecard scorecard)
+			throws ServiceException {
+		// check params
+		if (scorecard != null) {
+			try {
+				LOG.debug("populating course object with courseId {}",
+						scorecard.getCourseDocumentId());
+				scorecard.setCourse(clubMongoDaoImpl.findById(Course.class,
+						scorecard.getCourseDocumentId()));
+			} catch (PersistenceException e) {
+				LOG.error(e.getMessage(), e);
+				throw new ServiceException(e.getMessage(), e);
+			}
+		}
+		return scorecard;
 	}
 
 	/**
@@ -505,6 +643,8 @@ public class ScorecardService extends AbstractService implements
 			throws ServiceException {
 		// if entry does not exist then it's a general scorecard
 		if (competitionRound != null) {
+			createLeaderboardEntryIfNeeded(scorecard, competitionRound,
+					scorecard.getGolfer());
 			leaderboardService.publishHoleScore(scorecard.getGolfer(),
 					competitionRound, holeNumber, holeScore, //
 					ScoringUtils.toPar(competitionRound.getCourse(),
@@ -631,6 +771,9 @@ public class ScorecardService extends AbstractService implements
 					// do this last because I'm not sure about transactional
 					// support in Mongo (yet)
 
+					// if this is a competition scorecard, it'll be signed
+					competitionService.signScorecard(scorecardId,
+							"scorerSignature", "golferSignature");
 					return scorecardSigned;
 				} else {
 					// scorecard is inactive

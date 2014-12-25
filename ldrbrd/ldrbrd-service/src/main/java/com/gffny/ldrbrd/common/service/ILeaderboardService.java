@@ -40,4 +40,12 @@ public interface ILeaderboardService {
 			int toPar, int toHandicapPar, int competitionScore)
 			throws ServiceException;
 
+	/**
+	 * @param golfer
+	 * @param cr
+	 * @return
+	 */
+	public abstract boolean hasLeaderboardBeenStarted(Golfer golfer,
+			CompetitionRound cr);
+
 }

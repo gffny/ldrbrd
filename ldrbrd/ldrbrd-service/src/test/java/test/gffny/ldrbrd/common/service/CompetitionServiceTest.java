@@ -6,6 +6,8 @@ package test.gffny.ldrbrd.common.service;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,7 @@ import com.gffny.ldrbrd.common.model.impl.Competition;
 import com.gffny.ldrbrd.common.model.impl.CompetitionEntry;
 import com.gffny.ldrbrd.common.model.impl.CompetitionRound;
 import com.gffny.ldrbrd.common.model.impl.Golfer;
-import com.gffny.ldrbrd.common.service.impl.CompetitionService;
+import com.gffny.ldrbrd.common.service.ICompetitionService;
 
 /**
  * @author John D. Gaffney | gffny.com
@@ -38,7 +40,12 @@ public class CompetitionServiceTest {
 
 	/** */
 	@Autowired
-	private CompetitionService competitionService;
+	private ICompetitionService competitionService;
+
+	/** */
+	@Autowired
+	@Qualifier(value = "genericDaoJpaImpl")
+	private GenericDao<CompetitionRound> competitionRoundDao;
 
 	/** */
 	@Autowired
@@ -62,6 +69,7 @@ public class CompetitionServiceTest {
 	 */
 	@Test
 	public void testCreateCompetitionRound() {
+
 		fail("Not yet implemented");
 	}
 
@@ -80,18 +88,20 @@ public class CompetitionServiceTest {
 		Golfer golfer = personDao.findById(Golfer.class, 1);
 		assertNotNull(golfer);
 		assertNotNull(competition);
-		// CompetitionEntry competitionEntry = competitionService
-		// .registerGolferForCompetition(golfer, competition);
 	}
 
 	/**
 	 * Test method for
 	 * {@link com.gffny.ldrbrd.common.service.impl.CompetitionService#getCompetitionById(java.lang.String)}
 	 * .
+	 * 
+	 * @throws ServiceException
 	 */
 	@Test
-	public void testGetCompetitionById() {
-		fail("Not yet implemented");
+	public void testGetCompetitionById() throws ServiceException {
+
+		Competition competition = competitionService.getCompetitionById("1");
+		assertNotNull(competition);
 	}
 
 	/**
@@ -162,6 +172,21 @@ public class CompetitionServiceTest {
 	@Test
 	public void testCreateRoundScore() {
 		fail("Not yet implemented");
+	}
+
+	/**
+	 * @throws PersistenceException
+	 */
+	@Test
+	public void testGetCompetitionRoundListForGolfer() throws ServiceException,
+			PersistenceException {
+		List<CompetitionRound> competitionRoundList1 = competitionRoundDao
+				.findAll(CompetitionRound.class);
+		assertNotNull(competitionRoundList1);
+
+		List<CompetitionRound> competitionRoundList = competitionService
+				.listCompetitionRoundForGolfer("1");
+		assertNotNull(competitionRoundList);
 	}
 
 }

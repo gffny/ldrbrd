@@ -34,8 +34,7 @@ public interface IRoundScoreNoSqlDao extends GenericNoSqlDao<RoundScore> {
 	 * @throws PersistenceException
 	 */
 	public abstract List<RoundScore> listRoundScoreByCompetitionRound(
-			String competitionId, String roundNumber)
-			throws PersistenceException;
+			String competitionId, int roundNumber) throws PersistenceException;
 
 	/**
 	 * 
@@ -55,7 +54,7 @@ public interface IRoundScoreNoSqlDao extends GenericNoSqlDao<RoundScore> {
 	 * @throws PersistenceException
 	 */
 	public abstract RoundScore findGolferRoundScoreByCompetitionRound(
-			String golferId, String competitionId, String roundNumber)
+			String golferId, String competitionId, int roundNumber)
 			throws PersistenceException;
 
 	/**

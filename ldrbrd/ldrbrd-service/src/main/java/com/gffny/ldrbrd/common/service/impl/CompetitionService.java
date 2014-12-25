@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -39,34 +40,29 @@ import com.gffny.ldrbrd.common.service.ICompetitionService;
 public class CompetitionService extends AbstractService implements
 		ICompetitionService {
 
+	/** TODO: Make this a config */
+	private static final int NUM_COMP_ROUNDS = 5;
+
 	/** The Constant log. */
 	private static final Logger LOG = LoggerFactory
 			.getLogger(CompetitionService.class);
 
-	/**
-	 * 
-	 */
+	/** */
 	@Autowired
 	@Qualifier(value = "genericDaoJpaImpl")
 	private GenericDao<Competition> competitionDao;
 
-	/**
-	 * 
-	 */
+	/** */
 	@Autowired
 	@Qualifier(value = "genericDaoJpaImpl")
 	private GenericDao<CompetitionRound> competitionRoundDao;
 
-	/**
-	 * 
-	 */
+	/** */
 	@Autowired
 	@Qualifier(value = "genericDaoJpaImpl")
 	private GenericDao<CompetitionEntry> competitionRegistrationDao;
 
-	/**
-	 * 
-	 */
+	/** */
 	@Autowired
 	@Qualifier(value = "genericDaoJpaImpl")
 	private GenericDao<CompetitionRoundScore> competitionRoundScoreDao;
@@ -75,12 +71,11 @@ public class CompetitionService extends AbstractService implements
 	@Autowired
 	private GenericNoSqlDao<Club> clubMongoDaoImpl;
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.gffny.ldrbrd.common.service.impl.ICompetitionService#createCompetition
-	 * (java.lang.String)
+	 * @see com.gffny.ldrbrd.common.service.impl.ICompetitionService#createCompetition
+	 *      (java.lang.String)
 	 */
 	@Override
 	@Transactional(value = "lrdbrd_txnMgr", propagation = Propagation.REQUIRED)
@@ -104,12 +99,11 @@ public class CompetitionService extends AbstractService implements
 		}
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.gffny.ldrbrd.common.service.ICompetitionService#getCompetitionById
-	 * (java.lang.String)
+	 * @see com.gffny.ldrbrd.common.service.ICompetitionService#getCompetitionById
+	 *      (java.lang.String)
 	 */
 	@Override
 	public Competition getCompetitionById(String competitionId)
@@ -128,12 +122,11 @@ public class CompetitionService extends AbstractService implements
 		}
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.gffny.ldrbrd.common.service.ICompetitionService#getCompetitionByName
-	 * (java.lang.String)
+	 * @see com.gffny.ldrbrd.common.service.ICompetitionService#getCompetitionByName
+	 *      (java.lang.String)
 	 */
 	@Override
 	public Competition getCompetitionByName(String competitionName)
@@ -185,20 +178,67 @@ public class CompetitionService extends AbstractService implements
 	@Override
 	public List<CompetitionEntry> getCompetitionListForGolfer(String golferId)
 			throws ServiceException {
-		if (golferId != null) {
+		if (StringUtils.isNotBlank(golferId)) {
 			// TODO fix the competition service to register
 			return new ArrayList<CompetitionEntry>();
 		}
 		throw new ServiceException("invalid parameter: golfer " + golferId);
 	}
 
-	/*
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gffny.ldrbrd.common.service.ICompetitionService#listCompetitionRoundForGolfer(java.lang.String)
+	 */
+	@Override
+	public List<CompetitionRound> listCompetitionRoundForGolfer(
+			String golferId) throws ServiceException {
+		// check params
+		if (StringUtils.isNotBlank(golferId)) {
+			List<CompetitionRound> competitionRoundList = namedQueryListResultOrNull(
+					competitionRoundDao,
+					CompetitionRound.FIND_NON_COMPLETE_BY_GOLFER_ID_IN_COMPETITION_ENTRY,
+					populateParamMap("golferId", Integer.parseInt(golferId)),
+					NUM_COMP_ROUNDS);
+			// check the list is not null or empty
+			if (CollectionUtils.isNotEmpty(competitionRoundList)) {
+				// traverse list and populate course;
+				Map<String, Course> courseMap = new HashMap<String, Course>();
+				int i = 0;
+				for (CompetitionRound cr : competitionRoundList) {
+					// check if the course has already been retrieved from mongo
+					if (courseMap.containsKey(cr.getCourseDocumentId())) {
+						cr.setCourse(courseMap.get(cr.getCourseDocumentId()));
+					} else {
+						// otherwise get retrieve it, inject it and store it
+						try {
+							cr = populateCourseForCompetitionRound(cr);
+							courseMap.put(cr.getCourseDocumentId(),
+									cr.getCourse());
+						} catch (PersistenceException pe) {
+							LOG.error(pe.getMessage(), pe);
+							throw new ServiceException(pe.getMessage(), pe);
+						}
+					}
+					competitionRoundList.set(i, cr);
+					i++;
+				}
+			}
+			return competitionRoundList;
+		} else {
+			LOG.error("invalid parameter; golferId was null or empty");
+			throw new ServiceException(
+					"invalid parameter; golferId was null or empty");
+		}
+	}
+
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see com.gffny.ldrbrd.common.service.impl.ICompetitionService#
-	 * createCompetitionRound(com.gffny.ldrbrd.common.model.impl.Competition,
-	 * org.joda.time.DateTime, java.lang.Integer,
-	 * com.gffny.ldrbrd.common.model.impl.Course)
+	 *      createCompetitionRound(com.gffny.ldrbrd.common.model.impl.Competition,
+	 *      org.joda.time.DateTime, java.lang.Integer,
+	 *      com.gffny.ldrbrd.common.model.impl.Course)
 	 */
 	@Override
 	@Transactional(value = "lrdbrd_txnMgr", propagation = Propagation.REQUIRED)
@@ -210,19 +250,17 @@ public class CompetitionService extends AbstractService implements
 		return new CompetitionRound();
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.gffny.ldrbrd.common.service.ICompetitionService#getCompetitionRound
-	 * (java.lang.String, java.lang.Integer)
+	 * @see com.gffny.ldrbrd.common.service.ICompetitionService#getCompetitionRound
+	 *      (java.lang.String, java.lang.Integer)
 	 */
 	@Override
 	@Transactional(readOnly = true)
 	public CompetitionRound getCompetitionRound(String competitionId,
 			Integer roundNumber) throws ServiceException {
 		try {
-
 			CompetitionRound competitionRound = namedQuerySingleResultOrNull(
 					competitionRoundDao,
 					CompetitionRound.FIND_BY_COMP_ID_AND_RND_NMBR,
@@ -290,6 +328,35 @@ public class CompetitionService extends AbstractService implements
 					competitionRound.getCourseDocumentId()));
 		}
 		return competitionRound;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @throws ServiceException
+	 * 
+	 * @see com.gffny.ldrbrd.common.service.ICompetitionService#getCompetitionRoundById(java.lang.String)
+	 */
+	@Override
+	public CompetitionRound getCompetitionRoundById(String competitionRoundId)
+			throws ServiceException {
+		// check params
+		if (StringUtils.isNotBlank(competitionRoundId)) {
+			LOG.debug("getting the competition round by id {}",
+					competitionRoundId);
+			try {
+				CompetitionRound cr = competitionRoundDao.findById(
+						CompetitionRound.class,
+						Integer.parseInt(competitionRoundId));
+				return populateCourseForCompetitionRound(cr);
+			} catch (NumberFormatException | PersistenceException e) {
+				LOG.error(e.getMessage(), e);
+				throw new ServiceException(e.getMessage(), e);
+			}
+		}
+		LOG.error("invalid parameters: competitionRoundId is null or blank");
+		throw new ServiceException(
+				"invalid parameters: competitionRoundId is null or blank");
 	}
 
 	/**
@@ -387,8 +454,8 @@ public class CompetitionService extends AbstractService implements
 				&& competitionRound != null) {
 			try {
 				return competitionRoundScoreDao
-						.persist(new CompetitionRoundScore(competitionEntry,
-								scorecard, competitionRound));
+						.persist(CompetitionRoundScore.instance(
+								competitionEntry, scorecard, competitionRound));
 			} catch (PersistenceException e) {
 				LOG.error(e.getMessage(), e);
 				throw new ServiceException(e.getMessage(), e);
@@ -397,5 +464,96 @@ public class CompetitionService extends AbstractService implements
 		LOG.error("invalid parameters: scorecard, competitionEntry, or competitionRound is null");
 		throw new ServiceException(
 				"invalid parameters: scorecard, competitionEntry, or competitionRound is null");
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gffny.ldrbrd.common.service.ICompetitionService#getCompetitionRoundScoreByScorecardId(java.lang.String)
+	 */
+	@Override
+	public CompetitionRoundScore getCompetitionRoundScoreByScorecardId(
+			String scorecardId) throws ServiceException {
+		// check params
+		if (StringUtils.isNotBlank(scorecardId)) {
+			return namedQuerySingleResultOrNull(
+					competitionRoundScoreDao,
+					CompetitionRoundScore.FIND_BY_SCORECARD_ID,
+					populateParamMap("scorecardId",
+							Integer.valueOf(scorecardId)));
+		}
+		return null;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gffny.ldrbrd.common.service.ICompetitionService#
+	 *      isCompetitionRoundScoreCompleteForScorecardId(java.lang.String)
+	 */
+	@Override
+	public boolean isCompetitionRoundScoreCompleteForScorecardId(
+			String scorecardId) {
+		// check params
+		if (StringUtils.isNotBlank(scorecardId)) {
+			try {
+				CompetitionRoundScore crs = getCompetitionRoundScoreByScorecardId(scorecardId);
+				return crs != null ? crs.isComplete() : false;
+			} catch (ServiceException e) {
+				LOG.error(e.getMessage(), e);
+				return false;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public boolean isCompetitionRoundScoreCompleteForScorecard(String golferId,
+			String competitionRoundId) {
+		// check params
+		if (StringUtils.isNotBlank(golferId)
+				&& StringUtils.isNotBlank(competitionRoundId)) {
+			try {
+				CompetitionRoundScore crs = namedQuerySingleResultOrNull(
+						competitionRoundScoreDao,
+						CompetitionRoundScore.FIND_BY_COMPETITION_ROUND_ID_AND_GOLFER_ID,
+						populateParamMap("golferId", Integer.valueOf(golferId),
+								"competitionRoundId",
+								Integer.valueOf(competitionRoundId)));
+				return crs != null ? crs.isComplete() : false;
+			} catch (ServiceException e) {
+				LOG.error(e.getMessage(), e);
+				return false;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gffny.ldrbrd.common.service.ICompetitionService#signScorecard(java.lang.String)
+	 */
+	@Override
+	public void signScorecard(String scorecardId, String scorerSignature,
+			String golferSignature) throws ServiceException {
+		// get the crs (param checking done there)
+		CompetitionRoundScore crs = getCompetitionRoundScoreByScorecardId(scorecardId);
+		// check if the round score exists and if is no already complete
+		if (crs != null && !crs.isComplete()) {
+			crs.setComplete(true);
+			crs.setScorerSignature(scorerSignature);
+			crs.setGolferSignature(golferSignature);
+			try {
+				competitionRoundScoreDao.merge(crs);
+				LOG.debug("signed competition round score");
+			} catch (PersistenceException e) {
+				LOG.error(e.getMessage(), e);
+				throw new ServiceException(e.getMessage(), e);
+			}
+		}
 	}
 }

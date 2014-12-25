@@ -39,8 +39,8 @@ public class ProfileRestController extends BaseRestController {
 	/**
 	 * @return
 	 */
-	@RequestMapping(value = "/profile", produces = { MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE })
+	@RequestMapping(value = "/profile", produces = {
+			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<String> loadProfile(
 			@RequestParam(value = "id", required = false) String profileId) {
 		return new ResponseEntity<String>("Hello World", HttpStatus.OK);
@@ -49,20 +49,22 @@ public class ProfileRestController extends BaseRestController {
 	/**
 	 * @return
 	 */
-	@RequestMapping(value = "/profile/digest", produces = { MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE })
+	@RequestMapping(value = "/profile/digest", produces = {
+			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<GolferDigestResponse> loadDigest(
 			@RequestParam(value = "id", required = false) String profileId) {
 
 		try {
 			return new ResponseEntity<GolferDigestResponse>(
-					profileService.getDigestById(profileId), HttpStatus.OK);
+					profileService.getLoggedInGolferDigest(), HttpStatus.OK);
 		} catch (AuthorisationException ae) {
 			LOG.error(ae.getMessage());
-			return new ResponseEntity<GolferDigestResponse>(HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<GolferDigestResponse>(
+					HttpStatus.UNAUTHORIZED);
 		} catch (ServiceException se) {
 			LOG.error(se.getMessage());
-			return new ResponseEntity<GolferDigestResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<GolferDigestResponse>(
+					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

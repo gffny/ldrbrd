@@ -27,9 +27,7 @@ public class ScoringFormat extends CommonIDEntity {
 	/** */
 	private String scoringClass;
 
-	/**
-	 * 
-	 */
+	/** */
 	public ScoringFormat() {
 
 	}

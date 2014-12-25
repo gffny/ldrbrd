@@ -20,7 +20,9 @@ import com.gffny.ldrbrd.common.model.Constant;
 /**
  * @author John D. Gaffney | gffny.com
  */
-@NamedQueries(@NamedQuery(name = CompetitionRoundScore.FIND_BY_SCORECARD_ID, query = "select c from CompetitionRoundScore c where c.scorecard.id = :scorecardId"))
+@NamedQueries({
+		@NamedQuery(name = CompetitionRoundScore.FIND_BY_SCORECARD_ID, query = "SELECT c FROM CompetitionRoundScore c WHERE c.scorecard.id = :scorecardId"),
+		@NamedQuery(name = CompetitionRoundScore.FIND_BY_COMPETITION_ROUND_ID_AND_GOLFER_ID, query = "SELECT c FROM CompetitionRoundScore c WHERE c.competitionRound.id = :competitionRoundId AND c.competitionEntry.id = (SELECT ce.id FROM CompetitionEntry ce WHERE ce.golfer.id = :golferId)") })
 @Entity
 @Table(name = Constant.DB_TABLE_COMPETITION_ROUND_SCORE)
 public class CompetitionRoundScore extends CommonIDEntity {
@@ -29,7 +31,10 @@ public class CompetitionRoundScore extends CommonIDEntity {
 	private static final long serialVersionUID = -6188698053405294852L;
 
 	/** */
-	public static final String FIND_BY_SCORECARD_ID = "FIND_BY_SCORECARD_ID";
+	public static final String FIND_BY_SCORECARD_ID = "CompetitionRoundScore.FIND_BY_SCORECARD_ID";
+
+	/** */
+	public static final String FIND_BY_COMPETITION_ROUND_ID_AND_GOLFER_ID = "CompetitionRoundScore.FIND_BY_COMPETITION_ROUND_ID_AND_GOLFER_ID";
 
 	/** */
 	private CompetitionEntry competitionEntry;
@@ -47,6 +52,9 @@ public class CompetitionRoundScore extends CommonIDEntity {
 	private String scorerSignature;
 
 	/** */
+	private boolean complete;
+
+	/** */
 	public CompetitionRoundScore() {
 		// hibernate required zero-arg constructor
 	}
@@ -56,11 +64,14 @@ public class CompetitionRoundScore extends CommonIDEntity {
 	 * @param competitionEntry
 	 * @param scorecard
 	 */
-	public CompetitionRoundScore(CompetitionEntry competitionEntry,
-			Scorecard scorecard, CompetitionRound competitionRound) {
-		this.competitionEntry = competitionEntry;
-		this.scorecard = scorecard;
-		this.competitionRound = competitionRound;
+	public static CompetitionRoundScore instance(
+			CompetitionEntry competitionEntry, Scorecard scorecard,
+			CompetitionRound competitionRound) {
+		CompetitionRoundScore crs = new CompetitionRoundScore();
+		crs.setCompetitionEntry(competitionEntry);
+		crs.setScorecard(scorecard);
+		crs.setCompetitionRound(competitionRound);
+		return crs;
 	}
 
 	/**
@@ -144,5 +155,21 @@ public class CompetitionRoundScore extends CommonIDEntity {
 	 */
 	public void setScorerSignature(String scorerSignature) {
 		this.scorerSignature = scorerSignature;
+	}
+
+	/**
+	 * @return the complete
+	 */
+	@Column(name = "is_complete", columnDefinition = "BIT", length = 1)
+	public boolean isComplete() {
+		return complete;
+	}
+
+	/**
+	 * @param complete
+	 *            the complete to set
+	 */
+	public void setComplete(boolean complete) {
+		this.complete = complete;
 	}
 }

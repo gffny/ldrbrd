@@ -77,8 +77,8 @@ public class LeaderboardService extends AbstractService implements
 														competitionRound
 																.getCompetition()
 																.getIdString(),
-														String.valueOf(competitionRound
-																.getRoundNumber())));
+														(competitionRound
+																.getRoundNumber() - 1)));
 					} else {
 						LOG.debug("setting values for initial competition round");
 						PublishScorecardUtils.initialiseRoundScoreValues(rs);
@@ -291,5 +291,29 @@ public class LeaderboardService extends AbstractService implements
 		holeScore.setOverviewCompetitionScore(overview
 				.getOverviewCompetitionScore()
 				+ holeScore.getHoleCompetitionScore());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.gffny.ldrbrd.common.service.ILeaderboardService#hasLeaderboardBeenStarted
+	 * (com.gffny.ldrbrd.common.model.impl.Golfer,
+	 * com.gffny.ldrbrd.common.model.impl.CompetitionRound)
+	 */
+	@Override
+	public boolean hasLeaderboardBeenStarted(Golfer golfer, CompetitionRound cr) {
+		// check params
+		if (golfer != null && cr != null) {
+			try {
+				return roundScoreMongoDaoImpl
+						.findGolferRoundScoreByCompetitionRound(
+								golfer.getIdString(), cr.getIdString()) != null;
+			} catch (PersistenceException e) {
+				LOG.error(e.getMessage());
+			}
+		}
+		LOG.error("invalid parameters; golfer or competition round was null or there was an error in connecting to the mongo instance");
+		return false;
 	}
 }

@@ -19,12 +19,16 @@ public interface Constant {
 			+ "competition_round";
 	public static final String DB_TABLE_COMPETITION_ENTRY = DB_TABLE_PREFIX
 			+ "competition_entry";
+	public static final String DB_TABLE_COMPETITION_ROUND_SCORE = DB_TABLE_PREFIX
+			+ "competition_round_score";
+	public static final String DB_TABLE_SOCIETY = DB_TABLE_PREFIX + "society";
+	public static final String DB_TABLE_SOCIETY_MEMBERSHIP = DB_TABLE_PREFIX
+			+ "society_membership";
 	public static final String DB_TABLE_SCORECARD = DB_TABLE_PREFIX
 			+ "scorecard";
 	public static final String DB_TABLE_HOLE_SCORE = DB_TABLE_PREFIX
 			+ "hole_score";
-	public static final String DB_TABLE_COMPETITION_ROUND_SCORE = DB_TABLE_PREFIX
-			+ "competition_round_score";
+
 	public static final String DB_TABLE_SCORING_FORMAT = DB_TABLE_PREFIX
 			+ "scoring_format";
 

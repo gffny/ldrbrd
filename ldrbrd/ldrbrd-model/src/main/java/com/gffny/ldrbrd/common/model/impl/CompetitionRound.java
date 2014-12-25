@@ -15,7 +15,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
 
 import com.gffny.ldrbrd.common.model.CommonIDEntity;
@@ -30,16 +29,31 @@ import com.gffny.ldrbrd.common.model.nosql.Course;
 // ROUND
 @NamedQueries({
 		@NamedQuery(name = CompetitionRound.FIND_BY_COMP_ID_AND_RND_NMBR, query = "SELECT cr FROM CompetitionRound cr WHERE cr.roundNumber = :roundNumber AND cr.competition.id  = :competitionId"),
-		@NamedQuery(name = CompetitionRound.FIND_BY_SCORECARD_ID_AND_RND_NMBR, query = "SELECT cr FROM CompetitionRound cr WHERE cr.roundNumber = :roundNumber AND cr.competition.id = (SELECT ce.competition.id FROM CompetitionEntry ce WHERE ce.id = (SELECT crs.competitionEntry.id FROM CompetitionRoundScore crs WHERE crs.scorecard.id = :scorecardId))") })
+		@NamedQuery(name = CompetitionRound.FIND_BY_COMP_ID, query = "SELECT cr FROM CompetitionRound cr WHERE cr.competition.id  = :competitionId"),
+		@NamedQuery(name = CompetitionRound.FIND_BY_SCORECARD_ID_AND_RND_NMBR, query = "SELECT cr FROM CompetitionRound cr WHERE cr.roundNumber = :roundNumber AND cr.competition.id = (SELECT ce.competition.id FROM CompetitionEntry ce WHERE ce.id = (SELECT crs.competitionEntry.id FROM CompetitionRoundScore crs WHERE crs.scorecard.id = :scorecardId))"),
+		@NamedQuery(name = CompetitionRound.FIND_BY_GOLFER_ID_IN_COMPETITION_ENTRY, query = "SELECT cr FROM CompetitionRound cr WHERE cr.complete = false AND cr.competition.id IN (SELECT ce.competition.id FROM CompetitionEntry ce WHERE ce.golfer.id = :golferId) ORDER BY cr.startDate ASC"),
+		@NamedQuery(name = CompetitionRound.FIND_NON_COMPLETE_BY_GOLFER_ID_IN_COMPETITION_ENTRY, query = "SELECT cr FROM CompetitionRound cr WHERE cr.complete = false AND cr.competition.id IN (SELECT ce.competition.id FROM CompetitionEntry ce WHERE ce.golfer.id = :golferId) AND cr.id NOT IN (SELECT crs.competitionRound.id FROM CompetitionRoundScore crs WHERE crs.competitionEntry.id IN (SELECT ce.id FROM CompetitionEntry ce WHERE ce.golfer.id = :golferId))") })
 @Entity
 @Table(name = Constant.DB_TABLE_COMPETITION_ROUND)
 public class CompetitionRound extends CommonIDEntity {
 
 	/** */
-	public static final String FIND_BY_COMP_ID_AND_RND_NMBR = "FIND_BY_COMP_ID_AND_RND_NMBR";
+	public static final String FIND_BY_COMP_ID_AND_RND_NMBR = "CompetitionRound.FIND_BY_COMP_ID_AND_RND_NMBR";
 
 	/** */
-	public static final String FIND_BY_SCORECARD_ID_AND_RND_NMBR = "FIND_BY_SCORECARD_ID_AND_RND_NMBR";
+	public static final String FIND_BY_GOLFER_ID_IN_COMPETITION_ENTRY = "CompetitionRound.FIND_BY_GOLFER_ID_IN_COMPETITION_ENTRY";
+
+	/** */
+	public static final String FIND_NON_COMPLETE_BY_GOLFER_ID_IN_COMPETITION_ENTRY = "CompetitionRound.FIND_NON_COMPLETE_BY_GOLFER_ID_IN_COMPETITION_ENTRY";
+
+	/** */
+	public static final String FIND_BY_COMP_ID = "CompetitionRound.FIND_BY_COMP_ID";
+
+	/** */
+	public static final String FIND_BY_SCORECARD_ID_AND_RND_NMBR = "CompetitionRound.FIND_BY_SCORECARD_ID_AND_RND_NMBR";
+
+	/** */
+	public static final String FIND_BY_COMPETITION_ID_LIST = "CompetitionRound.FIND_BY_COMPETITION_ID_LIST";
 
 	/** */
 	private static final long serialVersionUID = -8135318864907425168L;
@@ -61,6 +75,9 @@ public class CompetitionRound extends CommonIDEntity {
 
 	/** */
 	private DateTime teeTime;
+
+	/** */
+	private boolean isComplete;
 
 	/** TODO change to an enum */
 	private ScoringFormat scoringFormat;
@@ -99,7 +116,6 @@ public class CompetitionRound extends CommonIDEntity {
 	/**
 	 * @return
 	 */
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "competition_id", nullable = false)
 	public Competition getCompetition() {
@@ -131,7 +147,6 @@ public class CompetitionRound extends CommonIDEntity {
 	/**
 	 * @return
 	 */
-	@JsonIgnore
 	@Column(name = "course_did")
 	public String getCourseDocumentId() {
 		return this.courseDocumentId;
@@ -166,7 +181,7 @@ public class CompetitionRound extends CommonIDEntity {
 	 */
 	@Column(name = "start_date")
 	public Date getStartDate() {
-		return this.startDate.toDate();
+		return this.startDate != null ? this.startDate.toDate() : null;
 	}
 
 	/**
@@ -196,7 +211,7 @@ public class CompetitionRound extends CommonIDEntity {
 	 */
 	@Column(name = "initial_tee_time")
 	public Date getTeeTime() {
-		return this.teeTime.toDate();
+		return this.teeTime != null ? this.teeTime.toDate() : null;
 	}
 
 	/**
@@ -222,9 +237,24 @@ public class CompetitionRound extends CommonIDEntity {
 	}
 
 	/**
+	 * @return the complete
+	 */
+	@Column(name = "is_complete")
+	public boolean isComplete() {
+		return this.isComplete;
+	}
+
+	/**
+	 * @param complete
+	 *            the complete to set
+	 */
+	public void setComplete(boolean complete) {
+		this.isComplete = complete;
+	}
+
+	/**
 	 * @return
 	 */
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "scoring_format_id", nullable = false)
 	public ScoringFormat getScoringFormat() {

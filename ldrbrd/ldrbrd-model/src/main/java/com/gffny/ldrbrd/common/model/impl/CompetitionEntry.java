@@ -30,7 +30,10 @@ import com.gffny.ldrbrd.common.model.Constant;
 /**
  * @author John D. Gaffney | gffny.com
  */
-@NamedQueries(@NamedQuery(name = CompetitionEntry.FIND_BY_COMPETITION_AND_GOLFER, query = "select c from CompetitionEntry c where c.competition.id = :competitionId and c.golfer.id = :golferId"))
+@NamedQueries({
+		@NamedQuery(name = CompetitionEntry.FIND_BY_COMPETITION_AND_GOLFER, query = "select c from CompetitionEntry c where c.competition.id = :competitionId and c.golfer.id = :golferId"),
+		@NamedQuery(name = CompetitionEntry.FIND_BY_GOLFER_ID, query = "select c from CompetitionEntry c where c.golfer.id = :golferId"),
+		@NamedQuery(name = CompetitionEntry.FIND_BY_COMPETITION_ID_LIST_BY_GOLFER_ID, query = "select c.competition.id from CompetitionEntry c where c.golfer.id = :golferId") })
 @Entity
 @Table(name = Constant.DB_TABLE_COMPETITION_ENTRY)
 public class CompetitionEntry extends CommonIDEntity {
@@ -40,6 +43,12 @@ public class CompetitionEntry extends CommonIDEntity {
 
 	/** */
 	public static final String FIND_BY_COMPETITION_AND_GOLFER = "FIND_BY_COMPETITION_AND_GOLFER";
+
+	/** */
+	public static final String FIND_BY_GOLFER_ID = "FIND_BY_GOLFER_ID";
+
+	/** */
+	public static final String FIND_BY_COMPETITION_ID_LIST_BY_GOLFER_ID = "FIND_BY_COMPEITION_ID_LIST_BY_GOLFER_ID";
 
 	/** */
 	private Competition competition;

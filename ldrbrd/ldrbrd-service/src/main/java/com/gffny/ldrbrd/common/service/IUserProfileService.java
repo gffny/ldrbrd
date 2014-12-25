@@ -13,7 +13,8 @@ public interface IUserProfileService {
 	 * @throws AuthorisationException
 	 * @throws ServiceException
 	 */
-	public Golfer getGolferByHandle(String string) throws AuthorisationException, ServiceException;
+	public Golfer getGolferByHandle(String string)
+			throws AuthorisationException, ServiceException;
 
 	/**
 	 * @param string
@@ -21,7 +22,8 @@ public interface IUserProfileService {
 	 * @throws AuthorisationException
 	 * @throws ServiceException
 	 */
-	public Golfer getGolferByEmail(String string) throws AuthorisationException, ServiceException;
+	public Golfer getGolferByEmail(String string)
+			throws AuthorisationException, ServiceException;
 
 	/**
 	 * @param id
@@ -29,14 +31,25 @@ public interface IUserProfileService {
 	 * @throws AuthorisationException
 	 * @throws ServiceException
 	 */
-	public Golfer getGolferById(String id) throws AuthorisationException, ServiceException;
-
-	/**
-	 * @param id
-	 * @return
-	 * @throws AuthorisationException
-	 * @throws ServiceException
-	 */
-	public GolferDigestResponse getDigestById(String id) throws AuthorisationException,
+	public Golfer getGolferById(String id) throws AuthorisationException,
 			ServiceException;
+
+	/**
+	 * @param id
+	 * @return
+	 * @throws AuthorisationException
+	 * @throws ServiceException
+	 */
+	public GolferDigestResponse getDigestById(String id)
+			throws AuthorisationException, ServiceException;
+
+	/**
+	 * returns the digest for user who is logged in
+	 * 
+	 * @return
+	 * @throws AuthorisationException
+	 * @throws ServiceException
+	 */
+	public GolferDigestResponse getLoggedInGolferDigest()
+			throws AuthorisationException, ServiceException;
 }
