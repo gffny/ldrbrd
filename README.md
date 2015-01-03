@@ -9,4 +9,4 @@ Adding Meteor
 1. follow installation instructions on meteor
 2. sudo npm install -g meteorite in the meteor project folder
 3. mrt add iron-router
-
+4. define a system parameter for the mongo instance ( MONGO_URL=mongodb://localhost:27017/ldrbrd)
