@@ -271,36 +271,36 @@ public class NEGolfClubLoad {
 				"Test GC 2", 2, " "));
 		holeList.add(CourseHole.createCourseHole("test 3", 3, 136, 16,
 				"Test GC 3", 3, " "));
-		// holeList.add(CourseHole.createCourseHole("test 4", 4, 403, 6,
-		// "Test GC 4", 4, " "));
-		// holeList.add(CourseHole.createCourseHole("test 5", 3, 136, 18,
-		// "Test GC 5", 5, " "));
-		// holeList.add(CourseHole.createCourseHole("test 6", 4, 436, 4,
-		// "Test GC 6", 6, " "));
-		// holeList.add(CourseHole.createCourseHole("test 7", 5, 554, 10,
-		// "Test GC 7", 7, " "));
-		// holeList.add(CourseHole.createCourseHole("test 8", 3, 171, 12,
-		// "Test GC 8", 8, " "));
-		// holeList.add(CourseHole.createCourseHole("test 9", 5, 618, 2,
-		// "Test GC 9", 9, " "));
-		// holeList.add(CourseHole.createCourseHole("test 10", 4, 383, 13,
-		// "Test GC 10", 10, " "));
-		// holeList.add(CourseHole.createCourseHole("test 11", 3, 249, 9,
-		// "Test GC 11", 11, " "));
-		// holeList.add(CourseHole.createCourseHole("test 12", 5, 521, 7,
-		// "Test GC 12", 12, " "));
-		// holeList.add(CourseHole.createCourseHole("test 13", 4, 321, 15,
-		// "Test GC 23", 13, " "));
-		// holeList.add(CourseHole.createCourseHole("test 14", 3, 199, 17,
-		// "Test GC 14", 14, " "));
-		// holeList.add(CourseHole.createCourseHole("test 15", 4, 447, 3,
-		// "Test GC 15", 15, " "));
-		// holeList.add(CourseHole.createCourseHole("test 16", 5, 524, 11,
-		// "Test GC 16", 16, " "));
-		// holeList.add(CourseHole.createCourseHole("test 17", 4, 416, 1,
-		// "Test GC 17", 17, " "));
-		// holeList.add(CourseHole.createCourseHole("test 18", 4, 355, 5,
-		// "Test GC 18", 18, " "));
+		holeList.add(CourseHole.createCourseHole("test 4", 4, 403, 6,
+				"Test GC 4", 4, " "));
+		holeList.add(CourseHole.createCourseHole("test 5", 3, 136, 18,
+				"Test GC 5", 5, " "));
+		holeList.add(CourseHole.createCourseHole("test 6", 4, 436, 4,
+				"Test GC 6", 6, " "));
+		holeList.add(CourseHole.createCourseHole("test 7", 5, 554, 10,
+				"Test GC 7", 7, " "));
+		holeList.add(CourseHole.createCourseHole("test 8", 3, 171, 12,
+				"Test GC 8", 8, " "));
+		holeList.add(CourseHole.createCourseHole("test 9", 5, 618, 2,
+				"Test GC 9", 9, " "));
+		holeList.add(CourseHole.createCourseHole("test 10", 4, 383, 13,
+				"Test GC 10", 10, " "));
+		holeList.add(CourseHole.createCourseHole("test 11", 3, 249, 9,
+				"Test GC 11", 11, " "));
+		holeList.add(CourseHole.createCourseHole("test 12", 5, 521, 7,
+				"Test GC 12", 12, " "));
+		holeList.add(CourseHole.createCourseHole("test 13", 4, 321, 15,
+				"Test GC 23", 13, " "));
+		holeList.add(CourseHole.createCourseHole("test 14", 3, 199, 17,
+				"Test GC 14", 14, " "));
+		holeList.add(CourseHole.createCourseHole("test 15", 4, 447, 3,
+				"Test GC 15", 15, " "));
+		holeList.add(CourseHole.createCourseHole("test 16", 5, 524, 11,
+				"Test GC 16", 16, " "));
+		holeList.add(CourseHole.createCourseHole("test 17", 4, 416, 1,
+				"Test GC 17", 17, " "));
+		holeList.add(CourseHole.createCourseHole("test 18", 4, 355, 5,
+				"Test GC 18", 18, " "));
 
 		Course black = new Course();
 		black.setPar(72);

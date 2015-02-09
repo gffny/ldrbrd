@@ -28,10 +28,11 @@ public class ConfigRestController extends BaseRestController {
 	/**
 	 * @return
 	 */
-	@RequestMapping(value = "/health", produces = { MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE })
+	@RequestMapping(value = "/health", produces = {
+			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<StatusResponse> healthCheck() {
-		return new ResponseEntity<StatusResponse>(new StatusResponse("200", "alive and kickin'"),
-				HttpStatus.OK);
+
+		return new ResponseEntity<StatusResponse>(new StatusResponse("200",
+				"alive and kickin'"), HttpStatus.OK);
 	}
 }

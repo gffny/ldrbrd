@@ -1,51 +1,73 @@
 <template name="roundscore">
 
-{{_competitionId}}
-<table>
-  <tr>
-    <th>Golfer Name</th>
-    <th>1</th>
-    <th>2</th>
-    <th>3</th>
-    <th>4</th>
-    <th>5</th>
-    <th>6</th>
-    <th>7</th>
-    <th>8</th>
-    <th>9</th>
-    <th>10</th>
-    <th>11</th>
-    <th>12</th>
-    <th>13</th>
-    <th>14</th>
-    <th>15</th>
-    <th>16</th>
-    <th>17</th>
-    <th>18</th>
-  </tr>
-{{#each _roundScore}}
-  <tr>
-    <th>{{golferName}}</th>
-    <td>{{hole1Score}}</td>
-    <td>{{hole2Score}}</td>
-    <td>{{hole3Score}}</td>
-    <td>{{hole4Score}}</td>
-    <td>{{hole5Score}}</td>
-    <td>{{hole6Score}}</td>
-    <td>{{hole7Score}}</td>
-    <td>{{hole8Score}}</td>
-    <td>{{hole9Score}}</td>
-    <td>{{hole10Score}}</td>
-    <td>{{hole11Score}}</td>
-    <td>{{hole12Score}}</td>
-    <td>{{hole13Score}}</td>
-    <td>{{hole14Score}}</td>
-    <td>{{hole15Score}}</td>
-    <td>{{hole16Score}}</td>
-    <td>{{hole17Score}}</td>
-    <td>{{hole18Score}}</td>
-  </tr>
-{{/each}}
-</table>
+    <table border=0 border-spacing=0>
 
+        <tr>
+            <th class="leaderboardDisplayHead">Hole</th>
+            {{#each _course.courseHoleList}}
+                <th class="holeNumber">{{holeNumber}}</th>
+            {{/each}}
+        </tr>
+        <tr>
+            <th class="leaderboardDisplayHead">Index</th>
+            {{#each _course.courseHoleList}}
+                <th class="holeNumber">{{holeIndex}}</th>
+            {{/each}}
+        </tr>
+        <tr>
+            <th class="leaderboardDisplayHead">Distance</th>
+            {{#each _course.courseHoleList}}
+                <th class="holeNumber">{{holeDistance}}</th>
+            {{/each}}
+            <th colspan=4 class="leaderboardDisplayName">Round</th>
+            <!-- maybe hide this if it's a single round competition -->
+            <th colspan=4 class="leaderboardDisplayName" hidden={{isFirstRoundOrSingleRoundCompetition}}>Overall</th>
+        </tr>
+        <tr>
+                        <th class="leaderboardDisplayHead">Par</th>
+            {{#each _course.courseHoleList}}
+                <th class="holeNumber">{{holePar}}</th>
+            {{/each}}
+
+            <th class="leaderboardDisplayName">Gross</th>
+            <th class="leaderboardDisplayName">To Par</th>
+            <th class="leaderboardDisplayName">To HC</th>
+            <th class="leaderboardDisplayName">Points</th>
+            <th class="leaderboardDisplayName" hidden={{isFirstRoundOrSingleRoundCompetition}}>Gross</th>
+            <th class="leaderboardDisplayName" hidden={{isFirstRoundOrSingleRoundCompetition}}>To Par</th>
+            <th class="leaderboardDisplayName" hidden={{isFirstRoundOrSingleRoundCompetition}}>Handicap</th>
+            <th class="leaderboardDisplayName" hidden={{isFirstRoundOrSingleRoundCompetition}}>Points</th>
+        </tr>
+        {{#each _roundScore}}
+            <tr>
+                <td class="leaderboardDisplayName">{{leaderboardDisplayName}}</td>
+                {{#if isHolePlayed 1 ../_course.courseHoleList}}<td class="holeScore">{{holeScore hole01Score}}</td>{{/if}}
+                {{#if isHolePlayed 2 ../_course.courseHoleList}}<td class="holeScore">{{holeScore hole02Score}}</td>{{/if}}
+                {{#if isHolePlayed 3 ../_course.courseHoleList}}<td class="holeScore">{{holeScore hole03Score}}</td>{{/if}}
+                {{#if isHolePlayed 4 ../_course.courseHoleList}}<td class="holeScore">{{holeScore hole04Score}}</td>{{/if}}
+                {{#if isHolePlayed 5 ../_course.courseHoleList}}<td class="holeScore">{{holeScore hole05Score}}</td>{{/if}}
+                {{#if isHolePlayed 6 ../_course.courseHoleList}}<td class="holeScore">{{holeScore hole06Score}}</td>{{/if}}
+                {{#if isHolePlayed 7 ../_course.courseHoleList}}<td class="holeScore">{{holeScore hole07Score}}</td>{{/if}}
+                {{#if isHolePlayed 8 ../_course.courseHoleList}}<td class="holeScore">{{holeScore hole08Score}}</td>{{/if}}
+                {{#if isHolePlayed 9 ../_course.courseHoleList}}<td class="holeScore">{{holeScore hole09Score}}</td>{{/if}}
+                {{#if isHolePlayed 10 ../_course.courseHoleList}}<td class="holeScore">{{holeScore hole10Score}}</td>{{/if}}
+                {{#if isHolePlayed 11 ../_course.courseHoleList}}<td class="holeScore">{{holeScore hole11Score}}</td>{{/if}}
+                {{#if isHolePlayed 12 ../_course.courseHoleList}}<td class="holeScore">{{holeScore hole12Score}}</td>{{/if}}
+                {{#if isHolePlayed 13 ../_course.courseHoleList}}<td class="holeScore">{{holeScore hole13Score}}</td>{{/if}}
+                {{#if isHolePlayed 14 ../_course.courseHoleList}}<td class="holeScore">{{holeScore hole14Score}}</td>{{/if}}
+                {{#if isHolePlayed 15 ../_course.courseHoleList}}<td class="holeScore">{{holeScore hole15Score}}</td>{{/if}}
+                {{#if isHolePlayed 16 ../_course.courseHoleList}}<td class="holeScore">{{holeScore hole16Score}}</td>{{/if}}
+                {{#if isHolePlayed 17 ../_course.courseHoleList}}<td class="holeScore">{{holeScore hole17Score}}</td>{{/if}}
+                {{#if isHolePlayed 18 ../_course.courseHoleList}}<td class="holeScore">{{holeScore hole18core}}</td>{{/if}}
+                <td class="holeScore">{{roundScore}}</td>
+                <td class="holeScore">{{roundToPar}}</td>
+                <td class="holeScore">{{roundToHandicapPar}}</td>
+                <td class="holeScore">{{roundCompetitionScore}}</td>
+                <td class="holeScore" hidden={{isFirstRoundOrSingleRoundCompetition}}>{{overviewScore}}</td>
+                <td class="holeScore" hidden={{isFirstRoundOrSingleRoundCompetition}}>{{overviewToPar}}</td>
+                <td class="holeScore" hidden={{isFirstRoundOrSingleRoundCompetition}}>{{overviewToHandicapPar}}</td>
+                <td class="holeScore" hidden={{isFirstRoundOrSingleRoundCompetition}}>{{overviewCompetitionScore}}</td>
+            </tr>
+        {{/each}}
+    </table>
 </template>

@@ -59,7 +59,10 @@ public class LeaderboardService extends AbstractService implements
 							"round did not exist in document store for compeitionRoundId {} and golfer {}",
 							competitionRound.getIdString(),
 							golfer.getIdString());
-					rs = RoundScore.instance(golfer.getIdString(),
+					rs = RoundScore.instance(
+							golfer.getIdString(),
+							golfer.getFirstName().concat(" ")
+									.concat(golfer.getLastName()),
 							competitionRound.getIdString());
 					rs.setCompetitionId(competitionRound.getCompetition()
 							.getIdString());

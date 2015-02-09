@@ -23,6 +23,13 @@ public class CompetitionType extends CommonIDEntity {
 	private boolean isIndividual;
 
 	/**
+	 * 
+	 */
+	public CompetitionType() {
+
+	}
+
+	/**
 	 * @param name
 	 * @param scheduler
 	 * @param scorer
@@ -30,8 +37,8 @@ public class CompetitionType extends CommonIDEntity {
 	 * @param isPair
 	 * @param isIndividual
 	 */
-	public CompetitionType(String name, String scheduler, String scorer, boolean isTeam,
-			boolean isPair, boolean isIndividual) {
+	public CompetitionType(String name, String scheduler, String scorer,
+			boolean isTeam, boolean isPair, boolean isIndividual) {
 		this.name = name;
 		this.scheduler = scheduler;
 		this.scorer = scorer;
@@ -48,8 +55,8 @@ public class CompetitionType extends CommonIDEntity {
 	 * @param isPair
 	 * @param isIndividual
 	 */
-	public CompetitionType(int id, String name, String scheduler, String scorer, boolean isTeam,
-			boolean isPair, boolean isIndividual) {
+	public CompetitionType(int id, String name, String scheduler,
+			String scorer, boolean isTeam, boolean isPair, boolean isIndividual) {
 		this.name = name;
 		this.setId(id);
 		this.scheduler = scheduler;
@@ -106,8 +113,8 @@ public class CompetitionType extends CommonIDEntity {
 	 */
 	@Override
 	public String toString() {
-		return "CompetitionType [name=" + getName() + ", scheduler=" + scheduler + ", scorer="
-				+ scorer + ", isTeam=" + isTeam + ", isPair=" + isPair + ", isIndividual="
-				+ isIndividual + "]";
+		return "CompetitionType [name=" + getName() + ", scheduler="
+				+ scheduler + ", scorer=" + scorer + ", isTeam=" + isTeam
+				+ ", isPair=" + isPair + ", isIndividual=" + isIndividual + "]";
 	}
 }

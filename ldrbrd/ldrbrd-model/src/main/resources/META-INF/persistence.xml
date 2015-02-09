@@ -8,14 +8,15 @@ version="2.1">
 		<class>com.gffny.ldrbrd.common.model.impl.CompetitionEntry</class>
 		<class>com.gffny.ldrbrd.common.model.impl.CompetitionRound</class>
 		<class>com.gffny.ldrbrd.common.model.impl.CompetitionRoundScore</class>
-		<class>com.gffny.ldrbrd.common.model.impl.CompetitionType</class>
+<!-- 		<class>com.gffny.ldrbrd.common.model.impl.CompetitionType</class>-->
 		<class>com.gffny.ldrbrd.common.model.impl.Golfer</class>
 		<class>com.gffny.ldrbrd.common.model.impl.Scorecard</class>
 		<properties>
 			<property name="javax.persistence.jdbc.user" value="ldrbrd" />
 			<property name="javax.persistence.jdbc.password" value="password"/>
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ldrbrdv2" />
+ 			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://ldrbrd-db01.crgjwijr3var.us-west-2.rds.amazonaws.com:3306/ldrbrdv2" />
+<!-- 			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ldrbrdv2" /> -->
 			<!-- <property name="javax.persistence.ddl-generation" value="drop-and-create-tables"/> -->
 			<property name="javax.persistence.ddl-generation" value="NONE" />
 			<property name="javax.persistence.logging.level" value="TRACE" />

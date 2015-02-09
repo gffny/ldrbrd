@@ -1,1 +1,25 @@
 /* CSS declarations go here */
+h1 {
+	margin: 0px;
+	font-family: "HelveticaNeue-CondensedBold", "Helvetica Neue";
+}
+.holeNumber {
+	font-family: "HelveticaNeue-CondensedBold", "Helvetica Neue";
+	text-align: center;
+	width: 20px;
+	background-color: #FFAA00;
+}
+.holeScore {
+	font-family: "HelveticaNeue-CondensedBold", "Helvetica Neue";
+	text-align: center;
+	background-color: ##2200FF;
+}
+.leaderboardDisplayName {
+	font-family: "HelveticaNeue-CondensedBold", "Helvetica Neue";
+	text-align: right;
+	background-color: #D2C2C2;
+}
+.leaderboardDisplayHead {
+	font-family: "HelveticaNeue-CondensedBold", "Helvetica Neue";
+	background-color: #D2C2C2;	
+}

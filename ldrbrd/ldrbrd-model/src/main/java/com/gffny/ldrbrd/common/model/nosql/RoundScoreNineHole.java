@@ -16,6 +16,8 @@ public class RoundScoreNineHole extends CommonUUIDEntity {
 	/** */
 	protected String golferId;
 	/** */
+	protected String leaderboardDisplayName;
+	/** */
 	protected String competitionId;
 	/** */
 	protected String competitionRoundId;
@@ -165,6 +167,21 @@ public class RoundScoreNineHole extends CommonUUIDEntity {
 	 */
 	public void setGolferId(String golferId) {
 		this.golferId = golferId;
+	}
+
+	/**
+	 * @return the golferId
+	 */
+	public String getLeaderboardDisplayName() {
+		return leaderboardDisplayName;
+	}
+
+	/**
+	 * @param golferId
+	 *            the golferId to set
+	 */
+	public void setLeaderboardDisplayName(String leaderboardDisplayName) {
+		this.leaderboardDisplayName = leaderboardDisplayName;
 	}
 
 	/**

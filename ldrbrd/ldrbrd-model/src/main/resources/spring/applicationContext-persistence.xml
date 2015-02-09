@@ -19,13 +19,14 @@
         http://www.springframework.org/schema/aop/spring-aop-4.0.xsd"
         >
 
-	<context:component-scan base-package="com.gffny.ldrbrd.common.dao,com.gffny.ldrbrd.common.dao.mongo,com.gffny.ldrbrd.common.service.impl" />
+	<context:component-scan base-package="com.gffny.ldrbrd.common.config,com.gffny.ldrbrd.common.dao,com.gffny.ldrbrd.common.dao.mongo,com.gffny.ldrbrd.common.service.impl" />
 	<context:annotation-config />
-<!-- 
-	<tx:annotation-driven mode="aspectj" transaction-manager="ldrbrd_txnMgr"
-		proxy-target-class="true" />
-	<aop:aspectj-autoproxy proxy-target-class="true"/> -->
-		
+
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:application.properties" />
+	</bean>
+
 	<bean class="org.springframework.transaction.aspectj.AnnotationTransactionAspect" factory-method="aspectOf">
 	    <property name="transactionManager" ref="ldrbrd_txnMgr"/>
 	</bean>
@@ -63,13 +64,12 @@
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 <!-- 	ONE OF THESE SHOULD BE USED FOR DEVELOPMENT AND ANOTHER FOR TESTING 
-		<property name="url" value="jdbc:mysql://ldrbrd-dbs1.cit2gadb0fxa.us-east-1.rds.amazonaws.com:3306/ldrbrdv2" /> 
+		<property name="url" value="jdbc:mysql://ldrbrd-db01.crgjwijr3var.us-west-2.rds.amazonaws.com:3306/ldrbrdv2" /> 
  		<property name="url" value="jdbc:mysql://localhost:3306/ldrbrdv2" />
 -->
- 		<property name="url" value="jdbc:mysql://localhost:3306/ldrbrdv2" />
+		<property name="url" value="jdbc:mysql://ldrbrd-db01.crgjwijr3var.us-west-2.rds.amazonaws.com:3306/ldrbrdv2" /> 
 		<property name="username" value="ldrbrd" />
-<!-- 		<property name="password" value="password" /> -->
+<!--  		<property name="password" value="password" /> -->
 		<property name="password" value="ldrbrdv2" />
 	</bean>
-
 </beans>

@@ -1,23 +1,20 @@
 if (Meteor.isClient) {
-  // counter starts at 0
-  // Session.setDefault("counter", 0);
 
-  // Template.hello.helpers({
-  //   counter: function () {
-  //     return Session.get("counter");
-  //   }
-  // });
+  //helper methods for the templates
+  Template.roundscore.helpers({
+    "isHolePlayed": function(holeNumber, courseHoleList) {
+      return (courseHoleList != null && courseHoleList.length  >= holeNumber);
+    },
+    "holeScore": function(holeScore) {
+      return (holeScore != null && holeScore > 0) ? holeScore : "-";
+    },
+    "isFirstRoundOrSingleRoundCompetition" : function() {
 
-  // Template.hello.events({
-  //   'click button': function () {
-  //     // increment the counter when button is clicked
-  //     Session.set("counter", Session.get("counter") + 1);
-  //   }
-  // });
+      return _competitionRound.roundNumber > 1;
+    }
+  });
 }
 
 if (Meteor.isServer) {
-  // Meteor.startup(function () {
-    // code to run on server at startup
-  // });
+
 }

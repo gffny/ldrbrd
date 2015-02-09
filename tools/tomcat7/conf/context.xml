@@ -31,5 +31,18 @@
     <!--
     <Valve className="org.apache.catalina.valves.CometConnectionManagerValve" />
     -->
-
+  <Resource name="jdbc/ace-ds"
+    auth="Container" 
+    type="javax.sql.DataSource" 
+    description="ACE Database Instance" 
+    driverClassName="oracle.jdbc.OracleDriver" 
+    url="jdbc:oracle:thin:@ldap://oidnames.cadm.harvard.edu:8010/ACEDEV,cn=OracleContext,dc=harvard,dc=edu"
+    username="ACEWEB" 
+    password="x7tzq7yd" 
+    connectionProperties="SetBigStringTryClob=true" 
+    maxActive="25" 
+    maxIdle="10" 
+    maxWait="10000" 
+    factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+  />
 </Context>

@@ -51,6 +51,10 @@ public class CourseMongoDaoImplTest {
 
 	}
 
+	/**
+	 * 
+	 * @throws PersistenceException
+	 */
 	@Test
 	public void testListCourseByCity() throws PersistenceException {
 		List<Course> clubCourseList = courseMongoDao
@@ -60,4 +64,15 @@ public class CourseMongoDaoImplTest {
 
 	}
 
+	/**
+	 * 
+	 * @throws PersistenceException
+	 */
+	@Test
+	public void testListByCourseId() throws PersistenceException {
+		Course clubCourseList = courseMongoDao.findById(Course.class,
+				"54a9a44130040769e4f03f2e");
+		Assert.assertNotNull(clubCourseList);
+
+	}
 }

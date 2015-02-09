@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gffny.ldrbrd.common.dao.nosql.GenericNoSqlDao;
+import com.gffny.ldrbrd.common.dao.nosql.ICourseNoSqlDao;
 import com.gffny.ldrbrd.common.exception.PersistenceException;
 import com.gffny.ldrbrd.common.model.Constant;
 import com.gffny.ldrbrd.common.model.enums.TeeColour;
@@ -29,22 +29,24 @@ import com.gffny.ldrbrd.common.model.nosql.CourseHole;
 		"classpath*:spring/applicationContext-model.xml" })
 public class TestGolfClubLoad {
 
-	/**
-	 * 
-	 */
-	@Autowired
-	private GenericNoSqlDao<Club> clubDao;
+	// TODO DO NOT USE THIS CLASS TO LOAD TEST DATA UNTIL THE DATA MATCHES THE
+	// ios LBCourse object or whatever is generated in the NEGolfClubLoad class
 
 	/**
 	 * 
 	 */
 	@Autowired
-	private GenericNoSqlDao<Course> courseDao;
+	private GenericNoSqlDao<Club> clubMongoDaoImpl;
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private ICourseNoSqlDao courseMongoDaoImpl;
 
 	/**
 	 * @throws PersistenceException
 	 */
-	@Test
 	public void loadGolfClub() throws PersistenceException {
 
 		// create club
@@ -73,7 +75,7 @@ public class TestGolfClubLoad {
 		course.setCourseHoleList(courseHoleList);
 		loadClub.setCourseList(Arrays.asList(course));
 
-		String id = clubDao.persist(loadClub);
+		String id = clubMongoDaoImpl.persist(loadClub);
 		List<Course> courseList = loadClub.getCourseList();
 		loadClub.setCourseList(new ArrayList<Course>());
 		// TODO CREATE A METHOD TO CLONE CLUB WITHOUT COURSE LIST / OTHER
@@ -81,31 +83,31 @@ public class TestGolfClubLoad {
 		// THERE IS A LOOP OF PERSISTENCE CLUB -> COURSE -> CLUB -> COURSE ....
 		for (Course loadCourse : courseList) {
 			loadCourse.setClub(loadClub);
-			System.out.println(courseDao.persist(loadCourse));
+			System.out.println(courseMongoDaoImpl.persist(loadCourse));
 		}
 
-		Club clubReturned = clubDao.findById(Club.class, id);
+		Club clubReturned = clubMongoDaoImpl.findById(Club.class, id);
 		System.out.println(clubReturned.getClubName());
 	}
 
 	/**
 	 * @throws PersistenceException
 	 */
-	@Test
 	public void getGolfClub() throws PersistenceException {
 
-		Club clubReturned = clubDao.findById(Club.class,
-				"53ef8c050364fc04b2d8ed1d");
+		Club clubReturned = clubMongoDaoImpl.findById(Club.class,
+		// "53ef8c050364fc04b2d8ed1d");
+				"544597470364a7624818a270");
 		if (clubReturned != null) {
 			System.out.println(clubReturned.getClubName());
 		}
 
-		clubReturned = clubDao.findByName(Club.class, "test club");
+		clubReturned = clubMongoDaoImpl.findByName(Club.class, "test club");
 		if (clubReturned != null) {
 			System.out.println(clubReturned.getClubName());
 		}
 
-		Course courseReturned = courseDao.findByName(Course.class,
+		Course courseReturned = courseMongoDaoImpl.findByName(Course.class,
 				"test course");
 		if (courseReturned != null) {
 			System.out.println(courseReturned.getName());

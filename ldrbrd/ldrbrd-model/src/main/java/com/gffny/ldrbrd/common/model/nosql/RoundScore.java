@@ -149,9 +149,11 @@ public class RoundScore extends RoundScoreNineHole {
 	 * @param competitionRoundId
 	 * @return
 	 */
-	public static RoundScore instance(String golferId, String competitionRoundId) {
+	public static RoundScore instance(String golferId, String displayName,
+			String competitionRoundId) {
 		RoundScore instance = new RoundScore();
 		instance.setGolferId(golferId);
+		instance.setLeaderboardDisplayName(displayName);
 		instance.setCompetitionRoundId(competitionRoundId);
 		return instance;
 	}

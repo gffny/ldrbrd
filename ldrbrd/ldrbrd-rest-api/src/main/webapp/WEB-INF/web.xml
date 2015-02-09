@@ -32,6 +32,7 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
 			classpath*:spring/applicationContext-persistence.xml
+			classpath*:spring/applicationContext-mongo.xml
 			WEB-INF/security-context.xml
         </param-value>
 	</context-param>
